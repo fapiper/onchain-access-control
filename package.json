@@ -1,0 +1,28 @@
+{
+  "name": "monorepo-boilerplate",
+  "private": true,
+  "packageManager": "pnpm@8.6.0",
+  "scripts": {
+    "clean": "bazel clean",
+    "build": "run-p build:turbo build:bazel",
+    "build:turbo": "turbo run build",
+    "build:bazel": "bazel build //backend/...",
+    "test": "run-p test:turbo test:bazel",
+    "test:turbo": "turbo run test",
+    "test:bazel": "bazel test //backend/...",
+    "dev": "run-p dev:turbo dev:sample-microservice",
+    "dev:turbo": "turbo run dev --parallel",
+    "dev:sample-microservice": "ibazel run //backend/services/sample-microservice"
+  },
+  "devDependencies": {
+    "@bazel/bazelisk": "^1.12.1",
+    "@bazel/buildifier": "^5.1.0",
+    "@bazel/ibazel": "^0.16.2",
+    "npm-run-all": "^4.1.5",
+    "turbo": "^1.6.3"
+  },
+  "engines": {
+    "npm": ">=8.19.3",
+    "node": ">=v16.19.0"
+  }
+}
