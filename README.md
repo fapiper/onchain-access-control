@@ -1,6 +1,4 @@
-# monorepo-boilerplate
-
-A monorepo boilerplate for TypeScript and Golang with Turborepo and Bazel
+# On-Chain Access Control
 
 ## Getting Started
 
