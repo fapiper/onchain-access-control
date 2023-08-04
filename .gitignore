@@ -141,7 +141,7 @@ dist/**
 .bazelrc.user
 dist
 bazel-bin
-bazel-monorepo-boilerplate
+bazel-onchain-access-control
 bazel-out
 bazel-testlogs
 node_modules
