@@ -134,15 +134,10 @@ dist/**
 .yarn/*
 !.yarn/releases
 
-# ESLint
-.eslintcache
-
 # Bazel
 .bazelrc.user
-dist
-bazel-bin
-bazel-onchain-access-control
-bazel-out
-bazel-testlogs
-node_modules
+bazel-*
+
+# Intellij with Bazel (IJWB)
+.ijwb/
 
