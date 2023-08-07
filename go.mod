@@ -1,4 +1,4 @@
-module issuer
+module onchain-access-control
 
 go 1.18
 

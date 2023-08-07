@@ -4,6 +4,7 @@
   "packageManager": "pnpm@8.6.0",
   "scripts": {
     "clean": "bazel clean",
+    "update-repos": "bazel run //:gazelle-update-repos",
     "build": "run-p build:turbo build:bazel",
     "build:turbo": "turbo run build",
     "build:bazel": "bazel build ///...",
