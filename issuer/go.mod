@@ -1,4 +1,4 @@
-module sample-microservice
+module issuer
 
 go 1.18
 

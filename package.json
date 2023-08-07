@@ -12,8 +12,8 @@
     "test:bazel": "bazel test ///...",
     "dev": "run-p dev:turbo dev:bazel",
     "dev:turbo": "turbo run dev --parallel",
-    "dev:bazel": "run-p dev:sample-microservice",
-    "dev:sample-microservice": "ibazel run //sample-microservice",
+    "dev:bazel": "run-p dev:issuer",
+    "dev:issuer": "ibazel run //issuer",
     "lint:turbo": "turbo run lint",
     "prepare": "husky install",
     "pre-commit": "lint-staged"
