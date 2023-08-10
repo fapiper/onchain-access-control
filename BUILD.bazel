@@ -1,18 +1,16 @@
-package(default_visibility = ["//visibility:public"])
-
 load("@bazel_gazelle//:def.bzl", "gazelle")
 
 gazelle(
     name = "gazelle",
+    prefix = "github.com/fapiper/onchain-access-control",
 )
 
 gazelle(
     name = "gazelle-update-repos",
     args = [
         "-from_file=go.mod",
-        "-to_macro=deps.bzl%go_dependencies",
-        "-prune",
-        "-build_file_proto_mode=disable_global",
+        "-to_macro=DEPS.bzl%go_dependencies",
+        "-prune"
     ],
     command = "update-repos",
 )

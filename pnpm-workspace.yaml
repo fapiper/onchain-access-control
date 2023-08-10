@@ -1,4 +1,4 @@
 packages:
-  - 'app-ui'
-  - 'aggregation'
-  - 'contracts'
+  - 'pkg/ui'
+  - 'pkg/aggregation'
+  - 'pkg/contracts'
