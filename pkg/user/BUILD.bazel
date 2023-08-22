@@ -10,6 +10,14 @@ go_library(
 
 go_binary(
     name = "issuer",
-    embed = [":issuer_lib"],
+    embed = [":user_lib"],
     visibility = ["//visibility:public"],
+)
+
+go_library(
+    name = "user_lib",
+    srcs = ["main.go"],
+    importpath = "github.com/fapiper/onchain-access-control/pkg/user",
+    visibility = ["//visibility:private"],
+    deps = ["@com_github_gin_gonic_gin//:gin"],
 )

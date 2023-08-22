@@ -10,7 +10,7 @@ gazelle(
     args = [
         "-from_file=go.mod",
         "-to_macro=DEPS.bzl%go_dependencies",
-        "-prune"
+        "-prune",
     ],
     command = "update-repos",
 )

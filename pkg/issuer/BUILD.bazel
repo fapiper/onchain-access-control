@@ -5,7 +5,12 @@ go_library(
     srcs = ["main.go"],
     importpath = "github.com/fapiper/onchain-access-control/pkg/issuer",
     visibility = ["//visibility:private"],
-    deps = ["@com_github_gin_gonic_gin//:go_default_library"],
+    deps = [
+        "@com_github_gin_gonic_gin//:gin",
+        "@com_github_tbd54566975_ssi_sdk//crypto",
+        "@com_github_tbd54566975_ssi_sdk//did/key",
+        "@com_github_tbd54566975_ssi_sdk//util",
+    ],
 )
 
 go_binary(

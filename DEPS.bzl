@@ -366,6 +366,7 @@ def go_dependencies():
         sum = "h1:GbZG0S3xeaWQi2suWw2VjGRhM/S2RrIsfiubxSHlViE=",
         version = "v0.0.4-alpha",
     )
+
     go_repository(
         name = "com_github_ugorji_go",
         importpath = "github.com/ugorji/go",
