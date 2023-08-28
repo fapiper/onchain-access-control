@@ -1,0 +1,47 @@
+# http service configuration
+[server]
+env = "dev" # either 'dev', 'test', or 'prod'
+api_host = "0.0.0.0:3000"
+
+jager_enabled = false
+
+# 5 seconds, time is in nanoseconds
+read_timeout = 5000000000
+write_timeout = 5000000000
+shutdown_timeout = 5000000000
+
+log_location = ""
+# options: trace, debug, info, warn, error, fatal, panic
+log_level = "trace"
+
+enable_schema_caching = true
+enable_allow_all_cors = true
+
+# Storage Configuration
+[services]
+service_endpoint = "http://localhost:3000"
+
+# example bolt config with filepath option
+storage = "bolt"
+
+[services.storage_encryption]
+# encryption
+disable_encryption = true
+
+[[services.storage_option]]
+id = "boltdb-filepath-option"
+option = "bolt.db"
+
+[services.did]
+methods = ["key", "web"]
+local_resolution_methods = ["ion", "key", "web", "pkh", "peer"]
+universal_resolver_url = "https://dev.uniresolver.io/"
+universal_resolver_methods = ["ion"]
+batch_create_max_items = 100
+
+[services.credential]
+batch_create_max_items = 100
+batch_update_status_max_items = 100
+
+[services.webhook]
+webhook_timeout = "10s"

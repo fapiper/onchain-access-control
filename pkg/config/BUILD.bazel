@@ -1,0 +1,20 @@
+load("@io_bazel_rules_go//go:def.bzl", "go_library")
+
+go_library(
+    name = "config",
+    srcs = [
+        "config.go",
+        "info.go",
+    ],
+    importpath = "github.com/fapiper/onchain-access-control/pkg/config",
+    visibility = ["//visibility:public"],
+    deps = [
+        "//pkg/framework",
+        "//pkg/storage",
+        "@com_github_ardanlabs_conf//:conf",
+        "@com_github_burntsushi_toml//:toml",
+        "@com_github_joho_godotenv//:godotenv",
+        "@com_github_pkg_errors//:errors",
+        "@com_github_sirupsen_logrus//:logrus",
+    ],
+)
