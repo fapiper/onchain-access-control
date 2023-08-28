@@ -1,0 +1,41 @@
+load("@io_bazel_rules_go//go:def.bzl", "go_library", "go_test")
+
+go_library(
+    name = "keyaccess",
+    srcs = [
+        "dataintegrity.go",
+        "jwt.go",
+    ],
+    importpath = "github.com/fapiper/onchain-access-control/pkg/internal/keyaccess",
+    visibility = ["//pkg:__subpackages__"],
+    deps = [
+        "@com_github_goccy_go_json//:go-json",
+        "@com_github_lestrrat_go_jwx//jws",
+        "@com_github_pkg_errors//:errors",
+        "@com_github_tbd54566975_ssi_sdk//credential",
+        "@com_github_tbd54566975_ssi_sdk//credential/integrity",
+        "@com_github_tbd54566975_ssi_sdk//crypto/jwx",
+        "@com_github_tbd54566975_ssi_sdk//cryptosuite",
+        "@com_github_tbd54566975_ssi_sdk//cryptosuite/jws2020",
+        "@com_github_tbd54566975_ssi_sdk//did/resolution",
+    ],
+)
+
+go_test(
+    name = "keyaccess_test",
+    srcs = [
+        "dataintegrity_test.go",
+        "jwt_test.go",
+    ],
+    embed = [":keyaccess"],
+    deps = [
+        "@com_github_goccy_go_json//:go-json",
+        "@com_github_google_uuid//:uuid",
+        "@com_github_stretchr_testify//assert",
+        "@com_github_stretchr_testify//require",
+        "@com_github_tbd54566975_ssi_sdk//credential",
+        "@com_github_tbd54566975_ssi_sdk//crypto",
+        "@com_github_tbd54566975_ssi_sdk//did/key",
+        "@com_github_tbd54566975_ssi_sdk//did/resolution",
+    ],
+)
