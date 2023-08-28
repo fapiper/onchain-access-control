@@ -1,0 +1,28 @@
+load("@io_bazel_rules_go//go:def.bzl", "go_library")
+
+go_library(
+    name = "keystore",
+    srcs = [
+        "model.go",
+        "service.go",
+        "storage.go",
+    ],
+    importpath = "github.com/fapiper/onchain-access-control/pkg/keystore",
+    visibility = ["//visibility:public"],
+    deps = [
+        "//pkg/config",
+        "//pkg/framework",
+        "//pkg/internal/encryption",
+        "//pkg/internal/keyaccess",
+        "//pkg/storage",
+        "//pkg/util/crypto",
+        "@com_github_benbjohnson_clock//:clock",
+        "@com_github_mr_tron_base58//:base58",
+        "@com_github_pkg_errors//:errors",
+        "@com_github_sirupsen_logrus//:logrus",
+        "@com_github_tbd54566975_ssi_sdk//crypto",
+        "@com_github_tbd54566975_ssi_sdk//crypto/jwx",
+        "@com_github_tbd54566975_ssi_sdk//util",
+        "@org_golang_x_crypto//chacha20poly1305",
+    ],
+)

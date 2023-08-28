@@ -1,0 +1,29 @@
+load("@io_bazel_rules_go//go:def.bzl", "go_library")
+
+go_library(
+    name = "storage",
+    srcs = [
+        "bolt.go",
+        "encrypt.go",
+        "filter.go",
+        "redis.go",
+        "sql.go",
+        "storage.go",
+    ],
+    importpath = "github.com/fapiper/onchain-access-control/pkg/storage",
+    visibility = ["//visibility:public"],
+    deps = [
+        "//pkg/internal/encryption",
+        "@com_github_cenkalti_backoff_v4//:backoff",
+        "@com_github_google_cel_go//cel:go_default_library",
+        "@com_github_google_cel_go//common/types/ref:go_default_library",
+        "@com_github_lib_pq//:pq",
+        "@com_github_pkg_errors//:errors",
+        "@com_github_redis_go_redis_extra_redisotel_v9//:redisotel",
+        "@com_github_redis_go_redis_v9//:go-redis",
+        "@com_github_sirupsen_logrus//:logrus",
+        "@com_github_tbd54566975_ssi_sdk//util",
+        "@io_etcd_go_bbolt//:bbolt",
+        "@tech_einride_go_aip//filtering",
+    ],
+)
