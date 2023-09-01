@@ -1,3 +1,14 @@
 node_modules
 pkg/ui/node_modules
 pkg/contracts/node_modules
+.bazelrc.user
+bazel-bin
+bazel-onchain-access-control
+bazel-out
+bazel-testlogs
+bazel-genfiles
+.gitignore
+.bazelignore
+.ijwb
+.aswb
+.clwb
