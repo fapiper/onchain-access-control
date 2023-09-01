@@ -138,6 +138,9 @@ dist/**
 .bazelrc.user
 bazel-*
 
-# Intellij with Bazel (IJWB)
-.ijwb/
-
+# Directories for the Bazel IntelliJ plugin containing the generated
+# IntelliJ project files and plugin configuration. Seperate directories are
+# for the IntelliJ, Android Studio and CLion versions of the plugin.
+/.ijwb/
+/.aswb/
+/.clwb/

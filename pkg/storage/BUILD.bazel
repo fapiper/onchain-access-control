@@ -1,4 +1,4 @@
-load("@io_bazel_rules_go//go:def.bzl", "go_library")
+load("@io_bazel_rules_go//go:def.bzl", "go_library", "go_test")
 
 go_library(
     name = "storage",
@@ -25,5 +25,18 @@ go_library(
         "@com_github_tbd54566975_ssi_sdk//util",
         "@io_etcd_go_bbolt//:bbolt",
         "@tech_einride_go_aip//filtering",
+    ],
+)
+
+go_test(
+    name = "storage_test",
+    srcs = ["db_test.go"],
+    embed = [":storage"],
+    deps = [
+        "//pkg/internal/encryption",
+        "@com_github_alicebob_miniredis_v2//:miniredis",
+        "@com_github_fergusstrange_embedded_postgres//:embedded-postgres",
+        "@com_github_stretchr_testify//assert",
+        "@com_github_stretchr_testify//require",
     ],
 )

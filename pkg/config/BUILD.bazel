@@ -1,4 +1,4 @@
-load("@io_bazel_rules_go//go:def.bzl", "go_library")
+load("@io_bazel_rules_go//go:def.bzl", "go_library", "go_test")
 
 go_library(
     name = "config",
@@ -17,4 +17,16 @@ go_library(
         "@com_github_pkg_errors//:errors",
         "@com_github_sirupsen_logrus//:logrus",
     ],
+)
+
+go_test(
+    name = "config_test",
+    srcs = ["config_test.go"],
+    data = glob(["testdata/**"]),
+    embed = [":config"],
+    embedsrcs = [
+        "testdata/credential_issuer_metadata.example.json",
+        "testdata/test1.toml",
+    ],
+    deps = ["@com_github_stretchr_testify//assert"],
 )
