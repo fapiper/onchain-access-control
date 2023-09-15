@@ -1,0 +1,28 @@
+
+
+
+{
+  "query": [
+    {
+      "type": "AuthorizationQuery",
+      "role": "0x06f8...aac6",
+      "proof_program": "ipfs://12D3...69yew",
+      "verifier": "did:pkh:eip155:1:0x2f3a...4405",
+      "roleQuery": [
+        {
+          "@context": [
+            "https://www.w3.org/2018/credentials/v1",
+            "https://w3id.org/contracts/v1"
+          ],
+          "type": "SupplyContractCredential"
+        }
+      ]
+    }
+  ],
+  "challenge": "c-123456",
+  "domain": "did:web:example.com"
+}
+
+
+
+

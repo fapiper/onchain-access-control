@@ -1,0 +1,51 @@
+
+
+
+
+
+{
+  "@context": [
+    "https://www.w3.org/2018/credentials/v1",
+    "https://w3id.org/contracts/v1"
+  ],
+  "type": "VerifiablePresentation",
+  "verifiableCredential": [
+    {
+      "@context": [
+        "https://www.w3.org/2018/credentials/v1",
+        "https://w3id.org/contracts/v1"
+      ],
+      "type": [
+        "VerifiableCredential",
+        "SupplyContractCredential"
+      ],
+      "credentialSchema": {
+        "id": "did:example:cdf:35LB7w9ueWbagPL94T9bMLtyXDj9pX5o",
+        "type": "did:example:schema:22Kp...yYQG"
+      },
+      "_sd_alg": "sha-256",
+      "issuer": "did:pkh:eip155:1:0xb9c5...6e8a",
+      "issuanceDate": "2023-09-06T12:00:00Z",
+      "expirationDate": "2024-09-06T12:00:00Z",
+      "credentialSubject": {
+        "_sd": [
+          "zSmImWHPJzQ7Rx8ZG0IYhUF1Ozj8f17wDKJGhxUkrdU",
+          "T4RnDm1clVLCav2Mrsel6sNMz8pqGCeMrrp__YrV_-w",
+          "SFQTjr91IkPi6betQ0EYs5rdJ2TbMesJGftF6h7hjTA",
+          "MJDEi9f11sTte5tG20ff6h7hjTAD3fghFF57j7FgApe"
+        ]
+      },
+      "proof": {
+        "type": "Ed25519Signature2018",
+        "created": "2023-09-06T12:00:00Z",
+        "proofPurpose": "assertionMethod",
+        "verificationMethod": "did:pkh:eip155:1:0xb9c5...6e8a#blockchainAccountId",
+        "jws": "eyJhbGciOiJFZERTQSIsImI2NCI6ZmFsc2UsInR5cCI6IkpXVCJ9..."
+      }
+    }
+  ]
+}
+
+
+
+

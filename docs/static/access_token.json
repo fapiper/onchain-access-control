@@ -1,0 +1,8 @@
+{
+  "iss": "did:pkh:eip155:1:0xd8da...6045",
+  "sub": "did:pkh:eip155:1:0xd8da...6045",
+  "aud": "did:web:example.com",
+  "iat": 1646308737,
+  "exp": 1646769537,
+  "nonce": "c-123456"
+}
