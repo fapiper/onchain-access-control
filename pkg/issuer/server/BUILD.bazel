@@ -1,0 +1,26 @@
+load("@io_bazel_rules_go//go:def.bzl", "go_library", "go_test")
+
+go_library(
+    name = "server",
+    srcs = ["server.go"],
+    importpath = "github.com/fapiper/onchain-access-control/pkg/issuer/server",
+    visibility = ["//visibility:public"],
+    deps = [
+        "//pkg/config",
+        "//pkg/did",
+        "//pkg/framework",
+        "//pkg/framework/middleware",
+        "//pkg/webhook",
+        "@com_github_gin_gonic_gin//:gin",
+        "@com_github_swaggo_files//:files",
+        "@com_github_swaggo_gin_swagger//:gin-swagger",
+        "@com_github_tbd54566975_ssi_sdk//util",
+        "@io_opentelemetry_go_contrib_instrumentation_github_com_gin_gonic_gin_otelgin//:otelgin",
+    ],
+)
+
+go_test(
+    name = "server_test",
+    srcs = ["server_issuance_test.go"],
+    embed = [":server"],
+)
