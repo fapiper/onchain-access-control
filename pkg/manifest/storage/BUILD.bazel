@@ -1,0 +1,22 @@
+load("@io_bazel_rules_go//go:def.bzl", "go_library")
+
+go_library(
+    name = "storage",
+    srcs = ["storage.go"],
+    importpath = "github.com/fapiper/onchain-access-control/pkg/manifest/storage",
+    visibility = ["//visibility:public"],
+    deps = [
+        "//pkg/internal/credential",
+        "//pkg/internal/keyaccess",
+        "//pkg/operation/credential",
+        "//pkg/operation/storage",
+        "//pkg/operation/storage/namespace",
+        "//pkg/operation/submission",
+        "//pkg/storage",
+        "@com_github_goccy_go_json//:go-json",
+        "@com_github_pkg_errors//:errors",
+        "@com_github_sirupsen_logrus//:logrus",
+        "@com_github_tbd54566975_ssi_sdk//credential/manifest",
+        "@com_github_tbd54566975_ssi_sdk//util",
+    ],
+)
