@@ -3,6 +3,7 @@ package manifest
 import (
 	"context"
 	"fmt"
+	"github.com/fapiper/onchain-access-control/pkg/manifest/model"
 	"strings"
 
 	"github.com/TBD54566975/ssi-sdk/credential/manifest"
@@ -10,9 +11,9 @@ import (
 	sdkutil "github.com/TBD54566975/ssi-sdk/util"
 	"github.com/lestrrat-go/jwx/v2/jws"
 
+	didint "github.com/fapiper/onchain-access-control/internal/did"
+	"github.com/fapiper/onchain-access-control/internal/keyaccess"
 	"github.com/fapiper/onchain-access-control/pkg/credential"
-	didint "github.com/fapiper/onchain-access-control/pkg/internal/did"
-	"github.com/fapiper/onchain-access-control/pkg/internal/keyaccess"
 )
 
 // validateCredentialApplication validates the credential application's signature(s) in addition to making sure it

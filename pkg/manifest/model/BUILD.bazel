@@ -6,9 +6,9 @@ go_library(
     importpath = "github.com/fapiper/onchain-access-control/pkg/manifest/model",
     visibility = ["//visibility:public"],
     deps = [
+        "//internal/credential",
+        "//internal/keyaccess",
         "//pkg/common",
-        "//pkg/internal/credential",
-        "//pkg/internal/keyaccess",
         "//pkg/manifest/storage",
         "@com_github_tbd54566975_ssi_sdk//credential/exchange",
         "@com_github_tbd54566975_ssi_sdk//credential/manifest",

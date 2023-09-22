@@ -6,10 +6,10 @@ go_library(
         "access.go",
         "resolver.go",
     ],
-    importpath = "github.com/fapiper/onchain-access-control/pkg/internal/did",
-    visibility = ["//pkg:__subpackages__"],
+    importpath = "github.com/fapiper/onchain-access-control/internal/did",
+    visibility = ["//:__subpackages__"],
     deps = [
-        "//pkg/internal/keyaccess",
+        "//internal/keyaccess",
         "@com_github_pkg_errors//:errors",
         "@com_github_sirupsen_logrus//:logrus",
         "@com_github_tbd54566975_ssi_sdk//did",

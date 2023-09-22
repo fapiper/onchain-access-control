@@ -4,8 +4,8 @@ import (
 	"fmt"
 
 	"github.com/TBD54566975/ssi-sdk/util"
+	"github.com/fapiper/onchain-access-control/internal/credential"
 	"github.com/fapiper/onchain-access-control/pkg/common"
-	"github.com/fapiper/onchain-access-control/pkg/internal/credential"
 )
 
 type BatchCreateCredentialsRequest struct {

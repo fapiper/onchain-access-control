@@ -6,7 +6,7 @@ import (
 	"github.com/lestrrat-go/jwx/jws"
 	"github.com/lestrrat-go/jwx/jwt"
 
-	"github.com/fapiper/onchain-access-control/pkg/internal/keyaccess"
+	"github.com/fapiper/onchain-access-control/internal/keyaccess"
 )
 
 // ParseJWT parses a JWT token and returns the jws signature and jwt claims

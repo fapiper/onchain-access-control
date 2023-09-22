@@ -15,9 +15,9 @@ import (
 	"github.com/sirupsen/logrus"
 	"go.einride.tech/aip/filtering"
 
+	credint "github.com/fapiper/onchain-access-control/internal/credential"
+	"github.com/fapiper/onchain-access-control/internal/keyaccess"
 	"github.com/fapiper/onchain-access-control/pkg/common"
-	credint "github.com/fapiper/onchain-access-control/pkg/internal/credential"
-	"github.com/fapiper/onchain-access-control/pkg/internal/keyaccess"
 	"github.com/fapiper/onchain-access-control/pkg/storage"
 	"github.com/fapiper/onchain-access-control/pkg/util"
 )

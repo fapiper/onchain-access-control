@@ -7,10 +7,10 @@ import (
 	"github.com/goccy/go-json"
 	"go.einride.tech/aip/filtering"
 
+	"github.com/fapiper/onchain-access-control/internal/credential"
+	"github.com/fapiper/onchain-access-control/internal/keyaccess"
 	"github.com/fapiper/onchain-access-control/pkg/common"
 	"github.com/fapiper/onchain-access-control/pkg/framework/pagination"
-	"github.com/fapiper/onchain-access-control/pkg/internal/credential"
-	"github.com/fapiper/onchain-access-control/pkg/internal/keyaccess"
 	"github.com/fapiper/onchain-access-control/pkg/presentation/storage"
 )
 

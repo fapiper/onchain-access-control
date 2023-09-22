@@ -9,8 +9,8 @@ import (
 	"github.com/pkg/errors"
 	"github.com/sirupsen/logrus"
 
+	"github.com/fapiper/onchain-access-control/internal/keyaccess"
 	"github.com/fapiper/onchain-access-control/pkg/common"
-	"github.com/fapiper/onchain-access-control/pkg/internal/keyaccess"
 	"github.com/fapiper/onchain-access-control/pkg/storage"
 )
 

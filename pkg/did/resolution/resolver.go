@@ -9,7 +9,7 @@ import (
 	"github.com/pkg/errors"
 	"github.com/sirupsen/logrus"
 
-	didint "github.com/fapiper/onchain-access-control/pkg/internal/did"
+	didint "github.com/fapiper/onchain-access-control/internal/did"
 	utilint "github.com/fapiper/onchain-access-control/pkg/util"
 )
 

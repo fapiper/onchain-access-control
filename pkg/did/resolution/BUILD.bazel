@@ -9,7 +9,7 @@ go_library(
     importpath = "github.com/fapiper/onchain-access-control/pkg/did/resolution",
     visibility = ["//visibility:public"],
     deps = [
-        "//pkg/internal/did",
+        "//internal/did",
         "//pkg/util",
         "@com_github_pkg_errors//:errors",
         "@com_github_sirupsen_logrus//:logrus",

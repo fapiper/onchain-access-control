@@ -17,9 +17,9 @@ import (
 	"github.com/pkg/errors"
 	"github.com/sirupsen/logrus"
 
+	cred "github.com/fapiper/onchain-access-control/internal/credential"
+	"github.com/fapiper/onchain-access-control/internal/keyaccess"
 	"github.com/fapiper/onchain-access-control/pkg/credential"
-	cred "github.com/fapiper/onchain-access-control/pkg/internal/credential"
-	"github.com/fapiper/onchain-access-control/pkg/internal/keyaccess"
 	"github.com/fapiper/onchain-access-control/pkg/issuance"
 	"github.com/fapiper/onchain-access-control/pkg/keystore"
 )

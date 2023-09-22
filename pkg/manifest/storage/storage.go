@@ -9,8 +9,8 @@ import (
 	"github.com/pkg/errors"
 	"github.com/sirupsen/logrus"
 
-	cred "github.com/fapiper/onchain-access-control/pkg/internal/credential"
-	"github.com/fapiper/onchain-access-control/pkg/internal/keyaccess"
+	cred "github.com/fapiper/onchain-access-control/internal/credential"
+	"github.com/fapiper/onchain-access-control/internal/keyaccess"
 	"github.com/fapiper/onchain-access-control/pkg/operation/credential"
 	opstorage "github.com/fapiper/onchain-access-control/pkg/operation/storage"
 	"github.com/fapiper/onchain-access-control/pkg/operation/storage/namespace"

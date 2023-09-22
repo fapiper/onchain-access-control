@@ -12,10 +12,10 @@ import (
 	"github.com/sirupsen/logrus"
 	"golang.org/x/crypto/chacha20poly1305"
 
+	"github.com/fapiper/onchain-access-control/internal/encryption"
+	"github.com/fapiper/onchain-access-control/internal/keyaccess"
 	"github.com/fapiper/onchain-access-control/pkg/config"
 	"github.com/fapiper/onchain-access-control/pkg/framework"
-	"github.com/fapiper/onchain-access-control/pkg/internal/encryption"
-	"github.com/fapiper/onchain-access-control/pkg/internal/keyaccess"
 	"github.com/fapiper/onchain-access-control/pkg/storage"
 	crypto "github.com/fapiper/onchain-access-control/pkg/util/crypto"
 )

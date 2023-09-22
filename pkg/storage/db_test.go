@@ -16,7 +16,7 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
-	"github.com/fapiper/onchain-access-control/pkg/internal/encryption"
+	"github.com/fapiper/onchain-access-control/internal/encryption"
 )
 
 func getDBImplementations(t *testing.T) []ServiceStorage {

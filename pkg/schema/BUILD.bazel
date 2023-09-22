@@ -10,11 +10,11 @@ go_library(
     importpath = "github.com/fapiper/onchain-access-control/pkg/schema",
     visibility = ["//visibility:public"],
     deps = [
+        "//internal/keyaccess",
         "//pkg/common",
         "//pkg/config",
         "//pkg/framework",
         "//pkg/framework/pagination",
-        "//pkg/internal/keyaccess",
         "//pkg/keystore",
         "//pkg/storage",
         "@com_github_goccy_go_json//:go-json",
