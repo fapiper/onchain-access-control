@@ -22,7 +22,7 @@ go_test(
     srcs = ["router_test.go"],
     embed = [":router"],
     deps = [
-        "//pkg/config",
+        "//config",
         "//pkg/framework",
         "@com_github_tbd54566975_ssi_sdk//did",
     ],

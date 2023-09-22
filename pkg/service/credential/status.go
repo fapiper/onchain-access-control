@@ -11,8 +11,8 @@ import (
 	"github.com/google/uuid"
 	"github.com/pkg/errors"
 
+	"github.com/fapiper/onchain-access-control/config"
 	credint "github.com/fapiper/onchain-access-control/internal/credential"
-	"github.com/fapiper/onchain-access-control/pkg/config"
 	"github.com/fapiper/onchain-access-control/pkg/storage"
 )
 

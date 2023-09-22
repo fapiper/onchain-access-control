@@ -16,10 +16,10 @@ import (
 	"github.com/sirupsen/logrus"
 	"go.einride.tech/aip/filtering"
 
+	"github.com/fapiper/onchain-access-control/config"
 	credint "github.com/fapiper/onchain-access-control/internal/credential"
 	"github.com/fapiper/onchain-access-control/internal/keyaccess"
 	"github.com/fapiper/onchain-access-control/internal/verification"
-	"github.com/fapiper/onchain-access-control/pkg/config"
 	"github.com/fapiper/onchain-access-control/pkg/framework"
 	"github.com/fapiper/onchain-access-control/pkg/framework/pagination"
 	"github.com/fapiper/onchain-access-control/pkg/service/keystore"

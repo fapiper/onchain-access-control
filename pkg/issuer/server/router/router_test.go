@@ -3,7 +3,7 @@ package router
 import (
 	didsdk "github.com/TBD54566975/ssi-sdk/did"
 
-	"github.com/fapiper/onchain-access-control/pkg/config"
+	"github.com/fapiper/onchain-access-control/config"
 	"github.com/fapiper/onchain-access-control/pkg/framework"
 )
 

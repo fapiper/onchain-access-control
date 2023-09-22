@@ -10,7 +10,7 @@ go_library(
     importpath = "github.com/fapiper/onchain-access-control/pkg/framework/middleware",
     visibility = ["//visibility:public"],
     deps = [
-        "//pkg/config",
+        "//config",
         "//pkg/framework/server",
         "@com_github_gin_contrib_cors//:cors",
         "@com_github_gin_gonic_gin//:gin",

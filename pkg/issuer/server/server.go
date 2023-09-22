@@ -12,7 +12,7 @@ import (
 	ginswagger "github.com/swaggo/gin-swagger"
 	"go.opentelemetry.io/contrib/instrumentation/github.com/gin-gonic/gin/otelgin"
 
-	"github.com/fapiper/onchain-access-control/pkg/config"
+	"github.com/fapiper/onchain-access-control/config"
 	"github.com/fapiper/onchain-access-control/pkg/framework"
 	svcframework "github.com/fapiper/onchain-access-control/pkg/framework"
 	"github.com/fapiper/onchain-access-control/pkg/framework/middleware"

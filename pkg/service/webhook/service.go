@@ -15,7 +15,7 @@ import (
 	"github.com/pkg/errors"
 	"github.com/sirupsen/logrus"
 
-	"github.com/fapiper/onchain-access-control/pkg/config"
+	"github.com/fapiper/onchain-access-control/config"
 	"github.com/fapiper/onchain-access-control/pkg/framework"
 	"github.com/fapiper/onchain-access-control/pkg/storage"
 	"github.com/fapiper/onchain-access-control/pkg/util"

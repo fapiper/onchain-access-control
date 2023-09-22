@@ -12,7 +12,7 @@ go_library(
     importpath = "github.com/fapiper/onchain-access-control/pkg/framework/server",
     visibility = ["//visibility:public"],
     deps = [
-        "//pkg/config",
+        "//config",
         "@com_github_gin_gonic_gin//:gin",
         "@com_github_go_playground_locales//en",
         "@com_github_go_playground_universal_translator//:universal-translator",

@@ -7,7 +7,7 @@ import (
 	didsdk "github.com/TBD54566975/ssi-sdk/did"
 	didresolution "github.com/TBD54566975/ssi-sdk/did/resolution"
 	sdkutil "github.com/TBD54566975/ssi-sdk/util"
-	"github.com/fapiper/onchain-access-control/pkg/config"
+	"github.com/fapiper/onchain-access-control/config"
 	"github.com/fapiper/onchain-access-control/pkg/framework"
 	"github.com/fapiper/onchain-access-control/pkg/service/did/resolution"
 	"github.com/fapiper/onchain-access-control/pkg/service/keystore"
