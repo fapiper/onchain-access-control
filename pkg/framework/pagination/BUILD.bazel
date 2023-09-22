@@ -6,8 +6,8 @@ go_library(
     importpath = "github.com/fapiper/onchain-access-control/pkg/framework/pagination",
     visibility = ["//visibility:public"],
     deps = [
-        "//pkg/common",
         "//pkg/framework/server",
+        "//pkg/service/common",
         "@com_github_gin_gonic_gin//:gin",
         "@com_github_goccy_go_json//:go-json",
         "@com_github_sirupsen_logrus//:logrus",

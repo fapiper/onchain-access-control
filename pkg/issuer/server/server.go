@@ -13,11 +13,11 @@ import (
 	"go.opentelemetry.io/contrib/instrumentation/github.com/gin-gonic/gin/otelgin"
 
 	"github.com/fapiper/onchain-access-control/pkg/config"
-	didsvc "github.com/fapiper/onchain-access-control/pkg/did"
 	"github.com/fapiper/onchain-access-control/pkg/framework"
 	svcframework "github.com/fapiper/onchain-access-control/pkg/framework"
 	"github.com/fapiper/onchain-access-control/pkg/framework/middleware"
-	"github.com/fapiper/onchain-access-control/pkg/webhook"
+	didsvc "github.com/fapiper/onchain-access-control/pkg/service/did"
+	"github.com/fapiper/onchain-access-control/pkg/service/webhook"
 )
 
 const (

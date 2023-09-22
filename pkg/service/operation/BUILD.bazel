@@ -1,0 +1,49 @@
+load("@io_bazel_rules_go//go:def.bzl", "go_library", "go_test")
+
+go_library(
+    name = "operation",
+    srcs = [
+        "model.go",
+        "service.go",
+        "storage.go",
+    ],
+    importpath = "github.com/fapiper/onchain-access-control/pkg/service/operation",
+    visibility = ["//visibility:public"],
+    deps = [
+        "//pkg/framework",
+        "//pkg/framework/pagination",
+        "//pkg/service/common",
+        "//pkg/service/manifest/model",
+        "//pkg/service/manifest/storage",
+        "//pkg/service/operation/credential",
+        "//pkg/service/operation/storage",
+        "//pkg/service/operation/storage/namespace",
+        "//pkg/service/operation/submission",
+        "//pkg/service/presentation/model",
+        "//pkg/service/presentation/storage",
+        "//pkg/storage",
+        "@com_github_goccy_go_json//:go-json",
+        "@com_github_pkg_errors//:errors",
+        "@com_github_sirupsen_logrus//:logrus",
+        "@com_github_tbd54566975_ssi_sdk//util",
+        "@tech_einride_go_aip//filtering",
+    ],
+)
+
+go_test(
+    name = "operation_test",
+    srcs = ["storage_test.go"],
+    embed = [":operation"],
+    deps = [
+        "//pkg/service/manifest/storage",
+        "//pkg/service/operation/credential",
+        "//pkg/service/operation/storage",
+        "//pkg/service/operation/storage/namespace",
+        "//pkg/storage",
+        "//pkg/testutil",
+        "@com_github_goccy_go_json//:go-json",
+        "@com_github_google_go_cmp//cmp",
+        "@com_github_google_go_cmp//cmp/cmpopts",
+        "@com_github_stretchr_testify//require",
+    ],
+)

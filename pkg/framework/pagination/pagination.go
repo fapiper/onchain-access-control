@@ -12,8 +12,8 @@ import (
 	"github.com/goccy/go-json"
 	"github.com/sirupsen/logrus"
 
-	"github.com/fapiper/onchain-access-control/pkg/common"
 	framework "github.com/fapiper/onchain-access-control/pkg/framework/server"
+	"github.com/fapiper/onchain-access-control/pkg/service/common"
 )
 
 type PageToken struct {

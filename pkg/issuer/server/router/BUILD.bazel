@@ -11,7 +11,7 @@ go_library(
     deps = [
         "//pkg/framework",
         "//pkg/framework/server",
-        "//pkg/issuance",
+        "//pkg/service/issuance",
         "@com_github_gin_gonic_gin//:gin",
         "@com_github_pkg_errors//:errors",
     ],

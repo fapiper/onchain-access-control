@@ -9,7 +9,7 @@ import (
 
 	svcframework "github.com/fapiper/onchain-access-control/pkg/framework"
 	framework "github.com/fapiper/onchain-access-control/pkg/framework/server"
-	"github.com/fapiper/onchain-access-control/pkg/issuance"
+	"github.com/fapiper/onchain-access-control/pkg/service/issuance"
 )
 
 type IssuanceRouter struct {
