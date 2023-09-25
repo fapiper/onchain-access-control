@@ -8,6 +8,7 @@ go_library(
     deps = [
         "//config",
         "//pkg/framework",
+        "//pkg/framework/middleware",
         "//pkg/framework/router",
         "//pkg/service/did",
         "//pkg/service/webhook",

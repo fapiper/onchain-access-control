@@ -7,6 +7,7 @@ import (
 
 	"github.com/fapiper/onchain-access-control/config"
 	svcframework "github.com/fapiper/onchain-access-control/pkg/framework"
+	"github.com/fapiper/onchain-access-control/pkg/framework/middleware"
 	"github.com/fapiper/onchain-access-control/pkg/framework/router"
 	didsvc "github.com/fapiper/onchain-access-control/pkg/service/did"
 	"github.com/fapiper/onchain-access-control/pkg/service/webhook"
