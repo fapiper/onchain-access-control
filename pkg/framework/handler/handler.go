@@ -3,12 +3,36 @@ package handler
 import (
 	"fmt"
 	sdkutil "github.com/TBD54566975/ssi-sdk/util"
+	"github.com/gin-gonic/gin"
+
 	"github.com/fapiper/onchain-access-control/config"
 	svcframework "github.com/fapiper/onchain-access-control/pkg/framework"
 	"github.com/fapiper/onchain-access-control/pkg/framework/router"
 	didsvc "github.com/fapiper/onchain-access-control/pkg/service/did"
 	"github.com/fapiper/onchain-access-control/pkg/service/webhook"
-	"github.com/gin-gonic/gin"
+)
+
+const (
+	OperationPrefix         = "/operations"
+	DIDsPrefix              = "/dids"
+	ResolverPrefix          = "/resolver"
+	SchemasPrefix           = "/schemas"
+	CredentialsPrefix       = "/credentials"
+	StatusPrefix            = "/status"
+	PresentationsPrefix     = "/presentations"
+	DefinitionsPrefix       = "/definitions"
+	SubmissionsPrefix       = "/submissions"
+	IssuanceTemplatePrefix  = "/issuancetemplates"
+	RequestsPrefix          = "/requests"
+	ManifestsPrefix         = "/manifests"
+	ApplicationsPrefix      = "/applications"
+	ResponsesPrefix         = "/responses"
+	KeyStorePrefix          = "/keys"
+	VerificationPath        = "/verification"
+	WebhookPrefix           = "/webhooks"
+	DIDConfigurationsPrefix = "/did-configurations"
+
+	batchSuffix = "/batch"
 )
 
 // KeyStoreAPI registers all HTTP handlers for the Key Store Service
