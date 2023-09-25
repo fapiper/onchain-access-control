@@ -18,11 +18,11 @@ import (
 	"go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp"
 
 	credint "github.com/fapiper/onchain-access-control/internal/credential"
+	"github.com/fapiper/onchain-access-control/internal/util"
 	"github.com/fapiper/onchain-access-control/internal/verification"
 	svcframework "github.com/fapiper/onchain-access-control/pkg/framework"
 	"github.com/fapiper/onchain-access-control/pkg/service/keystore"
 	"github.com/fapiper/onchain-access-control/pkg/service/schema"
-	"github.com/fapiper/onchain-access-control/pkg/util"
 )
 
 type DIDConfigurationService struct {

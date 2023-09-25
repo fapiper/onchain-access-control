@@ -24,7 +24,7 @@ import (
 	"github.com/fapiper/onchain-access-control/pkg/service/schema"
 	"github.com/fapiper/onchain-access-control/pkg/storage"
 	"github.com/fapiper/onchain-access-control/pkg/testutil"
-	"github.com/fapiper/onchain-access-control/pkg/util"
+	"github.com/fapiper/onchain-access-control/internal/util"
 )
 
 func TestIssuanceRouter(t *testing.T) {

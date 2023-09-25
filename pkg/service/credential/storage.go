@@ -17,9 +17,9 @@ import (
 
 	credint "github.com/fapiper/onchain-access-control/internal/credential"
 	"github.com/fapiper/onchain-access-control/internal/keyaccess"
+	"github.com/fapiper/onchain-access-control/internal/util"
 	"github.com/fapiper/onchain-access-control/pkg/service/common"
 	"github.com/fapiper/onchain-access-control/pkg/storage"
-	"github.com/fapiper/onchain-access-control/pkg/util"
 )
 
 type StoreCredentialRequest struct {

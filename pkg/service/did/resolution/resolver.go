@@ -10,7 +10,7 @@ import (
 	"github.com/sirupsen/logrus"
 
 	didint "github.com/fapiper/onchain-access-control/internal/did"
-	utilint "github.com/fapiper/onchain-access-control/pkg/util"
+	utilint "github.com/fapiper/onchain-access-control/internal/util"
 )
 
 // ServiceResolver is a resolver that can resolve DIDs using a combination of local and universal resolvers.

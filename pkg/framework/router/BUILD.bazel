@@ -22,6 +22,7 @@ go_library(
     deps = [
         "//internal/credential",
         "//internal/keyaccess",
+        "//internal/util",
         "//pkg/framework",
         "//pkg/framework/pagination",
         "//pkg/framework/server",
@@ -38,7 +39,6 @@ go_library(
         "//pkg/service/schema",
         "//pkg/service/webhook",
         "//pkg/service/well-known",
-        "//pkg/util",
         "@com_github_gin_gonic_gin//:gin",
         "@com_github_goccy_go_json//:go-json",
         "@com_github_mr_tron_base58//:base58",

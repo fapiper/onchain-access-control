@@ -10,11 +10,11 @@ go_library(
     visibility = ["//visibility:public"],
     deps = [
         "//internal/credential",
+        "//internal/util",
         "//internal/verification",
         "//pkg/framework",
         "//pkg/service/keystore",
         "//pkg/service/schema",
-        "//pkg/util",
         "@com_github_goccy_go_json//:go-json",
         "@com_github_pkg_errors//:errors",
         "@com_github_tbd54566975_ssi_sdk//credential",

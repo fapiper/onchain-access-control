@@ -16,9 +16,9 @@ import (
 	"github.com/sirupsen/logrus"
 
 	"github.com/fapiper/onchain-access-control/config"
+	"github.com/fapiper/onchain-access-control/internal/util"
 	"github.com/fapiper/onchain-access-control/pkg/framework"
 	"github.com/fapiper/onchain-access-control/pkg/storage"
-	"github.com/fapiper/onchain-access-control/pkg/util"
 
 	"go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp"
 )

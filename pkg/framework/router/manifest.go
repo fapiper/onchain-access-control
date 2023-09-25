@@ -16,8 +16,8 @@ import (
 
 	"github.com/fapiper/onchain-access-control/internal/credential"
 	"github.com/fapiper/onchain-access-control/internal/keyaccess"
+	"github.com/fapiper/onchain-access-control/internal/util"
 	"github.com/fapiper/onchain-access-control/pkg/service/manifest"
-	"github.com/fapiper/onchain-access-control/pkg/util"
 
 	"github.com/pkg/errors"
 	"github.com/sirupsen/logrus"

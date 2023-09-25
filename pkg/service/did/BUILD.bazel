@@ -16,12 +16,12 @@ go_library(
     visibility = ["//visibility:public"],
     deps = [
         "//config",
+        "//internal/util",
         "//pkg/framework",
         "//pkg/service/common",
         "//pkg/service/did/resolution",
         "//pkg/service/keystore",
         "//pkg/storage",
-        "//pkg/util",
         "@com_github_goccy_go_json//:go-json",
         "@com_github_google_uuid//:uuid",
         "@com_github_lestrrat_go_jwx_v2//jws",

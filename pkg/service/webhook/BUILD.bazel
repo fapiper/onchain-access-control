@@ -11,9 +11,9 @@ go_library(
     visibility = ["//visibility:public"],
     deps = [
         "//config",
+        "//internal/util",
         "//pkg/framework",
         "//pkg/storage",
-        "//pkg/util",
         "@com_github_gin_gonic_gin//:gin",
         "@com_github_pkg_errors//:errors",
         "@com_github_sirupsen_logrus//:logrus",

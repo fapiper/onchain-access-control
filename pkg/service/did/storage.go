@@ -11,9 +11,9 @@ import (
 	"github.com/pkg/errors"
 	"github.com/sirupsen/logrus"
 
+	"github.com/fapiper/onchain-access-control/internal/util"
 	"github.com/fapiper/onchain-access-control/pkg/service/common"
 	"github.com/fapiper/onchain-access-control/pkg/storage"
-	"github.com/fapiper/onchain-access-control/pkg/util"
 )
 
 const (
