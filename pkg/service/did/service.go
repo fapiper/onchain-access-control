@@ -118,6 +118,18 @@ func (s *Service) instantiateHandlerForMethod(method didsdk.Method) error {
 			return errors.Wrap(err, "instantiating key handler")
 		}
 		s.handlers[method] = kh
+	case didsdk.WebMethod:
+		wh, err := NewWebHandler(s.storage, s.keyStore)
+		if err != nil {
+			return errors.Wrap(err, "instantiating web handler")
+		}
+		s.handlers[method] = wh
+	case didsdk.IONMethod:
+		ih, err := NewIONHandler(s.Config().IONResolverURL, s.storage, s.keyStore, s.keyStoreFactory, s.didStorageFactory)
+		if err != nil {
+			return errors.Wrap(err, "instantiating ion handler")
+		}
+		s.handlers[method] = ih
 	default:
 		return sdkutil.LoggingNewErrorf("unsupported DID method: %s", method)
 	}
@@ -157,6 +169,18 @@ func (s *Service) CreateDIDByMethod(ctx context.Context, request CreateDIDReques
 		return nil, sdkutil.LoggingErrorMsgf(err, "could not get handler for method<%s>", request.Method)
 	}
 	return handler.CreateDID(ctx, request)
+}
+
+func (s *Service) UpdateIONDID(ctx context.Context, request UpdateIONDIDRequest) (*UpdateIONDIDResponse, error) {
+	handler, err := s.getHandler(didsdk.IONMethod)
+	if err != nil {
+		return nil, sdkutil.LoggingErrorMsgf(err, "could not get handler for method<%s>", didsdk.IONMethod)
+	}
+	ionHandlerImpl, ok := handler.(*ionHandler)
+	if !ok {
+		return nil, errors.New("cannot assert that handler is an ionHandler")
+	}
+	return ionHandlerImpl.UpdateDID(ctx, request)
 }
 
 func (s *Service) GetDIDByMethod(ctx context.Context, request GetDIDRequest) (*GetDIDResponse, error) {
