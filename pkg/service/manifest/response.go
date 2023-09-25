@@ -3,6 +3,7 @@ package manifest
 import (
 	"context"
 	"fmt"
+	"github.com/fapiper/onchain-access-control/pkg/service/manifest/model"
 	"strings"
 	"time"
 
