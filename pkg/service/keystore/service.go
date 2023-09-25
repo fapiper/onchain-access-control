@@ -17,7 +17,7 @@ import (
 	"github.com/fapiper/onchain-access-control/internal/keyaccess"
 	"github.com/fapiper/onchain-access-control/pkg/framework"
 	"github.com/fapiper/onchain-access-control/pkg/storage"
-	crypto "github.com/fapiper/onchain-access-control/pkg/util/crypto"
+	crypto "github.com/fapiper/onchain-access-control/pkg/util"
 )
 
 type ServiceFactory func(storage.Tx) (*Service, error)

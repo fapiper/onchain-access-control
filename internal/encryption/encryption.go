@@ -5,7 +5,7 @@ import (
 	"strings"
 
 	sdkutil "github.com/TBD54566975/ssi-sdk/util"
-	"github.com/fapiper/onchain-access-control/pkg/util/crypto"
+	"github.com/fapiper/onchain-access-control/pkg/util"
 	"github.com/google/tink/go/aead"
 	"github.com/google/tink/go/core/registry"
 	"github.com/google/tink/go/integration/awskms"
@@ -50,7 +50,7 @@ func (k XChaCha20Poly1305Encrypter) Encrypt(ctx context.Context, plaintext, _ []
 	if err != nil {
 		return nil, errors.Wrap(err, "resolving key")
 	}
-	encryptedKey, err := crypto.XChaCha20Poly1305Encrypt(key, plaintext)
+	encryptedKey, err := util.XChaCha20Poly1305Encrypt(key, plaintext)
 	if err != nil {
 		return nil, sdkutil.LoggingErrorMsgf(err, "could not encrypt key")
 	}
@@ -67,7 +67,7 @@ func (k XChaCha20Poly1305Encrypter) Decrypt(ctx context.Context, ciphertext, _ [
 		return nil, errors.Wrap(err, "resolving key")
 	}
 	// decrypt key before unmarshaling
-	decryptedKey, err := crypto.XChaCha20Poly1305Decrypt(key, ciphertext)
+	decryptedKey, err := util.XChaCha20Poly1305Decrypt(key, ciphertext)
 	if err != nil {
 		return nil, sdkutil.LoggingErrorMsgf(err, "could not decrypt key")
 	}

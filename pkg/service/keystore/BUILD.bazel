@@ -15,7 +15,7 @@ go_library(
         "//internal/keyaccess",
         "//pkg/framework",
         "//pkg/storage",
-        "//pkg/util/crypto",
+        "//pkg/util",
         "@com_github_benbjohnson_clock//:clock",
         "@com_github_mr_tron_base58//:base58",
         "@com_github_pkg_errors//:errors",
