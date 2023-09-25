@@ -6,7 +6,7 @@ go_library(
         "config.go",
         "info.go",
     ],
-    importpath = "github.com/fapiper/onchain-access-control/pkg/config",
+    importpath = "github.com/fapiper/onchain-access-control/config",
     visibility = ["//visibility:public"],
     deps = [
         "//pkg/framework",
