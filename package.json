@@ -13,9 +13,8 @@
     "test:bazel": "bazel test //pkg/...",
     "dev": "run-p dev:turbo dev:bazel",
     "dev:turbo": "turbo run dev --parallel",
-    "dev:bazel": "run-p dev:issuer dev:owner",
-    "dev:issuer": "ibazel run //pkg/issuer",
-    "dev:owner": "ibazel run //pkg/owner",
+    "dev:bazel": "run-p dev:consumer",
+    "dev:consumer": "ibazel run //cmd/consumer",
     "lint:turbo": "turbo run lint",
     "prepare": "husky install",
     "pre-commit": "lint-staged"

@@ -13,3 +13,4 @@ bazel-genfiles
 .aswb
 .clwb
 docs
+package.json

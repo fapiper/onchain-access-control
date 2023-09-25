@@ -1904,6 +1904,7 @@ def go_dependencies():
     go_repository(
         name = "tech_einride_go_aip",
         importpath = "go.einride.tech/aip",
+        build_file_proto_mode = "disable_global",
         sum = "h1:DVHT0kgIhHfEqcbTUZ/tKTc+YButvOuTVT4JQFWDGo0=",
         version = "v0.62.0",
     )
