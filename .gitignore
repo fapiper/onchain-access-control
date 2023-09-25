@@ -144,3 +144,6 @@ bazel-*
 /.ijwb/
 /.aswb/
 /.clwb/
+
+# DB files
+*.db
