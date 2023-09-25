@@ -1178,6 +1178,13 @@ def go_dependencies():
         version = "v0.0.0-20161129095857-cc309e4a2223",
     )
     go_repository(
+        name = "com_github_nbio_st",
+        importpath = "github.com/nbio/st",
+        sum = "h1:W6apQkHrMkS0Muv8G/TipAy/FJl/rCYT0+EuS8+Z0z4=",
+        version = "v0.0.0-20140626010706-e9e8d9816f32",
+    )
+
+    go_repository(
         name = "com_github_niemeyer_pretty",
         importpath = "github.com/niemeyer/pretty",
         sum = "h1:fD57ERR4JtEqsWbfPhv4DMiApHyliiK5xCTNVSPiaAs=",
