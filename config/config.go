@@ -18,7 +18,7 @@ import (
 )
 
 const (
-	DefaultConfigPath = "config/dev.toml"
+	DefaultConfigPath = ""
 	DefaultEnvPath    = "config/.env"
 	Filename          = "dev.toml"
 	Extension         = ".toml"

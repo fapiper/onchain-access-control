@@ -6,6 +6,12 @@ go_library(
         "config.go",
         "info.go",
     ],
+    data = [
+        "dev.toml",
+        "kitchensink.toml",
+        "prod.toml",
+        "test.toml",
+    ],
     importpath = "github.com/fapiper/onchain-access-control/config",
     visibility = ["//visibility:public"],
     deps = [
