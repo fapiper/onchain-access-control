@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"io/fs"
 	"os"
+	"path"
 	"path/filepath"
 	"reflect"
 	"time"
@@ -171,6 +172,23 @@ func (p *WebhookServiceConfig) IsEmpty() bool {
 		return true
 	}
 	return reflect.DeepEqual(p, &WebhookServiceConfig{})
+}
+
+func Init() *SSIServiceConfig {
+	configPath := DefaultConfigPath
+	envConfigPath, present := os.LookupEnv(ConfigPath.String())
+	if present {
+		logrus.Infof("loading config from env var path: %s", envConfigPath)
+		configPath = envConfigPath
+	}
+
+	dir, file := path.Split(configPath)
+	cfg, err := LoadConfig(file, os.DirFS(dir))
+	if err != nil {
+		logrus.Fatalf("could not instantiate config: %s", err.Error())
+	}
+
+	return cfg
 }
 
 // LoadConfig attempts to load a TOML config file from the given path, and coerce it into our object model.

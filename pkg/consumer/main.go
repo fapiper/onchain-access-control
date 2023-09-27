@@ -9,7 +9,6 @@ import (
 	"github.com/sirupsen/logrus"
 	"os"
 	"os/signal"
-	"path"
 	"syscall"
 
 	"github.com/fapiper/onchain-access-control/config"
@@ -26,29 +25,19 @@ func Init() {
 
 // startup and shutdown logic
 func run() error {
-	configPath := config.DefaultConfigPath
-	envConfigPath, present := os.LookupEnv(config.ConfigPath.String())
-	if present {
-		logrus.Infof("loading config from env var path: %s", envConfigPath)
-		configPath = envConfigPath
-	}
+	// init config
+	cfg := config.Init()
 
-	dir, file := path.Split(configPath)
-	cfg, err := config.LoadConfig(file, os.DirFS(dir))
-	if err != nil {
-		logrus.Fatalf("could not instantiate config: %s", err.Error())
-	}
-
-	// set up logger
-	if logFile := log.Configure(cfg.Server.LogLevel, cfg.Server.LogLocation); logFile != nil {
+	// setup logger based on config
+	if logFile := log.Init(cfg.Server.LogLevel, cfg.Server.LogLocation); logFile != nil {
 		defer func(logFile *os.File) {
-			if err = logFile.Close(); err != nil {
+			if err := logFile.Close(); err != nil {
 				logrus.WithError(err).Error("failed to close log file")
 			}
 		}(logFile)
 	}
 
-	// set up schema caching based on config
+	// setup schema caching based on config
 	if cfg.Server.EnableSchemaCaching {
 		localSchemas, err := schema.GetAllLocalSchemas()
 		if err != nil {
@@ -81,6 +70,7 @@ func run() error {
 	signal.Notify(shutdown, os.Interrupt, syscall.SIGTERM)
 
 	consumerServer, err := NewServer(shutdown, *cfg)
+
 	if err != nil {
 		logrus.Fatalf("could not start http services: %s", err.Error())
 	}

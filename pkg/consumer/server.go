@@ -24,7 +24,7 @@ const (
 	V1Prefix        = "/v1"
 )
 
-// Server exposes all dependencies needed to run a http pkg.server and all its services
+// Server exposes all dependencies needed to run a http server and all its services
 type Server struct {
 	*config.ServerConfig
 	*Service

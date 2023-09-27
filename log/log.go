@@ -9,9 +9,9 @@ import (
 	"time"
 )
 
-// Configure configures the logger to logs to the given location and returns a file pointer to a logs
+// Init configures the logger to logs to the given location and returns a file pointer to a logs
 // file that should be closed upon server shutdown
-func Configure(level, location string) *os.File {
+func Init(level, location string) *os.File {
 	if level != "" {
 		logLevel, err := logrus.ParseLevel(level)
 		if err != nil {
