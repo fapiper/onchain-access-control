@@ -11,6 +11,7 @@ go_library(
     visibility = ["//visibility:public"],
     deps = [
         "//config",
+        "//log",
         "//pkg/server/framework",
         "//pkg/server/handler",
         "//pkg/server/middleware",
