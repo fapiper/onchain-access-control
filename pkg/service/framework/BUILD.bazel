@@ -3,6 +3,6 @@ load("@io_bazel_rules_go//go:def.bzl", "go_library")
 go_library(
     name = "framework",
     srcs = ["framework.go"],
-    importpath = "github.com/fapiper/onchain-access-control/pkg/framework",
+    importpath = "github.com/fapiper/onchain-access-control/pkg/service/framework",
     visibility = ["//visibility:public"],
 )
