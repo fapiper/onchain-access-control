@@ -11,10 +11,10 @@ import (
 	"go.opentelemetry.io/contrib/instrumentation/github.com/gin-gonic/gin/otelgin"
 
 	"github.com/fapiper/onchain-access-control/config"
-	"github.com/fapiper/onchain-access-control/pkg/framework/handler"
-	"github.com/fapiper/onchain-access-control/pkg/framework/middleware"
-	"github.com/fapiper/onchain-access-control/pkg/framework/router"
-	framework "github.com/fapiper/onchain-access-control/pkg/framework/server"
+	framework "github.com/fapiper/onchain-access-control/pkg/server/framework"
+	"github.com/fapiper/onchain-access-control/pkg/server/handler"
+	"github.com/fapiper/onchain-access-control/pkg/server/middleware"
+	"github.com/fapiper/onchain-access-control/pkg/server/router"
 )
 
 const (
@@ -24,7 +24,7 @@ const (
 	V1Prefix        = "/v1"
 )
 
-// Server exposes all dependencies needed to run a http server and all its services
+// Server exposes all dependencies needed to run a http pkg.server and all its services
 type Server struct {
 	*config.ServerConfig
 	*Service
@@ -33,7 +33,7 @@ type Server struct {
 
 // NewServer does two things: instantiates all service and registers their HTTP bindings
 func NewServer(shutdown chan os.Signal, cfg config.SSIServiceConfig) (*Server, error) {
-	// creates an HTTP server from the framework, and wrap it to extend it for the Consumers
+	// creates an HTTP pkg.server from the framework, and wrap it to extend it for the Consumers
 	engine := setUpEngine(cfg.Server, shutdown)
 	httpServer := framework.NewServer(cfg.Server, engine, shutdown)
 	consumer, err := InstantiateService(cfg.Services)

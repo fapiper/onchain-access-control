@@ -10,8 +10,8 @@ go_library(
     importpath = "github.com/fapiper/onchain-access-control/pkg/service/issuance",
     visibility = ["//visibility:public"],
     deps = [
-        "//pkg/framework",
         "//pkg/service/common",
+        "//pkg/service/framework",
         "//pkg/service/manifest/storage",
         "//pkg/service/schema",
         "//pkg/storage",

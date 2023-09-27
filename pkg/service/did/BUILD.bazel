@@ -17,9 +17,9 @@ go_library(
     deps = [
         "//config",
         "//internal/util",
-        "//pkg/framework",
         "//pkg/service/common",
         "//pkg/service/did/resolution",
+        "//pkg/service/framework",
         "//pkg/service/keystore",
         "//pkg/storage",
         "@com_github_goccy_go_json//:go-json",

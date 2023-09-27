@@ -17,9 +17,9 @@ import (
 
 	credint "github.com/fapiper/onchain-access-control/internal/credential"
 	"github.com/fapiper/onchain-access-control/internal/keyaccess"
-	"github.com/fapiper/onchain-access-control/pkg/framework"
 	"github.com/fapiper/onchain-access-control/pkg/service/common"
 	"github.com/fapiper/onchain-access-control/pkg/service/credential"
+	"github.com/fapiper/onchain-access-control/pkg/service/framework"
 	"github.com/fapiper/onchain-access-control/pkg/service/issuance"
 	"github.com/fapiper/onchain-access-control/pkg/service/keystore"
 	"github.com/fapiper/onchain-access-control/pkg/service/manifest/model"

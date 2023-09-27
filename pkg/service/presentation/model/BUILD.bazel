@@ -8,7 +8,7 @@ go_library(
     deps = [
         "//internal/credential",
         "//internal/keyaccess",
-        "//pkg/framework/pagination",
+        "//pkg/server/pagination",
         "//pkg/service/common",
         "//pkg/service/presentation/storage",
         "@com_github_goccy_go_json//:go-json",

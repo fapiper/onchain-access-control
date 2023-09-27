@@ -14,7 +14,7 @@ go_library(
         "//internal/encryption",
         "//internal/keyaccess",
         "//internal/util",
-        "//pkg/framework",
+        "//pkg/service/framework",
         "//pkg/storage",
         "@com_github_benbjohnson_clock//:clock",
         "@com_github_mr_tron_base58//:base58",

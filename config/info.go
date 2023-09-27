@@ -3,7 +3,7 @@ package config
 import (
 	"strings"
 
-	"github.com/fapiper/onchain-access-control/pkg/framework"
+	"github.com/fapiper/onchain-access-control/pkg/service/framework"
 )
 
 const (

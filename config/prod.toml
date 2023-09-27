@@ -1,5 +1,5 @@
 # http service configuration
-[server]
+[pkg.server]
 env = "prod" # either 'dev', 'test', or 'prod'
 api_host = "0.0.0.0:3000"
 jager_host = "http://jaeger:14268/api/traces"

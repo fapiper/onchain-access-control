@@ -12,7 +12,7 @@ go_library(
         "//internal/credential",
         "//internal/util",
         "//internal/verification",
-        "//pkg/framework",
+        "//pkg/service/framework",
         "//pkg/service/keystore",
         "//pkg/service/schema",
         "@com_github_goccy_go_json//:go-json",

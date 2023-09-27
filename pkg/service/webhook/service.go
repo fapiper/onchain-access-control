@@ -17,7 +17,7 @@ import (
 
 	"github.com/fapiper/onchain-access-control/config"
 	"github.com/fapiper/onchain-access-control/internal/util"
-	"github.com/fapiper/onchain-access-control/pkg/framework"
+	"github.com/fapiper/onchain-access-control/pkg/service/framework"
 	"github.com/fapiper/onchain-access-control/pkg/storage"
 
 	"go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp"

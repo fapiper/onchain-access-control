@@ -1,0 +1,32 @@
+load("@io_bazel_rules_go//go:def.bzl", "go_library", "go_test")
+
+go_library(
+    name = "middleware",
+    srcs = [
+        "authn.go",
+        "cors.go",
+        "errors.go",
+        "webhook.go",
+    ],
+    importpath = "github.com/fapiper/onchain-access-control/pkg/server/middleware",
+    visibility = ["//visibility:public"],
+    deps = [
+        "//config",
+        "//pkg/server/framework",
+        "//pkg/service/webhook",
+        "@com_github_gin_contrib_cors//:cors",
+        "@com_github_gin_gonic_gin//:gin",
+        "@com_github_sirupsen_logrus//:logrus",
+        "@io_opentelemetry_go_otel_trace//:trace",
+    ],
+)
+
+go_test(
+    name = "middleware_test",
+    srcs = ["authn_test.go"],
+    embed = [":middleware"],
+    deps = [
+        "@com_github_gin_gonic_gin//:gin",
+        "@com_github_stretchr_testify//assert",
+    ],
+)

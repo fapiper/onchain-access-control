@@ -20,7 +20,7 @@ import (
 	credint "github.com/fapiper/onchain-access-control/internal/credential"
 	"github.com/fapiper/onchain-access-control/internal/util"
 	"github.com/fapiper/onchain-access-control/internal/verification"
-	svcframework "github.com/fapiper/onchain-access-control/pkg/framework"
+	svcframework "github.com/fapiper/onchain-access-control/pkg/service/framework"
 	"github.com/fapiper/onchain-access-control/pkg/service/keystore"
 	"github.com/fapiper/onchain-access-control/pkg/service/schema"
 )

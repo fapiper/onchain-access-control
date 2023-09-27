@@ -4,7 +4,7 @@ import (
 	"github.com/TBD54566975/ssi-sdk/util"
 	"go.einride.tech/aip/filtering"
 
-	"github.com/fapiper/onchain-access-control/pkg/framework/pagination"
+	"github.com/fapiper/onchain-access-control/pkg/server/pagination"
 )
 
 type Result struct {

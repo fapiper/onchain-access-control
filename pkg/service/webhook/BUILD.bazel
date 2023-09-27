@@ -12,7 +12,7 @@ go_library(
     deps = [
         "//config",
         "//internal/util",
-        "//pkg/framework",
+        "//pkg/service/framework",
         "//pkg/storage",
         "@com_github_gin_gonic_gin//:gin",
         "@com_github_pkg_errors//:errors",

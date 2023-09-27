@@ -1,4 +1,4 @@
-[server]
+[pkg.server]
 env = "prod" # either 'dev', 'test', or 'prod'
 
 [services.keystore]

@@ -7,9 +7,9 @@ import (
 	"github.com/pkg/errors"
 
 	"github.com/fapiper/onchain-access-control/config"
-	"github.com/fapiper/onchain-access-control/pkg/framework"
 	"github.com/fapiper/onchain-access-control/pkg/service/credential"
 	"github.com/fapiper/onchain-access-control/pkg/service/did"
+	"github.com/fapiper/onchain-access-control/pkg/service/framework"
 	"github.com/fapiper/onchain-access-control/pkg/service/issuance"
 	"github.com/fapiper/onchain-access-control/pkg/service/keystore"
 	"github.com/fapiper/onchain-access-control/pkg/service/manifest"

@@ -6,7 +6,7 @@ import (
 	"github.com/google/uuid"
 	"github.com/pkg/errors"
 
-	"github.com/fapiper/onchain-access-control/pkg/framework"
+	"github.com/fapiper/onchain-access-control/pkg/service/framework"
 	manifeststg "github.com/fapiper/onchain-access-control/pkg/service/manifest/storage"
 	"github.com/fapiper/onchain-access-control/pkg/service/schema"
 	"github.com/fapiper/onchain-access-control/pkg/storage"

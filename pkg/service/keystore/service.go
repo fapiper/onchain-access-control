@@ -16,7 +16,7 @@ import (
 	"github.com/fapiper/onchain-access-control/internal/encryption"
 	"github.com/fapiper/onchain-access-control/internal/keyaccess"
 	crypto "github.com/fapiper/onchain-access-control/internal/util"
-	"github.com/fapiper/onchain-access-control/pkg/framework"
+	"github.com/fapiper/onchain-access-control/pkg/service/framework"
 	"github.com/fapiper/onchain-access-control/pkg/storage"
 )
 

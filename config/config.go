@@ -41,11 +41,11 @@ func (e EnvironmentVariable) String() string {
 }
 
 type SSIServiceConfig struct {
-	Server   ServerConfig   `toml:"server"`
+	Server   ServerConfig   `toml:"pkg.server"`
 	Services ServicesConfig `toml:"services"`
 }
 
-// ServerConfig represents configurable properties for the HTTP server
+// ServerConfig represents configurable properties for the HTTP pkg.server
 type ServerConfig struct {
 	Environment         Environment   `toml:"env" conf:"default:dev"`
 	APIHost             string        `toml:"api_host" conf:"default:0.0.0.0:3000"`

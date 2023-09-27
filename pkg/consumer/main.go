@@ -90,13 +90,13 @@ func run() error {
 
 	serverErrors := make(chan error, 1)
 	go func() {
-		logrus.Infof("main: server started and listening on -> %s", consumerServer.Server.Addr)
+		logrus.Infof("main: pkg.server started and listening on -> %s", consumerServer.Server.Addr)
 		serverErrors <- consumerServer.ListenAndServe()
 	}()
 
 	select {
 	case err = <-serverErrors:
-		return errors.Wrap(err, "server error")
+		return errors.Wrap(err, "pkg.server error")
 	case sig := <-shutdown:
 		logrus.Infof("main: shutdown signal received -> %v", sig)
 
@@ -108,9 +108,9 @@ func run() error {
 		}
 
 		if err = consumerServer.Shutdown(ctx); err != nil {
-			logrus.WithError(err).Error("main: failed to stop server gracefully, forcing shutdown")
+			logrus.WithError(err).Error("main: failed to stop pkg.server gracefully, forcing shutdown")
 			if err = consumerServer.Close(); err != nil {
-				logrus.WithError(err).Error("main: failed to close server")
+				logrus.WithError(err).Error("main: failed to close pkg.server")
 			}
 		}
 	}
@@ -119,7 +119,7 @@ func run() error {
 }
 
 // configureLogger configures the logger to logs to the given location and returns a file pointer to a logs
-// file that should be closed upon server shutdown
+// file that should be closed upon pkg.server shutdown
 func configureLogger(level, location string) *os.File {
 	if level != "" {
 		logLevel, err := logrus.ParseLevel(level)

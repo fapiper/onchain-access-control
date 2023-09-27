@@ -14,7 +14,7 @@ import (
 	"github.com/pkg/errors"
 	"github.com/sirupsen/logrus"
 
-	"github.com/fapiper/onchain-access-control/pkg/framework"
+	"github.com/fapiper/onchain-access-control/pkg/service/framework"
 	manifestmodel "github.com/fapiper/onchain-access-control/pkg/service/manifest/model"
 	manifeststg "github.com/fapiper/onchain-access-control/pkg/service/manifest/storage"
 	"github.com/fapiper/onchain-access-control/pkg/service/operation/credential"

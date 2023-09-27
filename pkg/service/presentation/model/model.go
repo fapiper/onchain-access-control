@@ -9,7 +9,7 @@ import (
 
 	"github.com/fapiper/onchain-access-control/internal/credential"
 	"github.com/fapiper/onchain-access-control/internal/keyaccess"
-	"github.com/fapiper/onchain-access-control/pkg/framework/pagination"
+	"github.com/fapiper/onchain-access-control/pkg/server/pagination"
 	"github.com/fapiper/onchain-access-control/pkg/service/common"
 	"github.com/fapiper/onchain-access-control/pkg/service/presentation/storage"
 )

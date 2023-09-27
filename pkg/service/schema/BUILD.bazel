@@ -12,9 +12,9 @@ go_library(
     deps = [
         "//config",
         "//internal/keyaccess",
-        "//pkg/framework",
-        "//pkg/framework/pagination",
+        "//pkg/server/pagination",
         "//pkg/service/common",
+        "//pkg/service/framework",
         "//pkg/service/keystore",
         "//pkg/storage",
         "@com_github_goccy_go_json//:go-json",
