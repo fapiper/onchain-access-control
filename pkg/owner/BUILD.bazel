@@ -1,14 +1,41 @@
-load("@io_bazel_rules_go//go:def.bzl", "go_binary", "go_library")
+load("@io_bazel_rules_go//go:def.bzl", "go_library")
 
 go_library(
-    name = "owner_lib",
-    srcs = ["main.go"],
-    importpath = "github.com/fapiper/onchain-access-control/pkg/owner",
-    visibility = ["//visibility:private"],
-)
-
-go_binary(
     name = "owner",
-    embed = [":owner_lib"],
+    srcs = [
+        "main.go",
+        "server.go",
+        "service.go",
+    ],
+    importpath = "github.com/fapiper/onchain-access-control/pkg/owner",
     visibility = ["//visibility:public"],
+    deps = [
+        "//config",
+        "//log",
+        "//pkg/server/framework",
+        "//pkg/server/handler",
+        "//pkg/server/middleware",
+        "//pkg/server/router",
+        "//pkg/service/credential",
+        "//pkg/service/did",
+        "//pkg/service/framework",
+        "//pkg/service/issuance",
+        "//pkg/service/keystore",
+        "//pkg/service/manifest",
+        "//pkg/service/operation",
+        "//pkg/service/presentation",
+        "//pkg/service/schema",
+        "//pkg/service/webhook",
+        "//pkg/service/well-known",
+        "//pkg/storage",
+        "@com_github_ardanlabs_conf//:conf",
+        "@com_github_gin_gonic_gin//:gin",
+        "@com_github_pkg_errors//:errors",
+        "@com_github_sirupsen_logrus//:logrus",
+        "@com_github_swaggo_files//:files",
+        "@com_github_swaggo_gin_swagger//:gin-swagger",
+        "@com_github_tbd54566975_ssi_sdk//schema",
+        "@com_github_tbd54566975_ssi_sdk//util",
+        "@io_opentelemetry_go_contrib_instrumentation_github_com_gin_gonic_gin_otelgin//:otelgin",
+    ],
 )

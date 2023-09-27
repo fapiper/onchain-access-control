@@ -69,7 +69,7 @@ func run() error {
 	shutdown := make(chan os.Signal, 1)
 	signal.Notify(shutdown, os.Interrupt, syscall.SIGTERM)
 
-	consumerServer, err := NewServer(shutdown, *cfg)
+	server, err := NewServer(shutdown, *cfg)
 
 	if err != nil {
 		logrus.Fatalf("could not start http services: %s", err.Error())
@@ -77,8 +77,8 @@ func run() error {
 
 	serverErrors := make(chan error, 1)
 	go func() {
-		logrus.Infof("main: pkg.server started and listening on -> %s", consumerServer.Server.Addr)
-		serverErrors <- consumerServer.ListenAndServe()
+		logrus.Infof("main: pkg.server started and listening on -> %s", server.Server.Addr)
+		serverErrors <- server.ListenAndServe()
 	}()
 
 	select {
@@ -90,13 +90,13 @@ func run() error {
 		ctx, cancel := context.WithTimeout(context.Background(), cfg.Server.ShutdownTimeout)
 		defer cancel()
 
-		if err := consumerServer.PreShutdownHooks(ctx); err != nil {
+		if err := server.PreShutdownHooks(ctx); err != nil {
 			logrus.WithError(err).Error("main: failed to run pre shutdown hooks")
 		}
 
-		if err = consumerServer.Shutdown(ctx); err != nil {
+		if err = server.Shutdown(ctx); err != nil {
 			logrus.WithError(err).Error("main: failed to stop pkg.server gracefully, forcing shutdown")
-			if err = consumerServer.Close(); err != nil {
+			if err = server.Close(); err != nil {
 				logrus.WithError(err).Error("main: failed to close pkg.server")
 			}
 		}
