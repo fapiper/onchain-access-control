@@ -19,7 +19,7 @@ type ErrorResponse struct {
 	Fields string `json:"fields,omitempty"`
 }
 
-// SafeError is used to pass an error during the request through the pkg.server with
+// SafeError is used to pass an error during the request through the server with
 // web specific context. 'Safe' here means that the error messages do not include
 // any sensitive information and can be sent straight back to the requester
 type SafeError struct {
@@ -29,7 +29,7 @@ type SafeError struct {
 }
 
 // SafeError implements the `error` interface. It uses the default message of the
-// wrapped error. This is what will be shown in a pkg.server's logs
+// wrapped error. This is what will be shown in a server's logs
 func (err *SafeError) Error() string {
 	return err.Err.Error()
 }
@@ -52,7 +52,7 @@ func newRequestError(err error, statusCode int, fields ...FieldError) error {
 	return &SafeError{err, statusCode, fields}
 }
 
-// shutdown is a type used to help with graceful shutdown of a pkg.server.
+// shutdown is a type used to help with graceful shutdown of a server.
 type shutdown struct {
 	Message string
 }

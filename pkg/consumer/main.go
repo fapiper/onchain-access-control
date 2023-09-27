@@ -77,13 +77,13 @@ func run() error {
 
 	serverErrors := make(chan error, 1)
 	go func() {
-		logrus.Infof("main: pkg.server started and listening on -> %s", consumerServer.Server.Addr)
+		logrus.Infof("main: server started and listening on -> %s", consumerServer.Server.Addr)
 		serverErrors <- consumerServer.ListenAndServe()
 	}()
 
 	select {
 	case err = <-serverErrors:
-		return errors.Wrap(err, "pkg.server error")
+		return errors.Wrap(err, "server error")
 	case sig := <-shutdown:
 		logrus.Infof("main: shutdown signal received -> %v", sig)
 
@@ -95,9 +95,9 @@ func run() error {
 		}
 
 		if err = consumerServer.Shutdown(ctx); err != nil {
-			logrus.WithError(err).Error("main: failed to stop pkg.server gracefully, forcing shutdown")
+			logrus.WithError(err).Error("main: failed to stop server gracefully, forcing shutdown")
 			if err = consumerServer.Close(); err != nil {
-				logrus.WithError(err).Error("main: failed to close pkg.server")
+				logrus.WithError(err).Error("main: failed to close server")
 			}
 		}
 	}

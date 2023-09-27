@@ -65,7 +65,7 @@ type OperationResult struct {
 //	@Param			id	path		string		true	"ID"
 //	@Success		200	{object}	Operation	"OK"
 //	@Failure		400	{string}	string		"Bad request"
-//	@Failure		500	{string}	string		"Internal pkg.server error"
+//	@Failure		500	{string}	string		"Internal server error"
 //	@Router			/v1/operations/{id} [get]
 func (o OperationRouter) GetOperation(c *gin.Context) {
 	id := framework.GetParam(c, IDParam)
@@ -151,11 +151,11 @@ type ListOperationsResponse struct {
 //	@Produce		json
 //	@Param			parent		query		string					false	"The name of the parent's resource. For example: `?parent=/presentation/submissions`"
 //	@Param			filter		query		string					false	"A standard filter expression conforming to https://google.aip.dev/160. For example: `?filter=done="true"`"
-//	@Param			pageSize	query		number					false	"Hint to the pkg.server of the maximum elements to return. More may be returned. When not set, the pkg.server will return all elements."
-//	@Param			pageToken	query		string					false	"Used to indicate to the pkg.server to return a specific page of the list results. Must match a previous requests' `nextPageToken`."
+//	@Param			pageSize	query		number					false	"Hint to the server of the maximum elements to return. More may be returned. When not set, the server will return all elements."
+//	@Param			pageToken	query		string					false	"Used to indicate to the server to return a specific page of the list results. Must match a previous requests' `nextPageToken`."
 //	@Success		200			{object}	ListOperationsResponse	"OK"
 //	@Failure		400			{string}	string					"Bad request"
-//	@Failure		500			{string}	string					"Internal pkg.server error"
+//	@Failure		500			{string}	string					"Internal server error"
 //	@Router			/v1/operations [get]
 func (o OperationRouter) ListOperations(c *gin.Context) {
 	parentParam := framework.GetQueryValue(c, ParentParam)
@@ -246,7 +246,7 @@ func routerModel(op operation.Operation) Operation {
 //	@Param			id	path		string		true	"ID"
 //	@Success		200	{object}	Operation	"OK"
 //	@Failure		400	{string}	string		"Bad request"
-//	@Failure		500	{string}	string		"Internal pkg.server error"
+//	@Failure		500	{string}	string		"Internal server error"
 //	@Router			/v1/operations/cancel/{id} [get]
 func (o OperationRouter) CancelOperation(c *gin.Context) {
 	id := framework.GetParam(c, IDParam)

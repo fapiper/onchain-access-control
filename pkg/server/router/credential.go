@@ -67,7 +67,7 @@ type BatchCreateCredentialsResponse struct {
 //	@Param			request	body		BatchCreateCredentialsRequest	true	"The batch requests"
 //	@Success		201		{object}	BatchCreateCredentialsResponse
 //	@Failure		400		{string}	string	"Bad request"
-//	@Failure		500		{string}	string	"Internal pkg.server error"
+//	@Failure		500		{string}	string	"Internal server error"
 //	@Router			/v1/credentials/batch [put]
 func (cr CredentialRouter) BatchCreateCredentials(c *gin.Context) {
 	invalidCreateCredentialRequest := "invalid batch create credential request"
@@ -165,7 +165,7 @@ type CreateCredentialResponse struct {
 //	@Param			request	body		CreateCredentialRequest	true	"request body"
 //	@Success		201		{object}	CreateCredentialResponse
 //	@Failure		400		{string}	string	"Bad request"
-//	@Failure		500		{string}	string	"Internal pkg.server error"
+//	@Failure		500		{string}	string	"Internal server error"
 //	@Router			/v1/credentials [put]
 func (cr CredentialRouter) CreateCredential(c *gin.Context) {
 	invalidCreateCredentialRequest := "invalid create credential request"
@@ -208,7 +208,7 @@ type GetCredentialResponse struct {
 //	@Param			id	path		string	true	"ID of the credential within SSI-Service. Must be a UUID."
 //	@Success		200	{object}	GetCredentialResponse
 //	@Failure		400	{string}	string	"Bad request"
-//	@Failure		500	{string}	string	"Internal pkg.server error"
+//	@Failure		500	{string}	string	"Internal server error"
 //	@Router			/v1/credentials/{id} [get]
 func (cr CredentialRouter) GetCredential(c *gin.Context) {
 	id := framework.GetParam(c, IDParam)
@@ -249,7 +249,7 @@ type GetCredentialStatusResponse struct {
 //	@Param			id	path		string	true	"ID"
 //	@Success		200	{object}	GetCredentialStatusResponse
 //	@Failure		400	{string}	string	"Bad request"
-//	@Failure		500	{string}	string	"Internal pkg.server error"
+//	@Failure		500	{string}	string	"Internal server error"
 //	@Router			/v1/credentials/{id}/status [get]
 func (cr CredentialRouter) GetCredentialStatus(c *gin.Context) {
 	id := framework.GetParam(c, IDParam)
@@ -293,7 +293,7 @@ type GetCredentialStatusListResponse struct {
 //	@Param			id	path		string	true	"ID"
 //	@Success		200	{object}	GetCredentialStatusListResponse
 //	@Failure		400	{string}	string	"Bad request"
-//	@Failure		500	{string}	string	"Internal pkg.server error"
+//	@Failure		500	{string}	string	"Internal server error"
 //	@Router			/v1/credentials/status/{id} [get]
 func (cr CredentialRouter) GetCredentialStatusList(c *gin.Context) {
 	id := framework.GetParam(c, IDParam)
@@ -374,7 +374,7 @@ type BatchUpdateCredentialStatusResponse struct {
 //	@Param			request	body		BatchUpdateCredentialStatusRequest	true	"request body"
 //	@Success		201		{object}	BatchUpdateCredentialStatusResponse
 //	@Failure		400		{string}	string	"Bad request"
-//	@Failure		500		{string}	string	"Internal pkg.server error"
+//	@Failure		500		{string}	string	"Internal server error"
 //	@Router			/v1/credentials/status/batch [put]
 func (cr CredentialRouter) BatchUpdateCredentialStatus(c *gin.Context) {
 	var batchRequest BatchUpdateCredentialStatusRequest
@@ -417,7 +417,7 @@ func (cr CredentialRouter) BatchUpdateCredentialStatus(c *gin.Context) {
 //	@Param			request	body		UpdateCredentialStatusRequest	true	"request body"
 //	@Success		201		{object}	UpdateCredentialStatusResponse
 //	@Failure		400		{string}	string	"Bad request"
-//	@Failure		500		{string}	string	"Internal pkg.server error"
+//	@Failure		500		{string}	string	"Internal server error"
 //	@Router			/v1/credentials/{id}/status [put]
 func (cr CredentialRouter) UpdateCredentialStatus(c *gin.Context) {
 	id := framework.GetParam(c, IDParam)
@@ -493,7 +493,7 @@ type VerifyCredentialResponse struct {
 //	@Param			request	body		VerifyCredentialRequest	true	"request body"
 //	@Success		200		{object}	VerifyCredentialResponse
 //	@Failure		400		{string}	string	"Bad request"
-//	@Failure		500		{string}	string	"Internal pkg.server error"
+//	@Failure		500		{string}	string	"Internal server error"
 //	@Router			/v1/credentials/verification [put]
 func (cr CredentialRouter) VerifyCredential(c *gin.Context) {
 	var request VerifyCredentialRequest
@@ -586,11 +586,11 @@ func init() {
 //	@Param			issuer		query		string	false	"The issuer id, e.g. did:key:z6MkiTBz1ymuepAQ4HEHYSF1H8quG5GLVVQR3djdX3mDooWp"
 //	@Param			schema		query		string	false	"The credentialSchema.id value to filter by"
 //	@Param			subject		query		string	false	"The credentialSubject.id value to filter by"
-//	@Param			pageSize	query		number	false	"Hint to the pkg.server of the maximum elements to return. More may be returned. When not set, the pkg.server will return all elements."
-//	@Param			pageToken	query		string	false	"Used to indicate to the pkg.server to return a specific page of the list results. Must match a previous requests' `nextPageToken`."
+//	@Param			pageSize	query		number	false	"Hint to the server of the maximum elements to return. More may be returned. When not set, the server will return all elements."
+//	@Param			pageToken	query		string	false	"Used to indicate to the server to return a specific page of the list results. Must match a previous requests' `nextPageToken`."
 //	@Success		200			{object}	ListCredentialsResponse
 //	@Failure		400			{string}	string	"Bad request"
-//	@Failure		500			{string}	string	"Internal pkg.server error"
+//	@Failure		500			{string}	string	"Internal server error"
 //	@Router			/v1/credentials [get]
 func (cr CredentialRouter) ListCredentials(c *gin.Context) {
 	var pageRequest pagination.PageRequest
@@ -647,7 +647,7 @@ func (cr CredentialRouter) ListCredentials(c *gin.Context) {
 //	@Param			id	path		string	true	"ID of the credential to delete"
 //	@Success		204	{string}	string	"No Content"
 //	@Failure		400	{string}	string	"Bad request"
-//	@Failure		500	{string}	string	"Internal pkg.server error"
+//	@Failure		500	{string}	string	"Internal server error"
 //	@Router			/v1/credentials/{id} [delete]
 func (cr CredentialRouter) DeleteCredential(c *gin.Context) {
 	id := framework.GetParam(c, IDParam)

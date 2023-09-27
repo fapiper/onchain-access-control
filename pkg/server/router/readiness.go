@@ -69,7 +69,7 @@ func (r readiness) ready(c *gin.Context) {
 	framework.Respond(c, response, http.StatusOK)
 }
 
-// serviceGetter is a dependency of this readiness handler to know which service are available in the pkg.server
+// serviceGetter is a dependency of this readiness handler to know which service are available in the server
 type serviceGetter interface {
 	getServices() []svcframework.Service
 }

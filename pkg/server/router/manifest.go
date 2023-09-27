@@ -110,7 +110,7 @@ type CreateManifestResponse struct {
 //	@Param			request	body		CreateManifestRequest	true	"request body"
 //	@Success		201		{object}	CreateManifestResponse
 //	@Failure		400		{string}	string	"Bad request"
-//	@Failure		500		{string}	string	"Internal pkg.server error"
+//	@Failure		500		{string}	string	"Internal server error"
 //	@Router			/v1/manifests [put]
 func (mr ManifestRouter) CreateManifest(c *gin.Context) {
 	var request CreateManifestRequest
@@ -192,7 +192,7 @@ type ListManifestsResponse struct {
 //	@Param			subject	query		string	false	"string subject"
 //	@Success		200		{object}	ListManifestsResponse
 //	@Failure		400		{string}	string	"Bad request"
-//	@Failure		500		{string}	string	"Internal pkg.server error"
+//	@Failure		500		{string}	string	"Internal server error"
 //	@Router			/v1/manifests [get]
 func (mr ManifestRouter) ListManifests(c *gin.Context) {
 	gotManifests, err := mr.service.ListManifests(c)
@@ -224,7 +224,7 @@ func (mr ManifestRouter) ListManifests(c *gin.Context) {
 //	@Param			id	path		string	true	"ID"
 //	@Success		204	{string}	string	"No Content"
 //	@Failure		400	{string}	string	"Bad request"
-//	@Failure		500	{string}	string	"Internal pkg.server error"
+//	@Failure		500	{string}	string	"Internal server error"
 //	@Router			/v1/manifests/{id} [delete]
 func (mr ManifestRouter) DeleteManifest(c *gin.Context) {
 	id := framework.GetParam(c, IDParam)
@@ -326,7 +326,7 @@ type SubmitApplicationResponse struct {
 //	@Param			request	body		SubmitApplicationRequest	true	"request body"
 //	@Success		201		{object}	Operation					"Operation with a SubmitApplicationResponse type in the `result.response` field."
 //	@Failure		400		{string}	string						"Bad request"
-//	@Failure		500		{string}	string						"Internal pkg.server error"
+//	@Failure		500		{string}	string						"Internal server error"
 //	@Router			/v1/manifests/applications [put]
 func (mr ManifestRouter) SubmitApplication(c *gin.Context) {
 	var request SubmitApplicationRequest
@@ -403,7 +403,7 @@ type ListApplicationsResponse struct {
 //	@Accept			json
 //	@Produce		json
 //	@Success		200	{object}	ListApplicationsResponse
-//	@Failure		500	{string}	string	"Internal pkg.server error"
+//	@Failure		500	{string}	string	"Internal server error"
 //	@Router			/v1/manifests/applications [get]
 func (mr ManifestRouter) ListApplications(c *gin.Context) {
 	gotApplications, err := mr.service.ListApplications(c)
@@ -427,7 +427,7 @@ func (mr ManifestRouter) ListApplications(c *gin.Context) {
 //	@Param			id	path		string	true	"ID"
 //	@Success		204	{string}	string	"No Content"
 //	@Failure		400	{string}	string	"Bad request"
-//	@Failure		500	{string}	string	"Internal pkg.server error"
+//	@Failure		500	{string}	string	"Internal server error"
 //	@Router			/v1/manifests/applications/{id} [delete]
 func (mr ManifestRouter) DeleteApplication(c *gin.Context) {
 	id := framework.GetParam(c, IDParam)
@@ -463,7 +463,7 @@ type GetResponseResponse struct {
 //	@Param			id	path		string	true	"ID"
 //	@Success		200	{object}	GetResponseResponse
 //	@Failure		400	{string}	string	"Bad request"
-//	@Failure		500	{string}	string	"Internal pkg.server error"
+//	@Failure		500	{string}	string	"Internal server error"
 //	@Router			/v1/manifests/responses/{id} [get]
 func (mr ManifestRouter) GetResponse(c *gin.Context) {
 	id := framework.GetParam(c, IDParam)
@@ -500,7 +500,7 @@ type ListResponsesResponse struct {
 //	@Accept			json
 //	@Produce		json
 //	@Success		200	{object}	ListResponsesResponse
-//	@Failure		500	{string}	string	"Internal pkg.server error"
+//	@Failure		500	{string}	string	"Internal server error"
 //	@Router			/v1/manifests/responses [get]
 func (mr ManifestRouter) ListResponses(c *gin.Context) {
 	gotResponses, err := mr.service.ListResponses(c)
@@ -524,7 +524,7 @@ func (mr ManifestRouter) ListResponses(c *gin.Context) {
 //	@Param			id	path		string	true	"ID"
 //	@Success		200	{string}	string	"OK"
 //	@Failure		400	{string}	string	"Bad request"
-//	@Failure		500	{string}	string	"Internal pkg.server error"
+//	@Failure		500	{string}	string	"Internal server error"
 //	@Router			/v1/manifests/responses/{id} [delete]
 func (mr ManifestRouter) DeleteResponse(c *gin.Context) {
 	id := framework.GetParam(c, IDParam)
@@ -573,7 +573,7 @@ func (r ReviewApplicationRequest) toServiceRequest(id string) model.ReviewApplic
 //	@Param			request	body		ReviewApplicationRequest	true	"request body"
 //	@Success		201		{object}	SubmitApplicationResponse	"Credential Response"
 //	@Failure		400		{string}	string						"Bad request"
-//	@Failure		500		{string}	string						"Internal pkg.server error"
+//	@Failure		500		{string}	string						"Internal server error"
 //	@Router			/v1/manifests/applications/{id}/review [put]
 func (mr ManifestRouter) ReviewApplication(c *gin.Context) {
 	id := framework.GetParam(c, IDParam)
@@ -624,7 +624,7 @@ type CreateManifestRequestResponse struct {
 //	@Param			request	body		CreateManifestRequestRequest	true	"request body"
 //	@Success		201		{object}	CreateManifestRequestResponse
 //	@Failure		400		{string}	string	"Bad request"
-//	@Failure		500		{string}	string	"Internal pkg.server error"
+//	@Failure		500		{string}	string	"Internal server error"
 //	@Router			/v1/manifests/requests [put]
 func (mr ManifestRouter) CreateRequest(c *gin.Context) {
 	var request CreateManifestRequestRequest
@@ -677,7 +677,7 @@ type ListManifestRequestsResponse struct {
 //	@Accept			json
 //	@Produce		json
 //	@Success		200	{object}	ListManifestRequestsResponse
-//	@Failure		500	{string}	string	"Internal pkg.server error"
+//	@Failure		500	{string}	string	"Internal server error"
 //	@Router			/v1/manifests/requests [get]
 func (mr ManifestRouter) ListRequests(c *gin.Context) {
 	svcResponse, err := mr.service.ListRequests(c)
@@ -733,7 +733,7 @@ func (mr ManifestRouter) GetRequest(c *gin.Context) {
 //	@Param			id	path		string	true	"ID"
 //	@Success		204	{string}	string	"No Content"
 //	@Failure		400	{string}	string	"Bad request"
-//	@Failure		500	{string}	string	"Internal pkg.server error"
+//	@Failure		500	{string}	string	"Internal server error"
 //	@Router			/v1/manifests/requests/{id} [delete]
 func (mr ManifestRouter) DeleteRequest(c *gin.Context) {
 	id := framework.GetParam(c, IDParam)

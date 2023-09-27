@@ -52,7 +52,7 @@ type CreateWebhookResponse struct {
 //	@Param			request	body		CreateWebhookRequest	true	"request body"
 //	@Success		201		{object}	CreateWebhookResponse
 //	@Failure		400		{string}	string	"Bad request"
-//	@Failure		500		{string}	string	"Internal pkg.server error"
+//	@Failure		500		{string}	string	"Internal server error"
 //	@Router			/v1/webhooks [put]
 func (wr WebhookRouter) CreateWebhook(c *gin.Context) {
 	var request CreateWebhookRequest
@@ -140,7 +140,7 @@ type ListWebhooksResponse struct {
 //	@Accept			json
 //	@Produce		json
 //	@Success		200	{object}	ListWebhooksResponse
-//	@Failure		500	{string}	string	"Internal pkg.server error"
+//	@Failure		500	{string}	string	"Internal server error"
 //	@Router			/v1/webhooks [get]
 func (wr WebhookRouter) ListWebhooks(c *gin.Context) {
 	gotWebhooks, err := wr.service.ListWebhooks(c)
@@ -177,7 +177,7 @@ type DeleteWebhookRequest struct {
 //	@Param			url		path		string	true	"url"
 //	@Success		204		{string}	string	"No Content"
 //	@Failure		400		{string}	string	"Bad request"
-//	@Failure		500		{string}	string	"Internal pkg.server error"
+//	@Failure		500		{string}	string	"Internal server error"
 //	@Router			/v1/webhooks/{noun}/{verb}/{url} [delete]
 func (wr WebhookRouter) DeleteWebhook(c *gin.Context) {
 	var request DeleteWebhookRequest

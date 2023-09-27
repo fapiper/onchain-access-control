@@ -75,7 +75,7 @@ type CreateDIDConfigurationResponse struct {
 //	@Param			request	body		CreateDIDConfigurationRequest	true	"request body"
 //	@Success		201		{object}	CreateDIDConfigurationResponse
 //	@Failure		400		{string}	string	"Bad request"
-//	@Failure		500		{string}	string	"Internal pkg.server error"
+//	@Failure		500		{string}	string	"Internal server error"
 //	@Router			/v1/did-configurations [put]
 func (wr DIDConfigurationRouter) CreateDIDConfiguration(c *gin.Context) {
 	var request CreateDIDConfigurationRequest
@@ -120,7 +120,7 @@ func (wr DIDConfigurationRouter) CreateDIDConfiguration(c *gin.Context) {
 //	@Param			request	body		wellknown.VerifyDIDConfigurationRequest	true	"request body"
 //	@Success		201		{object}	wellknown.VerifyDIDConfigurationResponse
 //	@Failure		400		{string}	string	"Bad request"
-//	@Failure		500		{string}	string	"Internal pkg.server error"
+//	@Failure		500		{string}	string	"Internal server error"
 //	@Router			/v1/did-configurations/verification [put]
 func (wr DIDConfigurationRouter) VerifyDIDConfiguration(c *gin.Context) {
 	var request wellknown.VerifyDIDConfigurationRequest

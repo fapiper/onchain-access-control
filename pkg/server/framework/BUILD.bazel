@@ -1,7 +1,7 @@
 load("@io_bazel_rules_go//go:def.bzl", "go_library")
 
 go_library(
-    name = "pkg.server",
+    name = "server",
     srcs = [
         "errors.go",
         "request.go",
@@ -9,7 +9,7 @@ go_library(
         "server.go",
         "util.go",
     ],
-    importpath = "github.com/fapiper/onchain-access-control/pkg/framework/pkg.server",
+    importpath = "github.com/fapiper/onchain-access-control/pkg/framework/server",
     visibility = ["//visibility:public"],
     deps = [
         "//config",

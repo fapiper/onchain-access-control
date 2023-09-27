@@ -88,7 +88,7 @@ type CreateDIDByMethodResponse struct {
 //	@Param			request	body		CreateDIDByMethodRequest{options=did.CreateIONDIDOptions}	true	"request body"
 //	@Success		201		{object}	CreateDIDByMethodResponse
 //	@Failure		400		{string}	string	"Bad request"
-//	@Failure		500		{string}	string	"Internal pkg.server error"
+//	@Failure		500		{string}	string	"Internal server error"
 //	@Router			/v1/dids/{method} [put]
 func (dr DIDRouter) CreateDIDByMethod(c *gin.Context) {
 	method := framework.GetParam(c, MethodParam)
@@ -157,7 +157,7 @@ type UpdateDIDByMethodResponse struct {
 //	@Param			request	body		UpdateDIDByMethodRequest	true	"request body"
 //	@Success		200		{object}	UpdateDIDByMethodResponse
 //	@Failure		400		{string}	string	"Bad request"
-//	@Failure		500		{string}	string	"Internal pkg.server error"
+//	@Failure		500		{string}	string	"Internal server error"
 //	@Router			/v1/dids/{method}/{id} [put]
 func (dr DIDRouter) UpdateDIDByMethod(c *gin.Context) {
 	method := framework.GetParam(c, MethodParam)
@@ -340,11 +340,11 @@ type GetDIDsRequest struct {
 //	@Produce		json
 //	@Param			method		path		string	true	"Method must be one returned by GET /v1/dids"
 //	@Param			deleted		query		boolean	false	"When true, returns soft-deleted DIDs. Otherwise, returns DIDs that have not been soft-deleted. Default is false."
-//	@Param			pageSize	query		number	false	"Hint to the pkg.server of the maximum elements to return. More may be returned. When not set, the pkg.server will return all elements."
-//	@Param			pageToken	query		string	false	"Used to indicate to the pkg.server to return a specific page of the list results. Must match a previous requests' `nextPageToken`."
+//	@Param			pageSize	query		number	false	"Hint to the server of the maximum elements to return. More may be returned. When not set, the server will return all elements."
+//	@Param			pageToken	query		string	false	"Used to indicate to the server to return a specific page of the list results. Must match a previous requests' `nextPageToken`."
 //	@Success		200			{object}	ListDIDsByMethodResponse
 //	@Failure		400			{string}	string	"Bad request"
-//	@Failure		500			{string}	string	"Internal pkg.server error"
+//	@Failure		500			{string}	string	"Internal server error"
 //	@Router			/v1/dids/{method} [get]
 func (dr DIDRouter) ListDIDsByMethod(c *gin.Context) {
 	method := framework.GetParam(c, MethodParam)
@@ -413,7 +413,7 @@ type ResolveDIDResponse struct {
 //	@Param			id		path		string	true	"ID"
 //	@Success		204		{string}	string	"No Content"
 //	@Failure		400		{string}	string	"Bad request"
-//	@Failure		500		{string}	string	"Internal pkg.server error"
+//	@Failure		500		{string}	string	"Internal server error"
 //	@Router			/v1/dids/{method}/{id} [delete]
 func (dr DIDRouter) SoftDeleteDIDByMethod(c *gin.Context) {
 	method := framework.GetParam(c, MethodParam)
@@ -512,7 +512,7 @@ func NewBatchDIDRouter(svc *did.BatchService) *BatchDIDRouter {
 //	@Param			request	body		BatchCreateDIDsRequest	true	"The batch requests"
 //	@Success		201		{object}	BatchCreateDIDsResponse
 //	@Failure		400		{string}	string	"Bad request"
-//	@Failure		500		{string}	string	"Internal pkg.server error"
+//	@Failure		500		{string}	string	"Internal server error"
 //	@Router			/v1/dids/{method}/batch [put]
 func (dr BatchDIDRouter) BatchCreateDIDs(c *gin.Context) {
 	method := framework.GetParam(c, MethodParam)

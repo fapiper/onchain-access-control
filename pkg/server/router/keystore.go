@@ -74,7 +74,7 @@ func (sk StoreKeyRequest) ToServiceRequest() (*keystore.StoreKeyRequest, error) 
 //	@Param			request	body	StoreKeyRequest	true	"request body"
 //	@Success		201
 //	@Failure		400	{string}	string	"Bad request"
-//	@Failure		500	{string}	string	"Internal pkg.server error"
+//	@Failure		500	{string}	string	"Internal server error"
 //	@Router			/v1/keys [put]
 func (ksr *KeyStoreRouter) StoreKey(c *gin.Context) {
 	var request StoreKeyRequest
@@ -164,7 +164,7 @@ type RevokeKeyResponse struct {
 //	@Param			id	path		string	true	"ID of the key to revoke"
 //	@Success		200	{object}	RevokeKeyResponse
 //	@Failure		400	{string}	string	"Bad request"
-//	@Failure		500	{string}	string	"Internal pkg.server error"
+//	@Failure		500	{string}	string	"Internal server error"
 //	@Router			/v1/keys/{id} [delete]
 func (ksr *KeyStoreRouter) RevokeKey(c *gin.Context) {
 	id := framework.GetParam(c, IDParam)

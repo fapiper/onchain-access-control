@@ -10,7 +10,7 @@ import (
 )
 
 /*
-To use this middleware, you need to add it to your gin router in pkg.server.go:
+To use this middleware, you need to add it to your gin router in server.go:
 
 // setUpEngine creates the gin engine and sets up the middleware based on config
 func setUpEngine(cfg config.ServerConfig, shutdown chan os.Signal) *gin.Engine {

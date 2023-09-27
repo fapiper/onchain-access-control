@@ -68,7 +68,7 @@ type VerifyPresentationResponse struct {
 //	@Param			request	body		VerifyPresentationRequest	true	"request body"
 //	@Success		200		{object}	VerifyPresentationResponse
 //	@Failure		400		{string}	string	"Bad request"
-//	@Failure		500		{string}	string	"Internal pkg.server error"
+//	@Failure		500		{string}	string	"Internal server error"
 //	@Router			/v1/presentations/verification [put]
 func (pr PresentationRouter) VerifyPresentation(c *gin.Context) {
 	var request VerifyPresentationRequest
@@ -122,7 +122,7 @@ type CreatePresentationDefinitionResponse struct {
 //	@Param			request	body		CreatePresentationDefinitionRequest	true	"request body"
 //	@Success		201		{object}	CreatePresentationDefinitionResponse
 //	@Failure		400		{string}	string	"Bad request"
-//	@Failure		500		{string}	string	"Internal pkg.server error"
+//	@Failure		500		{string}	string	"Internal server error"
 //	@Router			/v1/presentations/definitions [put]
 func (pr PresentationRouter) CreateDefinition(c *gin.Context) {
 	var request CreatePresentationDefinitionRequest
@@ -236,7 +236,7 @@ type ListDefinitionsResponse struct {
 //	@Produce		json
 //	@Success		200	{object}	ListDefinitionsResponse
 //	@Failure		400	{string}	string	"Bad request"
-//	@Failure		500	{string}	string	"Internal pkg.server error"
+//	@Failure		500	{string}	string	"Internal server error"
 //	@Router			/v1/presentations/definitions [get]
 func (pr PresentationRouter) ListDefinitions(c *gin.Context) {
 	svcResponse, err := pr.service.ListDefinitions(c)
@@ -260,7 +260,7 @@ func (pr PresentationRouter) ListDefinitions(c *gin.Context) {
 //	@Param			id	path		string	true	"ID"
 //	@Success		204	{string}	string	"No Content"
 //	@Failure		400	{string}	string	"Bad request"
-//	@Failure		500	{string}	string	"Internal pkg.server error"
+//	@Failure		500	{string}	string	"Internal server error"
 //	@Router			/v1/presentations/definitions/{id} [delete]
 func (pr PresentationRouter) DeleteDefinition(c *gin.Context) {
 	id := framework.GetParam(c, IDParam)
@@ -323,14 +323,14 @@ func (r CreateSubmissionRequest) toServiceRequest() (*model.CreateSubmissionRequ
 // CreateSubmission godoc
 //
 //	@Summary		Create a Presentation Submission
-//	@Description	Accepts a Presentation Submission (https://identity.foundation/presentation-exchange/spec/v2.0.0/#presentation-submission) in this pkg.server ready to be reviewed.
+//	@Description	Accepts a Presentation Submission (https://identity.foundation/presentation-exchange/spec/v2.0.0/#presentation-submission) in this server ready to be reviewed.
 //	@Tags			PresentationSubmissions
 //	@Accept			json
 //	@Produce		json
 //	@Param			request	body		CreateSubmissionRequest	true	"request body"
 //	@Success		201		{object}	Operation				"The type of response is Submission once the operation has finished."
 //	@Failure		400		{string}	string					"Bad request"
-//	@Failure		500		{string}	string					"Internal pkg.server error"
+//	@Failure		500		{string}	string					"Internal server error"
 //	@Router			/v1/presentations/submissions [put]
 func (pr PresentationRouter) CreateSubmission(c *gin.Context) {
 	var request CreateSubmissionRequest
@@ -415,11 +415,11 @@ type ListSubmissionResponse struct {
 //	@Accept			json
 //	@Produce		json
 //	@Param			filter		query		string	false	"A standard filter expression conforming to https://google.aip.dev/160. For example: `?filter=status="pending"`"
-//	@Param			pageSize	query		number	false	"Hint to the pkg.server of the maximum elements to return. More may be returned. When not set, the pkg.server will return all elements."
-//	@Param			pageToken	query		string	false	"Used to indicate to the pkg.server to return a specific page of the list results. Must match a previous requests' `nextPageToken`."
+//	@Param			pageSize	query		number	false	"Hint to the server of the maximum elements to return. More may be returned. When not set, the server will return all elements."
+//	@Param			pageToken	query		string	false	"Used to indicate to the server to return a specific page of the list results. Must match a previous requests' `nextPageToken`."
 //	@Success		200			{object}	ListSubmissionResponse
 //	@Failure		400			{string}	string	"Bad request"
-//	@Failure		500			{string}	string	"Internal pkg.server error"
+//	@Failure		500			{string}	string	"Internal server error"
 //	@Router			/v1/presentations/submissions [get]
 func (pr PresentationRouter) ListSubmissions(c *gin.Context) {
 	filterParam := framework.GetQueryValue(c, FilterParam)
@@ -513,7 +513,7 @@ type ReviewSubmissionResponse struct {
 //	@Param			request	body		ReviewSubmissionRequest	true	"request body"
 //	@Success		200		{object}	ReviewSubmissionResponse
 //	@Failure		400		{string}	string	"Bad request"
-//	@Failure		500		{string}	string	"Internal pkg.server error"
+//	@Failure		500		{string}	string	"Internal server error"
 //	@Router			/v1/presentations/submissions/{id}/review [put]
 func (pr PresentationRouter) ReviewSubmission(c *gin.Context) {
 	id := framework.GetParam(c, IDParam)
@@ -565,7 +565,7 @@ type GetRequestResponse struct {
 //	@Param			request	body		CreateRequestRequest	true	"request body"
 //	@Success		201		{object}	CreateRequestResponse
 //	@Failure		400		{string}	string	"Bad request"
-//	@Failure		500		{string}	string	"Internal pkg.server error"
+//	@Failure		500		{string}	string	"Internal server error"
 //	@Router			/v1/presentations/requests [put]
 func (pr PresentationRouter) CreateRequest(c *gin.Context) {
 	var request CreateRequestRequest
@@ -644,7 +644,7 @@ type ListPresentationRequestsResponse struct {
 //	@Accept			json
 //	@Produce		json
 //	@Success		200	{object}	ListPresentationRequestsResponse
-//	@Failure		500	{string}	string	"Internal pkg.server error"
+//	@Failure		500	{string}	string	"Internal server error"
 //	@Router			/v1/presentations/requests [get]
 func (pr PresentationRouter) ListRequests(c *gin.Context) {
 	svcResponse, err := pr.service.ListRequests(c)
@@ -670,7 +670,7 @@ func (pr PresentationRouter) ListRequests(c *gin.Context) {
 //	@Param			id	path		string	true	"ID"
 //	@Success		204	{string}	string	"No Content"
 //	@Failure		400	{string}	string	"Bad request"
-//	@Failure		500	{string}	string	"Internal pkg.server error"
+//	@Failure		500	{string}	string	"Internal server error"
 //	@Router			/v1/presentations/requests/{id} [delete]
 func (pr PresentationRouter) DeleteRequest(c *gin.Context) {
 	id := framework.GetParam(c, IDParam)

@@ -95,7 +95,7 @@ type SchemaResponse struct {
 //	@Param			request	body		CreateSchemaRequest	true	"request body"
 //	@Success		201		{object}	CreateSchemaResponse
 //	@Failure		400		{string}	string	"Bad request"
-//	@Failure		500		{string}	string	"Internal pkg.server error"
+//	@Failure		500		{string}	string	"Internal server error"
 //	@Router			/v1/schemas [put]
 func (sr SchemaRouter) CreateSchema(c *gin.Context) {
 	var request CreateSchemaRequest
@@ -198,10 +198,10 @@ type ListSchemasResponse struct {
 //	@Tags			Schemas
 //	@Accept			json
 //	@Produce		json
-//	@Param			pageSize	query		number	false	"Hint to the pkg.server of the maximum elements to return. More may be returned. When not set, the pkg.server will return all elements."
-//	@Param			pageToken	query		string	false	"Used to indicate to the pkg.server to return a specific page of the list results. Must match a previous requests' `nextPageToken`."
+//	@Param			pageSize	query		number	false	"Hint to the server of the maximum elements to return. More may be returned. When not set, the server will return all elements."
+//	@Param			pageToken	query		string	false	"Used to indicate to the server to return a specific page of the list results. Must match a previous requests' `nextPageToken`."
 //	@Success		200			{object}	ListSchemasResponse
-//	@Failure		500			{string}	string	"Internal pkg.server error"
+//	@Failure		500			{string}	string	"Internal server error"
 //	@Router			/v1/schemas [get]
 func (sr SchemaRouter) ListSchemas(c *gin.Context) {
 	var pageRequest pagination.PageRequest
@@ -252,7 +252,7 @@ type GetSchemaResponse struct {
 //	@Param			id	path		string	true	"ID"
 //	@Success		204	{string}	string	"No Content"
 //	@Failure		400	{string}	string	"Bad request"
-//	@Failure		500	{string}	string	"Internal pkg.server error"
+//	@Failure		500	{string}	string	"Internal server error"
 //	@Router			/v1/schemas/{id} [delete]
 func (sr SchemaRouter) DeleteSchema(c *gin.Context) {
 	id := framework.GetParam(c, IDParam)

@@ -70,7 +70,7 @@ func (r CreateIssuanceTemplateRequest) toServiceRequest() *issuance.CreateIssuan
 //	@Param			request	body		CreateIssuanceTemplateRequest	true	"request body"
 //	@Success		201		{object}	issuance.Template
 //	@Failure		400		{string}	string	"Bad request"
-//	@Failure		500		{string}	string	"Internal pkg.server error"
+//	@Failure		500		{string}	string	"Internal server error"
 //	@Router			/v1/issuancetemplates [put]
 func (ir IssuanceRouter) CreateIssuanceTemplate(c *gin.Context) {
 	errMsg := "Invalid Issuance Template Request"
@@ -100,7 +100,7 @@ func (ir IssuanceRouter) CreateIssuanceTemplate(c *gin.Context) {
 //	@Param			id	path		string	true	"ID"
 //	@Success		204	{string}	string	"No Content"
 //	@Failure		400	{string}	string	"Bad request"
-//	@Failure		500	{string}	string	"Internal pkg.server error"
+//	@Failure		500	{string}	string	"Internal server error"
 //	@Router			/v1/issuancetemplates/{id} [delete]
 func (ir IssuanceRouter) DeleteIssuanceTemplate(c *gin.Context) {
 	id := framework.GetParam(c, IDParam)
@@ -132,7 +132,7 @@ type ListIssuanceTemplatesResponse struct {
 //	@Produce		json
 //	@Success		200	{object}	ListIssuanceTemplatesResponse
 //	@Failure		400	{string}	string	"Bad request"
-//	@Failure		500	{string}	string	"Internal pkg.server error"
+//	@Failure		500	{string}	string	"Internal server error"
 //	@Router			/v1/manifests [get]
 func (ir IssuanceRouter) ListIssuanceTemplates(c *gin.Context) {
 	gotManifests, err := ir.service.ListIssuanceTemplates(c, &issuance.ListIssuanceTemplatesRequest{})

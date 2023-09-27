@@ -1,5 +1,5 @@
 # http service configuration
-[pkg.server]
+[server]
 env = "dev" # either 'dev', 'test', or 'prod'
 api_host = "0.0.0.0:3000"
 

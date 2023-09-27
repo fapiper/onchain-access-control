@@ -32,7 +32,7 @@ type Server struct {
 
 // NewServer does two things: instantiates all service and registers their HTTP bindings
 func NewServer(shutdown chan os.Signal, cfg config.SSIServiceConfig) (*Server, error) {
-	// creates an HTTP pkg.server from the framework, and wrap it to extend it for the Consumers
+	// creates an HTTP server from the framework, and wrap it to extend it for the Consumers
 	engine := setUpEngine(cfg.Server, shutdown)
 	httpServer := framework.NewServer(cfg.Server, engine, shutdown)
 	owner, err := InstantiateService(cfg.Services)
