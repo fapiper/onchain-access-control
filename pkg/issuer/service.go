@@ -37,9 +37,9 @@ type Service struct {
 	DIDConfiguration *wellknown.DIDConfigurationService
 }
 
-// InstantiateService creates a new instance of the Consumers which instantiates all services and their
+// instantiateService creates a new instance of the Consumers which instantiates all services and their
 // dependencies independent of transport.
-func InstantiateService(config config.ServicesConfig) (*Service, error) {
+func instantiateService(config config.ServicesConfig) (*Service, error) {
 	if err := validateServiceConfig(config); err != nil {
 		return nil, sdkutil.LoggingErrorMsg(err, "could not instantiate SSI Service, invalid config")
 	}

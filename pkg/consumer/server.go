@@ -36,7 +36,7 @@ func NewServer(shutdown chan os.Signal, cfg config.SSIServiceConfig) (*Server, e
 	// creates an HTTP server from the framework, and wrap it to extend it for the Consumers
 	engine := setUpEngine(cfg.Server, shutdown)
 	httpServer := framework.NewServer(cfg.Server, engine, shutdown)
-	consumer, err := InstantiateService(cfg.Services)
+	consumer, err := instantiateService(cfg.Services)
 	if err != nil {
 		return nil, sdkutil.LoggingErrorMsg(err, "unable to instantiate consumer service")
 	}
