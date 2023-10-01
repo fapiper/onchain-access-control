@@ -5,14 +5,13 @@ import (
 	"expvar"
 	"github.com/TBD54566975/ssi-sdk/schema"
 	"github.com/ardanlabs/conf"
+	"github.com/fapiper/onchain-access-control/config"
+	"github.com/fapiper/onchain-access-control/log"
 	"github.com/pkg/errors"
 	"github.com/sirupsen/logrus"
 	"os"
 	"os/signal"
 	"syscall"
-
-	"github.com/fapiper/onchain-access-control/config"
-	"github.com/fapiper/onchain-access-control/log"
 )
 
 func Init() {
@@ -27,6 +26,16 @@ func Init() {
 func run() error {
 	// init config
 	cfg := config.Init()
+
+	if err := coreInit(cfg); err != nil {
+		logrus.WithError(err).Error(err.Error())
+	}
+
+	return nil
+}
+
+// coreInit initializes core functionality
+func coreInit(cfg *config.SSIServiceConfig) error {
 
 	// setup logger based on config
 	if logFile := log.Init(cfg.Server.LogLevel, cfg.Server.LogLocation); logFile != nil {
