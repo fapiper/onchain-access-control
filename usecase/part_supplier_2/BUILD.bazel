@@ -1,20 +1,18 @@
-load("@io_bazel_rules_go//go:def.bzl", "go_library")
+load("@io_bazel_rules_go//go:def.bzl", "go_binary", "go_library")
 
 go_library(
-    name = "consumer_lib",
-    srcs = ["main.go"],
-    importpath = "github.com/fapiper/onchain-access-control/cmd/consumer",
-    visibility = ["//visibility:private"],
-    deps = ["//pkg/consumer"],
-)
-
-go_library(
-    name = "part_supplier_2",
+    name = "part_supplier_2_lib",
     srcs = ["main.go"],
     importpath = "github.com/fapiper/onchain-access-control/usecase/part_supplier_2",
-    visibility = ["//visibility:public"],
+    visibility = ["//visibility:private"],
     deps = [
         "//pkg/issuer",
         "//pkg/owner",
     ],
+)
+
+go_binary(
+    name = "part_supplier_2",
+    embed = [":part_supplier_2_lib"],
+    visibility = ["//visibility:public"],
 )
