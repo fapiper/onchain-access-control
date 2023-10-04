@@ -1,4 +1,4 @@
-package module_supplier_1
+package main
 
 import (
 	"github.com/fapiper/onchain-access-control/pkg/issuer"
