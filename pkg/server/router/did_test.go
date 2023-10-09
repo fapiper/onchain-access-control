@@ -13,6 +13,7 @@ import (
 	"github.com/fapiper/onchain-access-control/pkg/service/framework"
 	"github.com/fapiper/onchain-access-control/pkg/testutil"
 	"github.com/stretchr/testify/assert"
+	gock "gopkg.in/h2non/gock.v1"
 )
 
 func TestDIDRouter(t *testing.T) {
