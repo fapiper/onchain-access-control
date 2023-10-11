@@ -31,6 +31,7 @@ type serviceInfo struct {
 	version       string
 	apiBase       string
 	statusBaseURL string
+	fileStoreBase string
 	apiVersion    string
 	servicePaths  map[framework.Type]string
 }
@@ -79,4 +80,22 @@ func SetServicePath(service framework.Type, path string) {
 
 func GetServicePath(service framework.Type) string {
 	return si.servicePaths[service]
+}
+
+func SetFileStoreBase(path string) {
+	pathLen := len(path)
+	if pathLen > 1 {
+		if strings.IndexAny(path, "/") == 0 {
+			path = path[1:]
+		}
+
+		if strings.LastIndexAny(path, "/") == pathLen-1 {
+			path = path[:pathLen-1]
+		}
+	}
+	si.fileStoreBase = path
+}
+
+func GetFileStoreBase() string {
+	return si.fileStoreBase
 }
