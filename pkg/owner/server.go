@@ -52,10 +52,10 @@ func NewServer(shutdown chan os.Signal, cfg config.SSIServiceConfig) (*Server, e
 	engine.GET(SwaggerPrefix, ginswagger.WrapHandler(swaggerfiles.Handler, ginswagger.URL("/swagger.yaml")))
 
 	// data router with auth
-	data := engine.Group(FileStorePrefix)
+	data := engine.Group(config.GetFileStoreBase())
 	// TODO middleware for authn + authz
 	data.Use(middleware.AuthMiddleware())
-	data.StaticFS("/", gin.Dir(cfg.Services.FileStorePath, false))
+	data.StaticFS("/", gin.Dir(cfg.Services.FileStoreConfig.LocalPath, false))
 
 	// register all v1 routers
 	v1 := engine.Group(V1Prefix)
