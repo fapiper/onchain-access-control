@@ -41,8 +41,9 @@ func NewServer(shutdown chan os.Signal, cfg config.SSIServiceConfig) (*Server, e
 		return nil, sdkutil.LoggingErrorMsg(err, "unable to instantiate owner service")
 	}
 
-	// make sure to set the api base in our service info
+	// make sure to set the api base and filestore base in our service info
 	config.SetAPIBase(cfg.Services.ServiceEndpoint)
+	config.SetFileStoreBase(cfg.Services.FileStoreConfig.EndpointPrefix)
 
 	// service-level routers
 	engine.GET(HealthPrefix, router.Health)
