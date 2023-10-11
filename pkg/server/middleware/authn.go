@@ -3,6 +3,9 @@ package middleware
 import (
 	"crypto/sha256"
 	"encoding/hex"
+	"fmt"
+	"github.com/fapiper/onchain-access-control/config"
+	"github.com/sirupsen/logrus"
 	"net/http"
 	"os"
 	"strconv"
@@ -24,18 +27,31 @@ func setUpEngine(cfg config.ServerConfig, shutdown chan os.Signal) *gin.Engine {
 	}
 */
 
+const (
+	fileRefParamKey = "filepath"
+)
+
 func AuthMiddleware() gin.HandlerFunc {
 	useAuthToken, _ := strconv.ParseBool(os.Getenv("USE_AUTH_TOKEN"))
 
 	return func(c *gin.Context) {
+		token := c.GetHeader("Authorization")
+		// TODO Retrieve `fileDidUrl` from token:
+		// fileDidUrl := "did:pkh:0x1234?ref=static/test.csv"
+		fileRefFromToken := "static/test.csv"
+		// 1. check if `fileRefFromToken` matches requested file
+		fileRefFromPath := fmt.Sprintf("%s%s", config.GetFileStoreBase(), c.Param(fileRefParamKey))
+
+		logrus.Infof("fileRefFromToken: %s, fileRefFromPath: %s", fileRefFromToken, fileRefFromPath)
+
+		// 2. check if token exists in db and isn't expired
+		authToken := ""
+
 		// If USE_AUTH_TOKEN is false or not set, skip the authentication
 		if !useAuthToken {
 			c.Next()
 			return
 		}
-
-		token := c.GetHeader("Authorization")
-		authToken := ""
 
 		// Remove "Bearer " from the token
 		if len(token) > 7 && token[:7] == "Bearer " {
