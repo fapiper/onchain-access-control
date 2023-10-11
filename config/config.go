@@ -28,8 +28,9 @@ const (
 	EnvironmentTest Environment = "test"
 	EnvironmentProd Environment = "prod"
 
-	ConfigPath EnvironmentVariable = "CONFIG_PATH"
-	DBPassword EnvironmentVariable = "DB_PASSWORD"
+	ConfigPath    EnvironmentVariable = "CONFIG_PATH"
+	FileStorePath EnvironmentVariable = "FILESTORE_PATH"
+	DBPassword    EnvironmentVariable = "DB_PASSWORD"
 )
 
 type (
@@ -70,6 +71,7 @@ type ServicesConfig struct {
 	StorageOptions  []storage.Option `toml:"storage_option"`
 	ServiceEndpoint string           `toml:"service_endpoint" conf:"default:http://localhost:8080"`
 	StatusEndpoint  string           `toml:"status_endpoint"`
+	FileStorePath   string           `toml:"filestore_path,omitempty"`
 
 	// Application level encryption configuration. Defines how values are encrypted before they are stored in the
 	// configured KV store.
@@ -84,6 +86,8 @@ type ServicesConfig struct {
 
 type KeyStoreServiceConfig struct {
 	EncryptionConfig
+}
+type FileStoreServiceConfig struct {
 }
 
 type EncryptionConfig struct {
@@ -308,6 +312,15 @@ func applyEnvVariables(config *SSIServiceConfig) error {
 			}
 		}
 	}
+
+	filestorePath, present := os.LookupEnv(FileStorePath.String())
+	if present {
+		config.Services.FileStorePath = filestorePath
+	} else {
+		return fmt.Errorf("filestore path must be set by env var [%s]", FileStorePath.String())
+	}
+
+	logrus.Infof("config.Services.FileStorePath %s", config.Services.FileStorePath)
 
 	return nil
 }
