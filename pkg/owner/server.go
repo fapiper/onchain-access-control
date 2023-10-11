@@ -53,7 +53,7 @@ func NewServer(shutdown chan os.Signal, cfg config.SSIServiceConfig) (*Server, e
 	// data router with auth
 	data := engine.Group(FileStorePrefix)
 	// TODO middleware for authn + authz
-	// data.Use(middleware.AuthMiddleware())
+	data.Use(middleware.AuthMiddleware())
 	data.StaticFS("/", gin.Dir(cfg.Services.FileStorePath, false))
 
 	// register all v1 routers
