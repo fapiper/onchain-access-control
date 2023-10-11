@@ -1,13 +1,12 @@
 package owner
 
 import (
-	"os"
-
 	sdkutil "github.com/TBD54566975/ssi-sdk/util"
 	"github.com/gin-gonic/gin"
 	swaggerfiles "github.com/swaggo/files"
 	ginswagger "github.com/swaggo/gin-swagger"
 	"go.opentelemetry.io/contrib/instrumentation/github.com/gin-gonic/gin/otelgin"
+	"os"
 
 	"github.com/fapiper/onchain-access-control/config"
 	framework "github.com/fapiper/onchain-access-control/pkg/server/framework"
@@ -20,7 +19,9 @@ const (
 	HealthPrefix    = "/health"
 	ReadinessPrefix = "/readiness"
 	SwaggerPrefix   = "/swagger/*any"
-	V1Prefix        = "/v1"
+	FileStorePrefix = "/static"
+
+	V1Prefix = "/v1"
 )
 
 // Server exposes all dependencies needed to run a http server and all its services
@@ -48,6 +49,12 @@ func NewServer(shutdown chan os.Signal, cfg config.SSIServiceConfig) (*Server, e
 	engine.GET(ReadinessPrefix, router.Readiness(owner.GetServices()))
 	engine.StaticFile("swagger.yaml", "./doc/swagger.yaml")
 	engine.GET(SwaggerPrefix, ginswagger.WrapHandler(swaggerfiles.Handler, ginswagger.URL("/swagger.yaml")))
+
+	// data router with auth
+	data := engine.Group(FileStorePrefix)
+	// TODO middleware for authn + authz
+	// data.Use(middleware.AuthMiddleware())
+	data.StaticFS("/", gin.Dir(cfg.Services.FileStorePath, false))
 
 	// register all v1 routers
 	v1 := engine.Group(V1Prefix)
