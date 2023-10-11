@@ -19,9 +19,7 @@ const (
 	HealthPrefix    = "/health"
 	ReadinessPrefix = "/readiness"
 	SwaggerPrefix   = "/swagger/*any"
-	FileStorePrefix = "/static"
-
-	V1Prefix = "/v1"
+	V1Prefix        = "/v1"
 )
 
 // Server exposes all dependencies needed to run a http server and all its services
