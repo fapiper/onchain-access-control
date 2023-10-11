@@ -5,6 +5,7 @@ import (
 	"encoding/hex"
 	"net/http"
 	"os"
+	"strconv"
 
 	"github.com/gin-gonic/gin"
 )
@@ -24,16 +25,17 @@ func setUpEngine(cfg config.ServerConfig, shutdown chan os.Signal) *gin.Engine {
 */
 
 func AuthMiddleware() gin.HandlerFunc {
-	authToken := os.Getenv("AUTH_TOKEN")
+	useAuthToken, _ := strconv.ParseBool(os.Getenv("USE_AUTH_TOKEN"))
 
 	return func(c *gin.Context) {
-		token := c.GetHeader("Authorization")
-
-		// If AUTH_TOKEN is not set, skip the authentication
-		if authToken == "" {
+		// If USE_AUTH_TOKEN is false or not set, skip the authentication
+		if !useAuthToken {
 			c.Next()
 			return
 		}
+
+		token := c.GetHeader("Authorization")
+		authToken := ""
 
 		// Remove "Bearer " from the token
 		if len(token) > 7 && token[:7] == "Bearer " {
