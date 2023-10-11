@@ -71,7 +71,6 @@ type ServicesConfig struct {
 	StorageOptions  []storage.Option `toml:"storage_option"`
 	ServiceEndpoint string           `toml:"service_endpoint" conf:"default:http://localhost:8080"`
 	StatusEndpoint  string           `toml:"status_endpoint"`
-	FileStorePath   string           `toml:"filestore_path,omitempty"`
 
 	// Application level encryption configuration. Defines how values are encrypted before they are stored in the
 	// configured KV store.
@@ -79,6 +78,7 @@ type ServicesConfig struct {
 
 	// Embed all service-specific configs here. The order matters: from which should be instantiated first, to last
 	KeyStoreConfig   KeyStoreServiceConfig   `toml:"keystore,omitempty"`
+	FileStoreConfig  FileStoreServiceConfig  `toml:"filestore,omitempty"`
 	DIDConfig        DIDServiceConfig        `toml:"did,omitempty"`
 	CredentialConfig CredentialServiceConfig `toml:"credential,omitempty"`
 	WebhookConfig    WebhookServiceConfig    `toml:"webhook,omitempty"`
@@ -86,8 +86,6 @@ type ServicesConfig struct {
 
 type KeyStoreServiceConfig struct {
 	EncryptionConfig
-}
-type FileStoreServiceConfig struct {
 }
 
 type EncryptionConfig struct {
@@ -132,6 +130,14 @@ func (k *KeyStoreServiceConfig) GetKMSCredentialsPath() string {
 
 func (k *KeyStoreServiceConfig) EncryptionEnabled() bool {
 	return !k.DisableEncryption
+}
+
+type FileStoreServiceConfig struct {
+	// Path to static files. WIll be set by environment variable. Required.
+	LocalPath string `toml:"local_path"`
+
+	// Server entrypoint for directory listing.
+	EndpointPrefix string `toml:"endpoint_prefix" conf:"default:static"`
 }
 
 type DIDServiceConfig struct {
@@ -315,12 +321,10 @@ func applyEnvVariables(config *SSIServiceConfig) error {
 
 	filestorePath, present := os.LookupEnv(FileStorePath.String())
 	if present {
-		config.Services.FileStorePath = filestorePath
+		config.Services.FileStoreConfig.LocalPath = filestorePath
 	} else {
 		return fmt.Errorf("filestore path must be set by env var [%s]", FileStorePath.String())
 	}
-
-	logrus.Infof("config.Services.FileStorePath %s", config.Services.FileStorePath)
 
 	return nil
 }
