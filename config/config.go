@@ -290,11 +290,11 @@ func loadTOMLConfig(path string, config *SSIServiceConfig, fs fs.FS) error {
 func applyEnvVariables(config *SSIServiceConfig) error {
 	if err := godotenv.Load(DefaultEnvPath); err != nil {
 		// The error indicates that the file or directory does not exist.
-		if os.IsNotExist(err) {
-			logrus.Info("no .env file found, skipping apply env variables...")
-			return nil
+		if !os.IsNotExist(err) {
+			return errors.Wrap(err, "dotenv parsing")
+		} else {
+			logrus.Info("no .env file found, trying with command line args...")
 		}
-		return errors.Wrap(err, "dotenv parsing")
 	}
 
 	dbPassword, present := os.LookupEnv(DBPassword.String())
