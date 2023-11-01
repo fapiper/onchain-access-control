@@ -38,11 +38,17 @@ func AuthMiddleware() gin.HandlerFunc {
 		token := c.GetHeader("Authorization")
 		// TODO Retrieve `fileDidUrl` from token:
 		// fileDidUrl := "did:pkh:0x1234?ref=static/test.csv"
-		fileRefFromToken := "static/test.csv"
-		// 1. check if `fileRefFromToken` matches requested file
+		fileRefFromToken := "static/test.txt"
 		fileRefFromPath := fmt.Sprintf("%s%s", config.GetFileStoreBase(), c.Param(fileRefParamKey))
 
 		logrus.Infof("fileRefFromToken: %s, fileRefFromPath: %s", fileRefFromToken, fileRefFromPath)
+
+		// 1. check if `fileRefFromToken` matches requested file
+		if fileRefFromToken != fileRefFromPath {
+			c.JSON(http.StatusUnauthorized, gin.H{"error": "Access token invalid"})
+			c.Abort()
+			return
+		}
 
 		// 2. check if token exists in db and isn't expired
 		authToken := ""
