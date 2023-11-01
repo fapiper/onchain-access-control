@@ -9,6 +9,7 @@ const (
 	// List of all service
 
 	DID              Type = "did"
+	Auth             Type = "auth"
 	Schema           Type = "schema"
 	Issuance         Type = "issuance"
 	Credential       Type = "credential"
