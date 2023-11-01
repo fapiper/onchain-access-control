@@ -40,6 +40,11 @@ status_endpoint = "https://our-site.com/status"
 # option = "password"
 
 # per-service configuration
+[services.auth]
+password = "default-password"
+# master_key_uri = "gcp-kms://projects/*/locations/*/keyRings/*/cryptoKeys/*"
+# kms_credentials_path = "credentials.json"
+
 [services.keystore]
 password = "default-password"
 # master_key_uri = "gcp-kms://projects/*/locations/*/keyRings/*/cryptoKeys/*"
