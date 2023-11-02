@@ -12,7 +12,9 @@ go_library(
     visibility = ["//visibility:public"],
     deps = [
         "//config",
+        "//internal/keyaccess",
         "//pkg/server/framework",
+        "//pkg/service/auth",
         "//pkg/service/webhook",
         "@com_github_gin_contrib_cors//:cors",
         "@com_github_gin_gonic_gin//:gin",

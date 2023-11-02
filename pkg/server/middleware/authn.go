@@ -5,7 +5,8 @@ import (
 	"encoding/hex"
 	"fmt"
 	"github.com/fapiper/onchain-access-control/config"
-	"github.com/sirupsen/logrus"
+	"github.com/fapiper/onchain-access-control/internal/keyaccess"
+	"github.com/fapiper/onchain-access-control/pkg/service/auth"
 	"net/http"
 	"os"
 	"strconv"
@@ -31,17 +32,36 @@ const (
 	fileRefParamKey = "filepath"
 )
 
-func AuthMiddleware() gin.HandlerFunc {
+func AuthMiddleware(authService *auth.Service) gin.HandlerFunc {
 	useAuthToken, _ := strconv.ParseBool(os.Getenv("USE_AUTH_TOKEN"))
 
 	return func(c *gin.Context) {
+
+		// If USE_AUTH_TOKEN is false or not set, skip the authentication
+		if !useAuthToken {
+			c.Next()
+			return
+		}
+
 		token := c.GetHeader("Authorization")
+
+		// Remove "Bearer " from the token
+		if len(token) > 7 && token[:7] == "Bearer " {
+			token = token[7:]
+		}
+
+		result, err := authService.VerifySession(c, auth.VerifySessionRequest{SessionJWT: keyaccess.JWT(token)})
+
+		if !result.Verified || err != nil {
+			c.JSON(http.StatusUnauthorized, gin.H{"error": result.Reason})
+			c.Abort()
+			return
+		}
+
 		// TODO Retrieve `fileDidUrl` from token:
 		// fileDidUrl := "did:pkh:0x1234?ref=static/test.csv"
 		fileRefFromToken := "static/test.txt"
 		fileRefFromPath := fmt.Sprintf("%s%s", config.GetFileStoreBase(), c.Param(fileRefParamKey))
-
-		logrus.Infof("fileRefFromToken: %s, fileRefFromPath: %s", fileRefFromToken, fileRefFromPath)
 
 		// 1. check if `fileRefFromToken` matches requested file
 		if fileRefFromToken != fileRefFromPath {
@@ -52,17 +72,6 @@ func AuthMiddleware() gin.HandlerFunc {
 
 		// 2. check if token exists in db and isn't expired
 		authToken := ""
-
-		// If USE_AUTH_TOKEN is false or not set, skip the authentication
-		if !useAuthToken {
-			c.Next()
-			return
-		}
-
-		// Remove "Bearer " from the token
-		if len(token) > 7 && token[:7] == "Bearer " {
-			token = token[7:]
-		}
 
 		// Generate SHA256 hash of the token from the header
 		hash := sha256.Sum256([]byte(token))
