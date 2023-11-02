@@ -2,8 +2,8 @@ package owner
 
 import (
 	"fmt"
-
 	sdkutil "github.com/TBD54566975/ssi-sdk/util"
+	"github.com/fapiper/onchain-access-control/pkg/service/auth"
 	"github.com/pkg/errors"
 
 	"github.com/fapiper/onchain-access-control/config"
@@ -24,6 +24,7 @@ import (
 // Service represents all services and their dependencies independent of transport
 type Service struct {
 	KeyStore         *keystore.Service
+	Auth             *auth.Service
 	DID              *did.Service
 	Schema           *schema.Service
 	Issuance         *issuance.Service
@@ -68,6 +69,7 @@ func validateServiceConfig(config config.ServicesConfig) error {
 
 // instantiateServices begins all instantiates and their dependencies
 func instantiateServices(config config.ServicesConfig) (*Service, error) {
+
 	unencryptedStorageProvider, err := storage.NewStorage(storage.Type(config.StorageProvider), config.StorageOptions...)
 	if err != nil {
 		return nil, sdkutil.LoggingErrorMsgf(err, "could not instantiate storage provider: %s", config.StorageProvider)
@@ -143,8 +145,20 @@ func instantiateServices(config config.ServicesConfig) (*Service, error) {
 	}
 
 	didConfigurationService, _ := wellknown.NewDIDConfigurationService(keyStoreService, didResolver, schemaService)
+
+	authServiceFactory := auth.NewAuthServiceFactory(storageProvider, didResolver, keyStoreService, keyEncrypter, keyDecrypter)
+	if err != nil {
+		return nil, sdkutil.LoggingErrorMsg(err, "could not instantiate the auth service factory")
+	}
+
+	authService, err := authServiceFactory(storageProvider)
+	if err != nil {
+		return nil, sdkutil.LoggingErrorMsg(err, "could not instantiate Auth service")
+	}
+
 	return &Service{
 		KeyStore:         keyStoreService,
+		Auth:             authService,
 		DID:              didService,
 		BatchDID:         batchDIDService,
 		Schema:           schemaService,
@@ -163,6 +177,7 @@ func instantiateServices(config config.ServicesConfig) (*Service, error) {
 func (s *Service) GetServices() []framework.Service {
 	return []framework.Service{
 		s.KeyStore,
+		s.Auth,
 		s.DID,
 		s.Schema,
 		s.Issuance,
