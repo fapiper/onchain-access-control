@@ -7,19 +7,20 @@ import (
 	"github.com/fapiper/onchain-access-control/internal/encryption"
 	"github.com/fapiper/onchain-access-control/internal/keyaccess"
 	"github.com/fapiper/onchain-access-control/pkg/storage"
+	"time"
 )
 
 type StoredSession struct {
-	ID         string         `json:"id"`
-	SessionJWT *keyaccess.JWT `json:"token,omitempty"`
-	Issuer     string         `json:"issuer"`
-	Audience   []string       `json:"audience"`
-	Subject    string         `json:"subject"`
-	CreatedAt  string         `json:"createdAt"`
-	Revoked    bool           `json:"revoked"`
-	RevokedAt  string         `json:"revokedAt"`
-	Expired    bool           `json:"expired"`
-	ExpiresAt  string         `json:"expiresAt"`
+	ID         string        `json:"id"`
+	SessionJWT keyaccess.JWT `json:"token,omitempty"`
+	Issuer     string        `json:"issuer"`
+	Audience   []string      `json:"audience"`
+	Subject    string        `json:"subject"`
+	CreatedAt  time.Time     `json:"createdAt"`
+	Revoked    bool          `json:"revoked"`
+	RevokedAt  string        `json:"revokedAt"`
+	Expired    bool          `json:"expired"`
+	ExpiresAt  time.Time     `json:"expiresAt"`
 }
 
 const (
@@ -76,10 +77,10 @@ func (as *Storage) StoreSession(ctx context.Context, session StoredSession) erro
 func (as *Storage) GetSession(ctx context.Context, id string) (*StoredSession, error) {
 	storedSessionBytes, err := as.db.Read(ctx, namespace, id)
 	if err != nil {
-		return nil, sdkutil.LoggingErrorMsgf(err, "getting session details for session: %s", id)
+		return nil, sdkutil.LoggingErrorMsgf(err, "getting session details for session <%s>", id)
 	}
 	if len(storedSessionBytes) == 0 {
-		return nil, sdkutil.LoggingNewErrorf("could not find session details for session: %s", id)
+		return nil, sdkutil.LoggingNewErrorf("could not find session details for session <%s>", id)
 	}
 
 	// decrypt session before unmarshalling
