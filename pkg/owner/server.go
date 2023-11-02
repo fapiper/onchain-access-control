@@ -17,6 +17,7 @@ import (
 
 const (
 	HealthPrefix    = "/health"
+	AuthPrefix      = "/auth"
 	ReadinessPrefix = "/readiness"
 	SwaggerPrefix   = "/swagger/*any"
 	V1Prefix        = "/v1"
@@ -49,10 +50,15 @@ func NewServer(shutdown chan os.Signal, cfg config.SSIServiceConfig) (*Server, e
 	engine.StaticFile("swagger.yaml", "./doc/swagger.yaml")
 	engine.GET(SwaggerPrefix, ginswagger.WrapHandler(swaggerfiles.Handler, ginswagger.URL("/swagger.yaml")))
 
+	// auth routers
+	if err = handler.AuthAPI(engine.Group(AuthPrefix), owner.Auth); err != nil {
+		return nil, sdkutil.LoggingErrorMsg(err, "unable to instantiate Auth API")
+	}
+
 	// data router with auth
 	data := engine.Group(config.GetFileStoreBase())
 	// TODO middleware for authn + authz
-	data.Use(middleware.AuthMiddleware())
+	data.Use(middleware.AuthMiddleware(owner.Auth))
 	data.StaticFS("/", gin.Dir(cfg.Services.FileStoreConfig.LocalPath, false))
 
 	// register all v1 routers
