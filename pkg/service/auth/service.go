@@ -15,6 +15,7 @@ import (
 	"github.com/fapiper/onchain-access-control/pkg/storage"
 	"github.com/lestrrat-go/jwx/v2/jwe"
 	"github.com/pkg/errors"
+	"github.com/sirupsen/logrus"
 )
 
 type ServiceFactory func(storage.Tx) (*Service, error)
@@ -42,7 +43,7 @@ func (s Service) Status() framework.Status {
 	return framework.Status{Status: framework.StatusReady}
 }
 
-func NewAuthService(config config.KeyStoreServiceConfig, s storage.ServiceStorage, r resolution.Resolver, k *keystore.Service) (*Service, error) {
+func NewAuthService(config config.AuthServiceConfig, s storage.ServiceStorage, r resolution.Resolver, k *keystore.Service) (*Service, error) {
 	encrypter, decrypter, err := keystore.NewServiceEncryption(s, config.EncryptionConfig, keystore.ServiceKeyEncryptionKey)
 	if err != nil {
 		return nil, errors.Wrap(err, "creating new encryption")
@@ -81,7 +82,7 @@ func (s Service) CreateSession(ctx context.Context, request CreateSessionRequest
 		return nil, errors.Errorf("invalid create session request: %+v", request)
 	}
 
-	sessionJWT, err := s.decryptJWE(ctx, request.SessionJWE, "<keyid>")
+	sessionJWT, err := s.decryptJWE(ctx, request.SessionJWE, "kid")
 	if err != nil {
 		return nil, errors.Wrap(err, "could not decrypt session JWE")
 	}
@@ -91,14 +92,14 @@ func (s Service) CreateSession(ctx context.Context, request CreateSessionRequest
 		return nil, errors.Wrap(err, "could not parse session JWT")
 	}
 
-	issuerKID := signature.ProtectedHeaders().KeyID()
-	if issuerKID == "" {
+	kid := signature.ProtectedHeaders().KeyID()
+	if kid == "" {
 		return nil, errors.Errorf("missing kid in header of session<%s>", session.JwtID())
 	}
 
 	// verify the token with the did by first resolving the did and getting the public key and next verifying the token
-	if err = didint.VerifyTokenFromDID(ctx, s.resolver, session.Issuer(), issuerKID, sessionJWT); err != nil {
-		return nil, errors.Wrapf(err, "verifying token from did<%s> with kid<%s>", session.Issuer(), issuerKID)
+	if err = didint.VerifyTokenFromDID(ctx, s.resolver, session.Issuer(), kid, sessionJWT); err != nil {
+		return nil, errors.Wrapf(err, "verifying token from did<%s> with kid<%s>", session.Issuer(), kid)
 	}
 
 	// TODO verify nonce
