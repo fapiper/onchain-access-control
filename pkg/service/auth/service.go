@@ -130,27 +130,23 @@ func (s Service) decryptJWE(ctx context.Context, jweBytes []byte, kid string) (k
 	return keyaccess.JWT(jwtBytes), nil
 }
 
-//func (s Service) VerifySession(ctx context.Context, request VerifySessionRequest) (*VerifySessionResponse, error) {
-//	logrus.Debugf("verifying session: %+v", request)
-//
-//	if err := request.IsValid(); err != nil {
-//		return nil, sdkutil.LoggingErrorMsg(err, "invalid verify session request")
-//	}
-//
-//	_, session, err := util.ParseJWT(request.SessionJWT)
-//	if err != nil {
-//		return nil, errors.Wrap(err, "could not parse session JWT")
-//	}
-//
-//	_, err = s.storage.GetSession(ctx, session.JwtID())
-//	if err != nil {
-//		return &VerifySessionResponse{Verified: false, Reason: err.Error()}, nil
-//	}
-//
-//	err := s.verifier.VerifyJWTSession(ctx, session)
-//	if err != nil {
-//		return &VerifySessionResponse{Verified: false, Reason: err.Error()}, nil
-//	}
-//
-//	return &VerifySessionResponse{Verified: true}, nil
-//}
+func (s Service) VerifySession(ctx context.Context, request VerifySessionRequest) (*VerifySessionResponse, error) {
+	logrus.Debugf("verifying session: %+v", request)
+
+	_, session, err := util.ParseJWT(request.SessionJWT)
+	if err != nil {
+		return &VerifySessionResponse{Verified: false, Reason: err.Error()}, nil
+	}
+
+	_, err = s.storage.GetSession(ctx, session.JwtID())
+	if err != nil {
+		return &VerifySessionResponse{Verified: false, Reason: err.Error()}, nil
+	}
+	// TODO
+	//	err := s.verifier.VerifyJWTSession(ctx, session)
+	//	if err != nil {
+	//		return &VerifySessionResponse{Verified: false, Reason: err.Error()}, nil
+	//	}
+
+	return &VerifySessionResponse{Verified: true}, nil
+}
