@@ -104,8 +104,14 @@ func (s Service) CreateSession(ctx context.Context, request CreateSessionRequest
 	// TODO verify nonce
 
 	storedSession := StoredSession{
-		ID:       session.JwtID(),
-		Audience: session.Audience(),
+		ID:         session.JwtID(),
+		Audience:   session.Audience(),
+		SessionJWT: sessionJWT,
+		Issuer:     session.Issuer(),
+		Subject:    session.Subject(),
+		CreatedAt:  session.IssuedAt(),
+		Revoked:    false,
+		Expired:    false,
 	}
 
 	if s.storage.StoreSession(ctx, storedSession) != nil {
