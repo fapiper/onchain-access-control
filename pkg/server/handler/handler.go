@@ -52,6 +52,20 @@ func KeyStoreAPI(rg *gin.RouterGroup, service svcframework.Service) (err error) 
 	return
 }
 
+// AuthAPI registers all HTTP handlers for the Auth Service
+func AuthAPI(authAPI *gin.RouterGroup, service svcframework.Service) (err error) {
+	// TODO move auth api to separate file as its not corresponding to any ssi handler
+	_, err = router.NewAuthRouter(service)
+	if err != nil {
+		return sdkutil.LoggingErrorMsg(err, "creating auth router")
+	}
+
+	//authAPI.POST("/", authRouter.CreateSession)
+	//authAPI.GET("/:id", authRouter.VerifySession)
+
+	return
+}
+
 // DecentralizedIdentityAPI registers all HTTP handlers for the DID Service
 func DecentralizedIdentityAPI(rg *gin.RouterGroup, service *didsvc.Service, did *didsvc.BatchService, webhookService *webhook.Service) (err error) {
 	didRouter, err := router.NewDIDRouter(service)
