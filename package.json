@@ -20,6 +20,7 @@
     "pre-commit": "lint-staged"
   },
   "devDependencies": {
+    "@tsconfig/node16-strictest": "1.0.4",
     "@bazel/bazelisk": "^1.12.1",
     "@bazel/buildifier": "^5.1.0",
     "@bazel/ibazel": "^0.16.2",
