@@ -20,6 +20,8 @@
         "name": "next"
       }
     ],
+    "isolatedModules": true,
+    "jsx": "preserve"
   },
   "include": [
     "next-env.d.ts",
@@ -32,5 +34,5 @@
     "out",
     "node_modules",
     "../../node_modules"
-  ],
+  ]
 }
