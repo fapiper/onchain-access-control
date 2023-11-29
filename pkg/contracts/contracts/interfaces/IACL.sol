@@ -10,13 +10,13 @@ interface IACL {
   // contexts
   function getNumContexts() external view returns (uint256);
   function getContextAtIndex(uint256 _index) external view returns (bytes32);
-  function getNumUsersInContext(bytes32 _context) external view returns (uint256);
-  function getUserInContextAtIndex(bytes32 _context, uint _index) external view returns (address);
+  function getNumSubjectsInContext(bytes32 _context) external view returns (uint256);
+  function getSubjectInContextAtIndex(bytes32 _context, uint _index) external view returns (address);
     
-  // users
-  function getNumContextsForUser(address _addr) external view returns (uint256);
-  function getContextForUserAtIndex(address _addr, uint256 _index) external view returns (bytes32);
-  function userSomeHasRoleInContext(bytes32 _context, address _addr) external view returns (bool);
+  // subjects
+  function getNumContextsForSubject(address _addr) external view returns (uint256);
+  function getContextForSubjectAtIndex(address _addr, uint256 _index) external view returns (bytes32);
+  function subjectSomeHasRoleInContext(bytes32 _context, address _addr) external view returns (bool);
     
   // role groups
   function hasRoleInGroup(bytes32 _context, address _addr, bytes32 _roleGroup) external view returns (bool);
@@ -30,7 +30,7 @@ interface IACL {
   function hasAnyRole(bytes32 _context, address _addr, bytes32[] calldata _roles) external view returns (bool);
   function assignRole(bytes32 _context, address _addr, bytes32 _role) external;
   function unassignRole(bytes32 _context, address _addr, bytes32 _role) external;
-  function getRolesForUser(bytes32 _context, address _addr) external view returns (bytes32[] memory);
+  function getRolesForSubject(bytes32 _context, address _addr) external view returns (bytes32[] memory);
     
   // who can assign roles
   function addAssigner(bytes32 _roleToAssign, bytes32 _assignerRoleGroup) external;

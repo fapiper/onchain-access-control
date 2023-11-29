@@ -15,7 +15,7 @@ contract ACL is IACL, IACLConstants {
     mapping(bytes32 => Bytes32.Set) private assigners;
     mapping(bytes32 => Bytes32.Set) private roleToGroups;
     mapping(bytes32 => Bytes32.Set) private groupToRoles;
-    mapping(address => Bytes32.Set) private userContexts;
+    mapping(address => Bytes32.Set) private subjectContexts;
 
     mapping(uint256 => bytes32) public contexts;
     mapping(bytes32 => bool) public isContext;
@@ -83,26 +83,26 @@ contract ACL is IACL, IACLConstants {
         return contexts[_index];
     }
 
-    function getNumUsersInContext(bytes32 _context) public view override returns (uint256) {
-        return assignments[_context].getNumUsers();
+    function getNumSubjectsInContext(bytes32 _context) public view override returns (uint256) {
+        return assignments[_context].getNumSubjects();
     }
 
-    function getUserInContextAtIndex(bytes32 _context, uint256 _index) public view override returns (address) {
-        return assignments[_context].getUserAtIndex(_index);
+    function getSubjectInContextAtIndex(bytes32 _context, uint256 _index) public view override returns (address) {
+        return assignments[_context].getSubjectAtIndex(_index);
     }
 
-    // Users
+    // Subjects
 
-    function getNumContextsForUser(address _addr) public view override returns (uint256) {
-        return userContexts[_addr].size();
+    function getNumContextsForSubject(address _addr) public view override returns (uint256) {
+        return subjectContexts[_addr].size();
     }
 
-    function getContextForUserAtIndex(address _addr, uint256 _index) public view override returns (bytes32) {
-        return userContexts[_addr].get(_index);
+    function getContextForSubjectAtIndex(address _addr, uint256 _index) public view override returns (bytes32) {
+        return subjectContexts[_addr].get(_index);
     }
 
-    function userSomeHasRoleInContext(bytes32 _context, address _addr) public view override returns (bool) {
-        return userContexts[_addr].has(_context);
+    function subjectSomeHasRoleInContext(bytes32 _context, address _addr) public view override returns (bool) {
+        return subjectContexts[_addr].has(_context);
     }
 
     // Role groups
@@ -138,9 +138,9 @@ contract ACL is IACL, IACLConstants {
         address _addr,
         bytes32 _role
     ) public view override returns (uint256) {
-        if (assignments[_context].hasRoleForUser(_role, _addr)) {
+        if (assignments[_context].hasRoleForSubject(_role, _addr)) {
             return HAS_ROLE_CONTEXT;
-        } else if (assignments[systemContext].hasRoleForUser(_role, _addr)) {
+        } else if (assignments[systemContext].hasRoleForSubject(_role, _addr)) {
             return HAS_ROLE_SYSTEM_CONTEXT;
         } else {
             return DOES_NOT_HAVE_ROLE;
@@ -183,24 +183,24 @@ contract ACL is IACL, IACLConstants {
         address _addr,
         bytes32 _role
     ) public override assertIsAssigner(_context, _addr, _role) {
-        if (assignments[_context].hasRoleForUser(_role, _addr)) {
-            assignments[_context].removeRoleForUser(_role, _addr);
+        if (assignments[_context].hasRoleForSubject(_role, _addr)) {
+            assignments[_context].removeRoleForSubject(_role, _addr);
         }
 
-        // update user's context list?
-        if (!assignments[_context].hasUser(_addr)) {
-            userContexts[_addr].remove(_context);
+        // update subject's context list?
+        if (!assignments[_context].hasSubject(_addr)) {
+            subjectContexts[_addr].remove(_context);
         }
 
         emit RoleUnassigned(_context, _addr, _role);
     }
 
-    function getRolesForUser(bytes32 _context, address _addr) public view override returns (bytes32[] memory) {
-        return assignments[_context].getRolesForUser(_addr);
+    function getRolesForSubject(bytes32 _context, address _addr) public view override returns (bytes32[] memory) {
+        return assignments[_context].getRolesForSubject(_addr);
     }
 
-    function getUsersForRole(bytes32 _context, bytes32 _role) public view override returns (address[] memory) {
-        return assignments[_context].getUsersForRole(_role);
+    function getSubjectsForRole(bytes32 _context, bytes32 _role) public view override returns (address[] memory) {
+        return assignments[_context].getSubjectsForRole(_role);
     }
 
     // Role assigners
@@ -275,10 +275,10 @@ contract ACL is IACL, IACLConstants {
             numContexts++;
         }
 
-        assignments[_context].addRoleForUser(_role, _assignee);
+        assignments[_context].addRoleForSubject(_role, _assignee);
 
-        // update user's context list
-        userContexts[_assignee].add(_context);
+        // update subject's context list
+        subjectContexts[_assignee].add(_context);
 
         // only admin should be able to assign somebody in the system context
         if (_context == systemContext) {
