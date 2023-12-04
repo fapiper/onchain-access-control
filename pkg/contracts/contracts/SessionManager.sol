@@ -21,11 +21,12 @@ contract SessionManager is ISessionManager {
         _;
     }
 
-    function setSession(bytes memory _token, uint256 _duration) external returns (SessionInfo memory) {
+    function setSession(bytes32 memory _token, bytes32 memory _subject, uint256 _duration) external returns (SessionInfo memory) {
         require(_duration <= maxDuration, "Invalid duration");
 
         SessionInfo memory session = SessionInfo({
             token: _token,
+            subject: _subject,
             exists: true,
             expiration: block.timestamp + _duration
         });
@@ -34,6 +35,10 @@ contract SessionManager is ISessionManager {
 
         emit NewSession(session);
         return session;
+    }
+
+    function revertSession(bytes32 memory _token, bytes32 memory _subject, uint256 _duration) external {
+        delete sessions[_token];
     }
 
     function isSessionValid(bytes memory _token) public view returns (bool) {

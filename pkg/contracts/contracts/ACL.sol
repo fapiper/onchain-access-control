@@ -15,7 +15,7 @@ contract ACL is IACL, IACLConstants {
     mapping(bytes32 => Bytes32.Set) private assigners;
     mapping(bytes32 => Bytes32.Set) private roleToGroups;
     mapping(bytes32 => Bytes32.Set) private groupToRoles;
-    mapping(address => Bytes32.Set) private subjectContexts;
+    mapping(bytes32 => Bytes32.Set) private subjectContexts;
 
     mapping(uint256 => bytes32) public contexts;
     mapping(bytes32 => bool) public isContext;
@@ -32,10 +32,10 @@ contract ACL is IACL, IACLConstants {
 
     modifier assertIsAssigner(
         bytes32 _context,
-        address _addr,
+        bytes32 _did,
         bytes32 _role
     ) {
-        uint256 ca = canAssign(_context, msg.sender, _addr, _role);
+        uint256 ca = canAssign(_context, msg.sender, _did, _role);
         require(ca != CANNOT_ASSIGN && ca != CANNOT_ASSIGN_USER_NOT_APPROVED, "unauthorized");
         _;
     }
@@ -61,16 +61,16 @@ contract ACL is IACL, IACLConstants {
 
     // Admins
 
-    function isAdmin(address _addr) public view override returns (bool) {
-        return hasRoleInGroup(systemContext, _addr, adminRoleGroup);
+    function isAdmin(bytes32 _did) public view override returns (bool) {
+        return hasRoleInGroup(systemContext, _did, adminRoleGroup);
     }
 
-    function addAdmin(address _addr) public override {
-        assignRole(systemContext, _addr, adminRole);
+    function addAdmin(bytes32 _did) public override {
+        assignRole(systemContext, _did, adminRole);
     }
 
-    function removeAdmin(address _addr) public override {
-        unassignRole(systemContext, _addr, adminRole);
+    function removeAdmin(bytes32 _did) public override {
+        unassignRole(systemContext, _did, adminRole);
     }
 
     // Contexts
@@ -87,32 +87,32 @@ contract ACL is IACL, IACLConstants {
         return assignments[_context].getNumSubjects();
     }
 
-    function getSubjectInContextAtIndex(bytes32 _context, uint256 _index) public view override returns (address) {
+    function getSubjectInContextAtIndex(bytes32 _context, uint256 _index) public view override returns (bytes32) {
         return assignments[_context].getSubjectAtIndex(_index);
     }
 
     // Subjects
 
-    function getNumContextsForSubject(address _addr) public view override returns (uint256) {
-        return subjectContexts[_addr].size();
+    function getNumContextsForSubject(bytes32 _did) public view override returns (uint256) {
+        return subjectContexts[_did].size();
     }
 
-    function getContextForSubjectAtIndex(address _addr, uint256 _index) public view override returns (bytes32) {
-        return subjectContexts[_addr].get(_index);
+    function getContextForSubjectAtIndex(bytes32 _did, uint256 _index) public view override returns (bytes32) {
+        return subjectContexts[_did].get(_index);
     }
 
-    function subjectSomeHasRoleInContext(bytes32 _context, address _addr) public view override returns (bool) {
-        return subjectContexts[_addr].has(_context);
+    function subjectSomeHasRoleInContext(bytes32 _context, bytes32 _did) public view override returns (bool) {
+        return subjectContexts[_did].has(_context);
     }
 
     // Role groups
 
     function hasRoleInGroup(
         bytes32 _context,
-        address _addr,
+        bytes32 _did,
         bytes32 _roleGroup
     ) public view override returns (bool) {
-        return hasAnyRole(_context, _addr, groupToRoles[_roleGroup].getAll());
+        return hasAnyRole(_context, _did, groupToRoles[_roleGroup].getAll());
     }
 
     function setRoleGroup(bytes32 _roleGroup, bytes32[] memory _roles) public override assertIsAdmin {
@@ -135,12 +135,12 @@ contract ACL is IACL, IACLConstants {
 
     function hasRole(
         bytes32 _context,
-        address _addr,
+        bytes32 _did,
         bytes32 _role
     ) public view override returns (uint256) {
-        if (assignments[_context].hasRoleForSubject(_role, _addr)) {
+        if (assignments[_context].hasRoleForSubject(_role, _did)) {
             return HAS_ROLE_CONTEXT;
-        } else if (assignments[systemContext].hasRoleForSubject(_role, _addr)) {
+        } else if (assignments[systemContext].hasRoleForSubject(_role, _did)) {
             return HAS_ROLE_SYSTEM_CONTEXT;
         } else {
             return DOES_NOT_HAVE_ROLE;
@@ -149,13 +149,13 @@ contract ACL is IACL, IACLConstants {
 
     function hasAnyRole(
         bytes32 _context,
-        address _addr,
+        bytes32 _did,
         bytes32[] memory _roles
     ) public view override returns (bool) {
         bool hasAny = false;
 
         for (uint256 i = 0; i < _roles.length; i++) {
-            if (hasRole(_context, _addr, _roles[i]) != DOES_NOT_HAVE_ROLE) {
+            if (hasRole(_context, _did, _roles[i]) != DOES_NOT_HAVE_ROLE) {
                 hasAny = true;
                 break;
             }
@@ -165,41 +165,41 @@ contract ACL is IACL, IACLConstants {
     }
 
     /**
-     * @dev assign a role to an address
+     * @dev assign a role to a did
      */
     function assignRole(
         bytes32 _context,
-        address _addr,
+        bytes32 _did,
         bytes32 _role
-    ) public override assertIsAssigner(_context, _addr, _role) {
-        _assignRole(_context, _addr, _role);
+    ) public override assertIsAssigner(_context, _did, _role) {
+        _assignRole(_context, _did, _role);
     }
 
     /**
-     * @dev remove a role from an address
+     * @dev remove a role from a did
      */
     function unassignRole(
         bytes32 _context,
-        address _addr,
+        bytes32 _did,
         bytes32 _role
-    ) public override assertIsAssigner(_context, _addr, _role) {
-        if (assignments[_context].hasRoleForSubject(_role, _addr)) {
-            assignments[_context].removeRoleForSubject(_role, _addr);
+    ) public override assertIsAssigner(_context, _did, _role) {
+        if (assignments[_context].hasRoleForSubject(_role, _did)) {
+            assignments[_context].removeRoleForSubject(_role, _did);
         }
 
         // update subject's context list?
-        if (!assignments[_context].hasSubject(_addr)) {
-            subjectContexts[_addr].remove(_context);
+        if (!assignments[_context].hasSubject(_did)) {
+            subjectContexts[_did].remove(_context);
         }
 
-        emit RoleUnassigned(_context, _addr, _role);
+        emit RoleUnassigned(_context, _did, _role);
     }
 
-    function getRolesForSubject(bytes32 _context, address _addr) public view override returns (bytes32[] memory) {
-        return assignments[_context].getRolesForSubject(_addr);
+    function getRolesForSubject(bytes32 _context, bytes32 _did) public view override returns (bytes32[] memory) {
+        return assignments[_context].getRolesForSubject(_did);
     }
 
-    function getSubjectsForRole(bytes32 _context, bytes32 _role) public view override returns (address[] memory) {
+    function getSubjectsForRole(bytes32 _context, bytes32 _role) public view override returns (bytes32[] memory) {
         return assignments[_context].getSubjectsForRole(_role);
     }
 
@@ -221,8 +221,8 @@ contract ACL is IACL, IACLConstants {
 
     function canAssign(
         bytes32 _context,
-        address _assigner,
-        address _assignee,
+        bytes32 _assigner,
+        bytes32 _assignee,
         bytes32 _role
     ) public view override returns (uint256) {
         // if they are an admin
@@ -231,7 +231,7 @@ contract ACL is IACL, IACLConstants {
         }
 
         // if they are assigning within their own context
-        if (_context == generateContextFromAddress(_assigner)) {
+        if (_context == generateContextFromDID(_assigner)) {
             return CAN_ASSIGN_IS_OWN_CONTEXT;
         }
 
@@ -240,7 +240,7 @@ contract ACL is IACL, IACLConstants {
             return CANNOT_ASSIGN_USER_NOT_APPROVED;
         }
 
-        // if they belong to an role group that can assign this role
+        // if they belong to a role group that can assign this role
         bytes32[] memory roleGroups = getAssigners(_role);
 
         for (uint256 i = 0; i < roleGroups.length; i++) {
@@ -254,18 +254,18 @@ contract ACL is IACL, IACLConstants {
         return CANNOT_ASSIGN;
     }
 
-    function generateContextFromAddress(address _addr) public pure override returns (bytes32) {
-        return keccak256(abi.encodePacked(_addr));
+    function generateContextFromDID(bytes32 _did) public pure override returns (bytes32) {
+        return keccak256(abi.encodePacked(_did));
     }
 
     // Internal functions
 
     /**
-     * @dev assign a role to an address
+     * @dev assign a role to a did
      */
     function _assignRole(
         bytes32 _context,
-        address _assignee,
+        bytes32 _assignee,
         bytes32 _role
     ) private {
         // record new context if necessary

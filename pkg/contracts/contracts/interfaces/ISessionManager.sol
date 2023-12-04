@@ -7,12 +7,13 @@ interface ISessionManager {
     event RevokeSession (SessionInfo indexed session);
 
     struct SessionInfo {
-        bytes token;
+        bytes32 token;
+        bytes32 subject;
         bool exists;
         uint256 expiration;
     }
 
-    function setSession(bytes memory _token, uint256 _duration) external returns (SessionInfo memory);
+    function setSession(bytes32 memory _token, bytes32 _subject, uint256 _duration) external returns (SessionInfo memory);
     
-    function isSessionValid(bytes memory _token) external view returns (bool);
+    function isSessionValid(bytes32 memory _token) external view returns (bool);
 }
