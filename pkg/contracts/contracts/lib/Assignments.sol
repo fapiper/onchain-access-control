@@ -6,8 +6,8 @@ pragma solidity >=0.8.4;
  */
 library Assignments {
     struct RoleSubjects {
-        mapping(bytes32 => uint256) map;
-        bytes32[] list;
+        mapping(string => uint256) map;
+        string[] list;
     }
 
     struct SubjectRoles {
@@ -17,9 +17,9 @@ library Assignments {
 
     struct Context {
         mapping(bytes32 => RoleSubjects) roleSubjects;
-        mapping(bytes32 => SubjectRoles) subjectRoles;
-        mapping(bytes32 => uint256) subjectMap;
-        bytes32[] subjectList;
+        mapping(string => SubjectRoles) subjectRoles;
+        mapping(string => uint256) subjectMap;
+        string[] subjectList;
     }
 
     /**
@@ -28,7 +28,7 @@ library Assignments {
     function addRoleForSubject(
         Context storage _context,
         bytes32 _role,
-        bytes32 _did
+        string memory _did
     ) internal {
         SubjectRoles storage ur = _context.subjectRoles[_did];
         RoleSubjects storage ru = _context.roleSubjects[_role];
@@ -58,7 +58,7 @@ library Assignments {
     function removeRoleForSubject(
         Context storage _context,
         bytes32 _role,
-        bytes32 _did
+        string memory _did
     ) internal {
         SubjectRoles storage ur = _context.subjectRoles[_did];
         RoleSubjects storage ru = _context.roleSubjects[_role];
@@ -115,7 +115,7 @@ library Assignments {
     function hasRoleForSubject(
         Context storage _context,
         bytes32 _role,
-        bytes32 _did
+        string memory _did
     ) internal view returns (bool) {
         SubjectRoles storage ur = _context.subjectRoles[_did];
 
@@ -126,7 +126,7 @@ library Assignments {
      * @dev get all roles for did
      * @return bytes32[]
      */
-    function getRolesForSubject(Context storage _context, bytes32 _did) internal view returns (bytes32[] storage) {
+    function getRolesForSubject(Context storage _context, string memory _did) internal view returns (bytes32[] storage) {
         SubjectRoles storage ur = _context.subjectRoles[_did];
 
         return ur.list;
@@ -134,9 +134,9 @@ library Assignments {
 
     /**
      * @dev get all dids assigned the given role
-     * @return bytes32[]
+     * @return string[]
      */
-    function getSubjectsForRole(Context storage _context, bytes32 _role) internal view returns (bytes32[] storage) {
+    function getSubjectsForRole(Context storage _context, bytes32 _role) internal view returns (string[] storage) {
         RoleSubjects storage ru = _context.roleSubjects[_role];
 
         return ru.list;
@@ -152,9 +152,9 @@ library Assignments {
 
     /**
      * @dev get dids at given index in list of dids
-     * @return bytes32
+     * @return string
      */
-    function getSubjectAtIndex(Context storage _context, uint256 _index) internal view returns (bytes32) {
+    function getSubjectAtIndex(Context storage _context, uint256 _index) internal view returns (string storage) {
         return _context.subjectList[_index];
     }
 
@@ -162,7 +162,7 @@ library Assignments {
      * @dev get whether given dids have a role in this context
      * @return bool
      */
-    function hasSubject(Context storage _context, bytes32 _did) internal view returns (bool) {
+    function hasSubject(Context storage _context, string memory _did) internal view returns (bool) {
         return _context.subjectMap[_did] != 0;
     }
 

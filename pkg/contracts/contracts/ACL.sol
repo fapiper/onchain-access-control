@@ -18,7 +18,7 @@ contract ACL is IACL, IACLConstants {
     mapping(bytes32 => Bytes32.Set) private assigners;
     mapping(bytes32 => Bytes32.Set) private roleToGroups;
     mapping(bytes32 => Bytes32.Set) private groupToRoles;
-    mapping(bytes32 => Bytes32.Set) private subjectContexts;
+    mapping(string => Bytes32.Set) private subjectContexts;
     mapping(bytes32 => address) private operators;
 
     mapping(uint256 => bytes32) public contexts;
@@ -41,8 +41,8 @@ contract ACL is IACL, IACLConstants {
 
     modifier assertIsAssigner(
         bytes32 _context,
-        bytes32 _assigner,
-        bytes32 _assignee,
+        string memory _assigner,
+        string memory _assignee,
         bytes32 _role
     ) {
         uint256 ca = canAssign(_context, _assigner, _assignee, _role);
@@ -55,7 +55,7 @@ contract ACL is IACL, IACLConstants {
         _;
     }
 
-    constructor(address _didRegistry, bytes32 _system, bytes32 _admin, bytes32 _adminRole, bytes32 _adminRoleGroup) {
+    constructor(address _didRegistry, bytes32 _system, string memory _admin, bytes32 _adminRole, bytes32 _adminRoleGroup) {
         didRegistry = IDIDRegistry(_didRegistry);
 
         adminRole = _adminRole;
@@ -80,11 +80,11 @@ contract ACL is IACL, IACLConstants {
         return hasRoleInGroup(systemContext, _did, adminRoleGroup);
     }
 
-    function addAdmin(bytes32 _assigner, bytes32 _assignee) public {
+    function addAdmin(string memory _assigner, string memory _assignee) public {
         assignRole(systemContext, _assigner, _assignee, adminRole);
     }
 
-    function removeAdmin(bytes32 _assigner, bytes32 _assignee) public {
+    function removeAdmin(string memory _assigner, string memory _assignee) public {
         unassignRole(systemContext, _assigner, _assignee, adminRole);
     }
 
@@ -102,7 +102,7 @@ contract ACL is IACL, IACLConstants {
         return assignments[_context].getNumSubjects();
     }
 
-    function getSubjectInContextAtIndex(bytes32 _context, uint256 _index) public view override returns (bytes32) {
+    function getSubjectInContextAtIndex(bytes32 _context, uint256 _index) public view override returns (string memory) {
         return assignments[_context].getSubjectAtIndex(_index);
     }
 
@@ -185,8 +185,8 @@ contract ACL is IACL, IACLConstants {
      */
     function assignRole(
         bytes32 _context,
-        bytes32 _assigner,
-        bytes32 _assignee,
+        string memory _assigner,
+        string memory _assignee,
         bytes32 _role
     ) public assertIsAssigner(_context, _assigner, _assignee, _role) {
         _assignRole(_context, _assigner, _assignee, _role);
@@ -197,8 +197,8 @@ contract ACL is IACL, IACLConstants {
      */
     function unassignRole(
         bytes32 _context,
-        bytes32 _assigner,
-        bytes32 _assignee,
+        string memory _assigner,
+        string memory _assignee,
         bytes32 _role
     ) public assertIsAssigner(_context, _assigner, _assignee, _role) {
         if (assignments[_context].hasRoleForSubject(_role, _assignee)) {
@@ -217,7 +217,7 @@ contract ACL is IACL, IACLConstants {
         return assignments[_context].getRolesForSubject(_did);
     }
 
-    function getSubjectsForRole(bytes32 _context, bytes32 _role) public view returns (bytes32[] memory) {
+    function getSubjectsForRole(bytes32 _context, bytes32 _role) public view returns (string[] memory) {
         return assignments[_context].getSubjectsForRole(_role);
     }
 
@@ -239,8 +239,8 @@ contract ACL is IACL, IACLConstants {
 
     function canAssign(
         bytes32 _context,
-        bytes32 _assigner,
-        bytes32 _assignee,
+        string memory _assigner,
+        string memory _assignee,
         bytes32 _role
     ) public view returns (uint256) {
         if(!didRegistry.isController(_assigner, msg.sender)){
@@ -287,8 +287,8 @@ contract ACL is IACL, IACLConstants {
      */
     function _assignRole(
         bytes32 _context,
-        bytes32 _assigner,
-        bytes32 _assignee,
+        string memory _assigner,
+        string memory _assignee,
         bytes32 _role
     ) private {
         // record new context if necessary

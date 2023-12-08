@@ -5,9 +5,9 @@ interface IACL {
     // admin
     function isAdmin(string memory _did, address _addr) external view returns (bool);
 
-    function addAdmin(bytes32 _assigner, bytes32 _assignee) external;
+    function addAdmin(string memory _assigner, string memory _assignee) external;
 
-    function removeAdmin(bytes32 _assigner, bytes32 _assignee) external;
+    function removeAdmin(string memory _assigner, string memory _assignee) external;
 
     // contexts
     function getNumContexts() external view returns (uint256);
@@ -16,7 +16,7 @@ interface IACL {
 
     function getNumSubjectsInContext(bytes32 _context) external view returns (uint256);
 
-    function getSubjectInContextAtIndex(bytes32 _context, uint _index) external view returns (bytes32);
+    function getSubjectInContextAtIndex(bytes32 _context, uint _index) external view returns (string memory);
 
     // subjects
     function getNumContextsForSubject(string memory _did) external view returns (uint256);
@@ -41,9 +41,9 @@ interface IACL {
 
     function hasAnyRole(bytes32 _context, string memory _did, bytes32[] calldata _roles) external view returns (bool);
 
-    function assignRole(bytes32 _context, bytes32 _assigner, bytes32 _assignee, bytes32 _role) external;
+    function assignRole(bytes32 _context, string memory _assigner, string memory _assignee, bytes32 _role) external;
 
-    function unassignRole(bytes32 _context, bytes32 _assigner, bytes32 _assignee, bytes32 _role) external;
+    function unassignRole(bytes32 _context, string memory _assigner, string memory _assignee, bytes32 _role) external;
 
     function getRolesForSubject(bytes32 _context, string memory _did) external view returns (bytes32[] memory);
 
@@ -54,7 +54,7 @@ interface IACL {
 
     function getAssigners(bytes32 _role) external view returns (bytes32[] memory);
 
-    function canAssign(bytes32 _context, bytes32 _assigner, bytes32 _assignee, bytes32 _role) external view returns (uint256);
+    function canAssign(bytes32 _context, string memory _assigner, string memory _assignee, bytes32 _role) external view returns (uint256);
 
     // utility methods
     function generateContextFromDID(string memory _did) external pure returns (bytes32);
