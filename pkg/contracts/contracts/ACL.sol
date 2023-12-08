@@ -4,7 +4,6 @@ pragma solidity >=0.8.4;
 import "./interfaces/IACL.sol";
 import "./interfaces/IACLConstants.sol";
 import "./interfaces/IDIDRegistry.sol";
-import "./interfaces/IAccessManager.sol";
 import "./lib/Assignments.sol";
 import "./lib/Bytes32.sol";
 
