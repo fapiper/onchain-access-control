@@ -13,7 +13,7 @@ interface ISessionManager {
         uint256 expiration;
     }
 
-    function setSession(bytes32 memory _token, bytes32 _subject, uint256 _duration) external returns (SessionInfo memory);
+    function setSession(bytes32 _token, bytes32 _subject, uint256 _duration) external returns (SessionInfo memory);
     
-    function isSessionValid(bytes32 memory _token) external view returns (bool);
+    function isSessionValid(bytes32 _token) external view returns (bool);
 }

@@ -165,4 +165,5 @@ library Assignments {
     function hasSubject(Context storage _context, bytes32 _did) internal view returns (bool) {
         return _context.subjectMap[_did] != 0;
     }
+
 }

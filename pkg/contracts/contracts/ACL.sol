@@ -3,19 +3,23 @@ pragma solidity >=0.8.4;
 
 import "./interfaces/IACL.sol";
 import "./interfaces/IACLConstants.sol";
-import "./interfaces/IAccessControl.sol";
+import "./interfaces/IDIDRegistry.sol";
+import "./interfaces/IAccessManager.sol";
 import "./lib/Assignments.sol";
 import "./lib/Bytes32.sol";
- 
+
 contract ACL is IACL, IACLConstants {
     using Assignments for Assignments.Context;
     using Bytes32 for Bytes32.Set;
+
+    IDIDRegistry didRegistry;
 
     mapping(bytes32 => Assignments.Context) private assignments;
     mapping(bytes32 => Bytes32.Set) private assigners;
     mapping(bytes32 => Bytes32.Set) private roleToGroups;
     mapping(bytes32 => Bytes32.Set) private groupToRoles;
     mapping(bytes32 => Bytes32.Set) private subjectContexts;
+    mapping(bytes32 => address) private operators;
 
     mapping(uint256 => bytes32) public contexts;
     mapping(bytes32 => bool) public isContext;
@@ -27,6 +31,11 @@ contract ACL is IACL, IACLConstants {
 
     modifier assertIsAdmin() {
         require(isAdmin(msg.sender), "unauthorized - must be admin");
+        _;
+    }
+
+    modifier assertIsController(bytes32 _did, address _actor) {
+        require(didRegistry.isController(_did, _actor), "unauthorized - must be valid DID controller");
         _;
     }
 
@@ -45,7 +54,9 @@ contract ACL is IACL, IACLConstants {
         _;
     }
 
-    constructor(bytes32 _adminRole, bytes32 _adminRoleGroup) {
+    constructor(address _didRegistry, bytes32 _admin, bytes32 _adminRole, bytes32 _adminRoleGroup) {
+        didRegistry = IDIDRegistry(_didRegistry);
+
         adminRole = _adminRole;
         adminRoleGroup = _adminRoleGroup;
         systemContext = keccak256(abi.encodePacked(address(this)));
@@ -56,12 +67,15 @@ contract ACL is IACL, IACLConstants {
         _setRoleGroup(adminRoleGroup, roles);
 
         // set creator as admin
-        _assignRole(systemContext, msg.sender, _adminRole);
+        _assignRole(systemContext, _admin, _adminRole);
     }
 
     // Admins
 
-    function isAdmin(bytes32 _did) public view override returns (bool) {
+    function isAdmin(bytes32 _did, address _addr) public view override returns (bool) {
+        if(!didRegistry.isController(_did, _addr)){
+            return false;
+        }
         return hasRoleInGroup(systemContext, _did, adminRoleGroup);
     }
 
@@ -115,7 +129,7 @@ contract ACL is IACL, IACLConstants {
         return hasAnyRole(_context, _did, groupToRoles[_roleGroup].getAll());
     }
 
-    function setRoleGroup(bytes32 _roleGroup, bytes32[] memory _roles) public override assertIsAdmin {
+    function setRoleGroup(bytes32 _roleGroup, bytes32[] memory _roles, bytes32 _did) public override assertIsAdmin(_did) {
         _setRoleGroup(_roleGroup, _roles);
     }
 
@@ -137,7 +151,7 @@ contract ACL is IACL, IACLConstants {
         bytes32 _context,
         bytes32 _did,
         bytes32 _role
-    ) public view override returns (uint256) {
+    ) public view returns (uint256) {
         if (assignments[_context].hasRoleForSubject(_role, _did)) {
             return HAS_ROLE_CONTEXT;
         } else if (assignments[systemContext].hasRoleForSubject(_role, _did)) {
@@ -195,11 +209,11 @@ contract ACL is IACL, IACLConstants {
         emit RoleUnassigned(_context, _did, _role);
     }
 
-    function getRolesForSubject(bytes32 _context, bytes32 _did) public view override returns (bytes32[] memory) {
+    function getRolesForSubject(bytes32 _context, bytes32 _did) public view returns (bytes32[] memory) {
         return assignments[_context].getRolesForSubject(_did);
     }
 
-    function getSubjectsForRole(bytes32 _context, bytes32 _role) public view override returns (bytes32[] memory) {
+    function getSubjectsForRole(bytes32 _context, bytes32 _role) public view returns (bytes32[] memory) {
         return assignments[_context].getSubjectsForRole(_role);
     }
 
@@ -224,7 +238,11 @@ contract ACL is IACL, IACLConstants {
         bytes32 _assigner,
         bytes32 _assignee,
         bytes32 _role
-    ) public view override returns (uint256) {
+    ) public view returns (uint256) {
+        if(!didRegistry.isController(_assigner, msg.sender)){
+            return CANNOT_ASSIGN_USER_NOT_APPROVED;
+        }
+
         // if they are an admin
         if (isAdmin(_assigner)) {
             return CAN_ASSIGN_IS_ADMIN;
@@ -266,6 +284,7 @@ contract ACL is IACL, IACLConstants {
     function _assignRole(
         bytes32 _context,
         bytes32 _assignee,
+        address _operator,
         bytes32 _role
     ) private {
         // record new context if necessary
@@ -308,4 +327,4 @@ contract ACL is IACL, IACLConstants {
 
         emit RoleGroupUpdated(_roleGroup);
     }
-}
+} 
