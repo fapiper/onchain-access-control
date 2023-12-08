@@ -7,13 +7,13 @@ interface IDIDRegistry {
     }
 
     event DIDControllerChanged(
-        bytes32 indexed identity,
+        string indexed identity,
         address controller
     );
 
-    function addController(bytes32 identity, address controller) external;
-    function getController(bytes32 identity) external view returns (address);
-    function removeController(bytes32 identity, address controller) external;
-    function changeController(bytes32 identity, address newController) external;
-    function isController(bytes32 identity, address actor) external view returns (bool);
+    function addController(string identity, address controller) external;
+    function getController(string identity) external view returns (address);
+    function removeController(string identity, address controller) external;
+    function changeController(string identity, address newController) external;
+    function isController(string identity, address actor) external view returns (bool);
 }
