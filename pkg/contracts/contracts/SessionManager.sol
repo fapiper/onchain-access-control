@@ -5,7 +5,7 @@ import "./interfaces/ISessionManager.sol";
 
 contract SessionManager is ISessionManager {
 
-    mapping(bytes => SessionInfo) private sessions;
+    mapping(bytes32 => SessionInfo) private sessions;
 
     uint256 public maxDuration;
 
@@ -13,7 +13,7 @@ contract SessionManager is ISessionManager {
         maxDuration = _maxDuration;
     }
 
-    modifier onlyValidSession(bytes memory _token) {
+    modifier onlyValidSession(bytes32 _token) {
         require(
             isSessionValid(_token),
             "Invalid session"
@@ -21,7 +21,7 @@ contract SessionManager is ISessionManager {
         _;
     }
 
-    function setSession(bytes32 memory _token, bytes32 memory _subject, uint256 _duration) external returns (SessionInfo memory) {
+    function setSession(bytes32 _token, string memory _subject, uint256 _duration) external returns (SessionInfo memory) {
         require(_duration <= maxDuration, "Invalid duration");
 
         SessionInfo memory session = SessionInfo({
@@ -37,11 +37,11 @@ contract SessionManager is ISessionManager {
         return session;
     }
 
-    function revertSession(bytes32 memory _token, bytes32 memory _subject, uint256 _duration) external {
+    function revokeSession(bytes32 _token) external {
         delete sessions[_token];
     }
 
-    function isSessionValid(bytes memory _token) public view returns (bool) {
+    function isSessionValid(bytes32 _token) public view returns (bool) {
         return sessions[_token].expiration >= block.timestamp;
     }
 

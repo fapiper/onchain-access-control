@@ -8,12 +8,12 @@ interface ISessionManager {
 
     struct SessionInfo {
         bytes32 token;
-        bytes32 subject;
+        string subject;
         bool exists;
         uint256 expiration;
     }
 
-    function setSession(bytes32 _token, bytes32 _subject, uint256 _duration) external returns (SessionInfo memory);
+    function setSession(bytes32 _token, string memory _subject, uint256 _duration) external returns (SessionInfo memory);
     
     function isSessionValid(bytes32 _token) external view returns (bool);
 }
