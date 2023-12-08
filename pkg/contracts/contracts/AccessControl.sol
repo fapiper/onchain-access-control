@@ -5,7 +5,7 @@ import "./interfaces/IACL.sol";
 import "./interfaces/IDIDRegistry.sol";
 import "./interfaces/ISessionManager.sol";
 import "./interfaces/IPolicyRegistry.sol";
-
+ 
 contract AccessControl {
 
     struct Rule {
@@ -50,12 +50,12 @@ contract AccessControl {
         delete rules[_roleId];
     }
 
-    function authorize(bytes32 _token, bytes32 _did, bytes32 _roleId, bytes memory _args) ruleExists(_roleId) public {
+    function authorize(bytes32 _token, string memory _did, bytes32 _roleId, bytes memory _args) ruleExists(_roleId) public {
         require(policyRegistry.verifyPolicy(rules[_roleId].policyId, _args), "Not allowed");
         authorize(_token, _did, _roleId);
     }
 
-    function authorize(bytes32 _token, bytes32 _did, bytes32 _roleId) ruleExists(_roleId) public {
+    function authorize(bytes32 _token, string memory _did, bytes32 _roleId) ruleExists(_roleId) public {
         require(acl.hasRole(rules[_roleId].context, _did, _roleId) > 0, "Not allowed");
         sessionManager.setSession(_token, _did, rules[_roleId].sessionDuration);
     }
