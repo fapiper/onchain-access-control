@@ -9,10 +9,6 @@ contract SimpleDIDRegistry is IDIDRegistry {
     mapping(bytes32 => DIDConfig) private configs;
     mapping(address => uint) public changed;
 
-    uint private minKeyRotationTime;
-
-    constructor() public {}
-
     modifier onlyController(bytes32 identity, address actor) {
         require(isController(identity, actor), 'Not authorized');
         _;
@@ -64,9 +60,6 @@ contract SimpleDIDRegistry is IDIDRegistry {
         int controllerIndex = _getControllerIndex(identity, newController);
 
         if (controllerIndex < 0) {
-            if( controllers[identity].length == 0 ){
-                controllers[identity].push( identity );
-            }
             controllers[identity].push( newController );
         }
     }
@@ -96,20 +89,19 @@ contract SimpleDIDRegistry is IDIDRegistry {
         if (controllerIndex >= 0) {
             setCurrentController(identity, uint(controllerIndex));
 
-            emit DIDControllerChanged(identity, newController, changed[identity]);
-            changed[identity] = block.number;
+            emit DIDControllerChanged(identity, newController);
         }
     }
 
-    function addController(bytes32 identity, address controller) external override {
+    function addController(bytes32 identity, address controller) external {
         addController(identity, msg.sender, controller);
     }
 
-    function removeController(bytes32 identity, address controller) external override {
+    function removeController(bytes32 identity, address controller) external {
         removeController(identity, msg.sender, controller);
     }
 
-    function changeController(bytes32 identity, address newController) external override {
+    function changeController(bytes32 identity, address newController) external {
         changeController(identity, msg.sender, newController);
     }
 }

@@ -56,7 +56,7 @@ contract AccessControl {
     }
 
     function authorize(bytes32 _token, bytes32 _did, bytes32 _roleId) ruleExists(_roleId) public {
-        require(acl.hasRole(rules[_roleId].context, _did, _roleId), "Not allowed");
+        require(acl.hasRole(rules[_roleId].context, _did, _roleId) > 0, "Not allowed");
         sessionManager.setSession(_token, _did, rules[_roleId].sessionDuration);
     }
 }

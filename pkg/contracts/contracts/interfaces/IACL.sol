@@ -2,12 +2,12 @@
 pragma solidity >=0.8.4;
 
 interface IACL {
-  // admin
-  function isAdmin(bytes32 _did) external view returns (bool);
+    // admin
+    function isAdmin(bytes32 _did, address _addr) external view returns (bool);
 
-    function addAdmin(bytes32 _did) external;
+    function addAdmin(bytes32 _assigner, bytes32 _assignee) external;
 
-    function removeAdmin(bytes32 _did) external;
+    function removeAdmin(bytes32 _assigner, bytes32 _assignee) external;
 
     // contexts
     function getNumContexts() external view returns (uint256);
@@ -28,7 +28,7 @@ interface IACL {
     // role groups
     function hasRoleInGroup(bytes32 _context, bytes32 _did, bytes32 _roleGroup) external view returns (bool);
 
-    function setRoleGroup(bytes32 _roleGroup, bytes32[] calldata _roles) external;
+    function setRoleGroup(bytes32 _roleGroup, bytes32[] calldata _roles, bytes32 _did) external;
 
     function isRoleGroup(bytes32 _roleGroup) external view returns (bool);
 
@@ -41,20 +41,20 @@ interface IACL {
 
     function hasAnyRole(bytes32 _context, bytes32 _did, bytes32[] calldata _roles) external view returns (bool);
 
-    function assignRole(bytes32 _context, bytes32 _did, bytes32 _role) external;
+    function assignRole(bytes32 _context, bytes32 _assigner, bytes32 _assignee, bytes32 _role) external;
 
-    function unassignRole(bytes32 _context, bytes32 _did, bytes32 _role) external;
+    function unassignRole(bytes32 _context, bytes32 _assigner, bytes32 _assignee, bytes32 _role) external;
 
     function getRolesForSubject(bytes32 _context, bytes32 _did) external view returns (bytes32[] memory);
 
     // who can assign roles
-    function addAssigner(bytes32 _roleToAssign, bytes32 _assignerRoleGroup) external;
+    function addAssigner(bytes32 _roleToAssign, bytes32 _assignerRoleGroup, bytes32 _did) external;
 
-    function removeAssigner(bytes32 _roleToAssign, bytes32 _assignerRoleGroup) external;
+    function removeAssigner(bytes32 _roleToAssign, bytes32 _assignerRoleGroup, bytes32 _did) external;
 
     function getAssigners(bytes32 _role) external view returns (bytes32[] memory);
 
-    function canAssign(bytes32 _context, bytes32 _did, bytes32 _role) external view returns (uint256);
+    function canAssign(bytes32 _context, bytes32 _assigner, bytes32 _assignee, bytes32 _role) external view returns (uint256);
 
     // utility methods
     function generateContextFromDID(bytes32 _did) external pure returns (bytes32);

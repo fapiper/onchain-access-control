@@ -29,8 +29,8 @@ contract ACL is IACL, IACLConstants {
     bytes32 public adminRoleGroup;
     bytes32 public systemContext;
 
-    modifier assertIsAdmin() {
-        require(isAdmin(msg.sender), "unauthorized - must be admin");
+    modifier assertIsAdmin(bytes32 _did) {
+        require(isAdmin(_did, msg.sender), "unauthorized - must be admin");
         _;
     }
 
@@ -41,10 +41,11 @@ contract ACL is IACL, IACLConstants {
 
     modifier assertIsAssigner(
         bytes32 _context,
-        bytes32 _did,
+        bytes32 _assigner,
+        bytes32 _assignee,
         bytes32 _role
     ) {
-        uint256 ca = canAssign(_context, msg.sender, _did, _role);
+        uint256 ca = canAssign(_context, _assigner, _assignee, _role);
         require(ca != CANNOT_ASSIGN && ca != CANNOT_ASSIGN_USER_NOT_APPROVED, "unauthorized");
         _;
     }
@@ -54,12 +55,12 @@ contract ACL is IACL, IACLConstants {
         _;
     }
 
-    constructor(address _didRegistry, bytes32 _admin, bytes32 _adminRole, bytes32 _adminRoleGroup) {
+    constructor(address _didRegistry, bytes32 _system, bytes32 _admin, bytes32 _adminRole, bytes32 _adminRoleGroup) {
         didRegistry = IDIDRegistry(_didRegistry);
 
         adminRole = _adminRole;
         adminRoleGroup = _adminRoleGroup;
-        systemContext = keccak256(abi.encodePacked(address(this)));
+        systemContext = keccak256(abi.encodePacked(_system));
 
         // setup admin rolegroup
         bytes32[] memory roles = new bytes32[](1);
@@ -67,7 +68,7 @@ contract ACL is IACL, IACLConstants {
         _setRoleGroup(adminRoleGroup, roles);
 
         // set creator as admin
-        _assignRole(systemContext, _admin, _adminRole);
+        _assignRole(systemContext, _admin, _admin, _adminRole);
     }
 
     // Admins
@@ -79,12 +80,12 @@ contract ACL is IACL, IACLConstants {
         return hasRoleInGroup(systemContext, _did, adminRoleGroup);
     }
 
-    function addAdmin(bytes32 _did) public override {
-        assignRole(systemContext, _did, adminRole);
+    function addAdmin(bytes32 _assigner, bytes32 _assignee) public {
+        assignRole(systemContext, _assigner, _assignee, adminRole);
     }
 
-    function removeAdmin(bytes32 _did) public override {
-        unassignRole(systemContext, _did, adminRole);
+    function removeAdmin(bytes32 _assigner, bytes32 _assignee) public {
+        unassignRole(systemContext, _assigner, _assignee, adminRole);
     }
 
     // Contexts
@@ -129,6 +130,7 @@ contract ACL is IACL, IACLConstants {
         return hasAnyRole(_context, _did, groupToRoles[_roleGroup].getAll());
     }
 
+    // TODO: change systemContext admin assertion to context specific admin (assignee?)
     function setRoleGroup(bytes32 _roleGroup, bytes32[] memory _roles, bytes32 _did) public override assertIsAdmin(_did) {
         _setRoleGroup(_roleGroup, _roles);
     }
@@ -183,10 +185,11 @@ contract ACL is IACL, IACLConstants {
      */
     function assignRole(
         bytes32 _context,
-        bytes32 _did,
+        bytes32 _assigner,
+        bytes32 _assignee,
         bytes32 _role
-    ) public override assertIsAssigner(_context, _did, _role) {
-        _assignRole(_context, _did, _role);
+    ) public assertIsAssigner(_context, _assigner, _assignee, _role) {
+        _assignRole(_context, _assigner, _assignee, _role);
     }
 
     /**
@@ -194,19 +197,20 @@ contract ACL is IACL, IACLConstants {
      */
     function unassignRole(
         bytes32 _context,
-        bytes32 _did,
+        bytes32 _assigner,
+        bytes32 _assignee,
         bytes32 _role
-    ) public override assertIsAssigner(_context, _did, _role) {
-        if (assignments[_context].hasRoleForSubject(_role, _did)) {
-            assignments[_context].removeRoleForSubject(_role, _did);
+    ) public assertIsAssigner(_context, _assigner, _assignee, _role) {
+        if (assignments[_context].hasRoleForSubject(_role, _assignee)) {
+            assignments[_context].removeRoleForSubject(_role, _assignee);
         }
 
         // update subject's context list?
-        if (!assignments[_context].hasSubject(_did)) {
-            subjectContexts[_did].remove(_context);
+        if (!assignments[_context].hasSubject(_assignee)) {
+            subjectContexts[_assignee].remove(_context);
         }
 
-        emit RoleUnassigned(_context, _did, _role);
+        emit RoleUnassigned(_context, _assignee, _role);
     }
 
     function getRolesForSubject(bytes32 _context, bytes32 _did) public view returns (bytes32[] memory) {
@@ -219,12 +223,12 @@ contract ACL is IACL, IACLConstants {
 
     // Role assigners
 
-    function addAssigner(bytes32 _roleToAssign, bytes32 _assignerRoleGroup) public override assertIsAdmin assertIsRoleGroup(_assignerRoleGroup) {
+    function addAssigner(bytes32 _roleToAssign, bytes32 _assignerRoleGroup, bytes32 _did) public override assertIsAdmin(_did) assertIsRoleGroup(_assignerRoleGroup) {
         assigners[_roleToAssign].add(_assignerRoleGroup);
         emit AssignerAdded(_roleToAssign, _assignerRoleGroup);
     }
 
-    function removeAssigner(bytes32 _roleToAssign, bytes32 _assignerRoleGroup) public override assertIsAdmin assertIsRoleGroup(_assignerRoleGroup) {
+    function removeAssigner(bytes32 _roleToAssign, bytes32 _assignerRoleGroup, bytes32 _did) public override assertIsAdmin(_did) assertIsRoleGroup(_assignerRoleGroup) {
         assigners[_roleToAssign].remove(_assignerRoleGroup);
         emit AssignerRemoved(_roleToAssign, _assignerRoleGroup);
     }
@@ -244,7 +248,7 @@ contract ACL is IACL, IACLConstants {
         }
 
         // if they are an admin
-        if (isAdmin(_assigner)) {
+        if (isAdmin(_assigner, msg.sender)) {
             return CAN_ASSIGN_IS_ADMIN;
         }
 
@@ -283,8 +287,8 @@ contract ACL is IACL, IACLConstants {
      */
     function _assignRole(
         bytes32 _context,
+        bytes32 _assigner,
         bytes32 _assignee,
-        address _operator,
         bytes32 _role
     ) private {
         // record new context if necessary
@@ -301,7 +305,7 @@ contract ACL is IACL, IACLConstants {
 
         // only admin should be able to assign somebody in the system context
         if (_context == systemContext) {
-            require(isAdmin(msg.sender), "only admin can assign role in system context");
+            require(isAdmin(_assigner, msg.sender), "only admin can assign role in system context");
         }
 
         emit RoleAssigned(_context, _assignee, _role);
