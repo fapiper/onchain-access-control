@@ -10,10 +10,10 @@ interface IDIDRegistry {
         string indexed identity,
         address controller
     );
-
-    function addController(string identity, address controller) external;
-    function getController(string identity) external view returns (address);
-    function removeController(string identity, address controller) external;
-    function changeController(string identity, address newController) external;
-    function isController(string identity, address actor) external view returns (bool);
+ 
+    function addController(string memory identity, address controller) external;
+    function getController(string memory identity) external view returns (address);
+    function removeController(string memory identity, address controller) external;
+    function changeController(string memory identity, address newController) external;
+    function isController(string memory identity, address actor) external view returns (bool);
 }

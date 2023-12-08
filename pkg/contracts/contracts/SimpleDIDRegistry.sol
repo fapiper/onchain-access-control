@@ -9,25 +9,25 @@ contract SimpleDIDRegistry is IDIDRegistry {
     mapping(string => DIDConfig) private configs;
     mapping(address => uint) public changed;
 
-    modifier onlyController(string identity, address actor) {
+    modifier onlyController(string memory identity, address actor) {
         require(isController(identity, actor), 'Not authorized');
         _;
     }
 
-    modifier onlyControllerOrNew(string identity, address actor) {
+    modifier onlyControllerOrNew(string memory identity, address actor) {
         require(controllers[identity].length <= 0 || isController(identity, actor), 'Not authorized');
         _;
     }
 
-    function getControllers(string identity) public view returns (address[] memory) {
+    function getControllers(string memory identity) public view returns (address[] memory) {
         return controllers[identity];
     }
 
-    function isController(string identity, address actor) public view returns (bool) {
+    function isController(string memory identity, address actor) public view returns (bool) {
         return actor == getController(identity);
     }
 
-    function getController(string identity) public view returns (address) {
+    function getController(string memory identity) public view returns (address) {
         uint len = controllers[identity].length;
         require(len > 0, "identity not found");
         if (len == 1) return controllers[identity][0];
@@ -42,12 +42,12 @@ contract SimpleDIDRegistry is IDIDRegistry {
         return controller;
     }
 
-    function setCurrentController(string identity, uint index) internal {
+    function setCurrentController(string memory identity, uint index) internal {
         DIDConfig storage config = configs[identity];
         config.currentController = index;
     }
 
-    function _getControllerIndex(string identity, address controller) internal view returns (int) {
+    function _getControllerIndex(string memory identity, address controller) internal view returns (int) {
         for (uint i = 0; i < controllers[identity].length; i++) {
             if (controllers[identity][i] == controller) {
                 return int(i);
@@ -56,7 +56,7 @@ contract SimpleDIDRegistry is IDIDRegistry {
         return - 1;
     }
 
-    function addController(string identity, address actor, address newController) internal onlyControllerOrNew(identity, actor) {
+    function addController(string memory identity, address actor, address newController) internal onlyControllerOrNew(identity, actor) {
         int controllerIndex = _getControllerIndex(identity, newController);
 
         if (controllerIndex < 0) {
@@ -64,7 +64,7 @@ contract SimpleDIDRegistry is IDIDRegistry {
         }
     }
 
-    function removeController(string identity, address actor, address controller) internal onlyController(identity, actor) {
+    function removeController(string memory identity, address actor, address controller) internal onlyController(identity, actor) {
         require(controllers[identity].length > 1, 'You need at least two controllers to delete' );
         require(getController(identity) != controller , 'Cannot delete current controller' );
         int controllerIndex = _getControllerIndex(identity, controller);
@@ -81,7 +81,7 @@ contract SimpleDIDRegistry is IDIDRegistry {
         controllers[identity].pop();
     }
 
-    function changeController(string identity, address actor, address newController) internal onlyController(identity, actor) {
+    function changeController(string memory identity, address actor, address newController) internal onlyController(identity, actor) {
         int controllerIndex = _getControllerIndex(identity, newController);
 
         require( controllerIndex >= 0, 'Controller not exist' );
@@ -93,15 +93,15 @@ contract SimpleDIDRegistry is IDIDRegistry {
         }
     }
 
-    function addController(string identity, address controller) external {
+    function addController(string memory identity, address controller) external {
         addController(identity, msg.sender, controller);
     }
 
-    function removeController(string identity, address controller) external {
+    function removeController(string memory identity, address controller) external {
         removeController(identity, msg.sender, controller);
     }
 
-    function changeController(string identity, address newController) external {
+    function changeController(string memory identity, address newController) external {
         changeController(identity, msg.sender, newController);
     }
 }
