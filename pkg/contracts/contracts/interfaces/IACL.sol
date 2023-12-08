@@ -3,7 +3,7 @@ pragma solidity >=0.8.4;
 
 interface IACL {
     // admin
-    function isAdmin(bytes32 _did, address _addr) external view returns (bool);
+    function isAdmin(string memory _did, address _addr) external view returns (bool);
 
     function addAdmin(bytes32 _assigner, bytes32 _assignee) external;
 
@@ -19,16 +19,16 @@ interface IACL {
     function getSubjectInContextAtIndex(bytes32 _context, uint _index) external view returns (bytes32);
 
     // subjects
-    function getNumContextsForSubject(bytes32 _did) external view returns (uint256);
+    function getNumContextsForSubject(string memory _did) external view returns (uint256);
 
-    function getContextForSubjectAtIndex(bytes32 _did, uint256 _index) external view returns (bytes32);
+    function getContextForSubjectAtIndex(string memory _did, uint256 _index) external view returns (bytes32);
 
-    function subjectSomeHasRoleInContext(bytes32 _context, bytes32 _did) external view returns (bool);
+    function subjectSomeHasRoleInContext(bytes32 _context, string memory _did) external view returns (bool);
 
     // role groups
-    function hasRoleInGroup(bytes32 _context, bytes32 _did, bytes32 _roleGroup) external view returns (bool);
+    function hasRoleInGroup(bytes32 _context, string memory _did, bytes32 _roleGroup) external view returns (bool);
 
-    function setRoleGroup(bytes32 _roleGroup, bytes32[] calldata _roles, bytes32 _did) external;
+    function setRoleGroup(bytes32 _roleGroup, bytes32[] calldata _roles, string memory _did) external;
 
     function isRoleGroup(bytes32 _roleGroup) external view returns (bool);
 
@@ -37,27 +37,27 @@ interface IACL {
     function getRoleGroupsForRole(bytes32 _role) external view returns (bytes32[] memory);
 
     // roles
-    function hasRole(bytes32 _context, bytes32 _did, bytes32 _role) external view returns (uint256);
+    function hasRole(bytes32 _context, string memory _did, bytes32 _role) external view returns (uint256);
 
-    function hasAnyRole(bytes32 _context, bytes32 _did, bytes32[] calldata _roles) external view returns (bool);
+    function hasAnyRole(bytes32 _context, string memory _did, bytes32[] calldata _roles) external view returns (bool);
 
     function assignRole(bytes32 _context, bytes32 _assigner, bytes32 _assignee, bytes32 _role) external;
 
     function unassignRole(bytes32 _context, bytes32 _assigner, bytes32 _assignee, bytes32 _role) external;
 
-    function getRolesForSubject(bytes32 _context, bytes32 _did) external view returns (bytes32[] memory);
+    function getRolesForSubject(bytes32 _context, string memory _did) external view returns (bytes32[] memory);
 
     // who can assign roles
-    function addAssigner(bytes32 _roleToAssign, bytes32 _assignerRoleGroup, bytes32 _did) external;
+    function addAssigner(bytes32 _roleToAssign, bytes32 _assignerRoleGroup, string memory _did) external;
 
-    function removeAssigner(bytes32 _roleToAssign, bytes32 _assignerRoleGroup, bytes32 _did) external;
+    function removeAssigner(bytes32 _roleToAssign, bytes32 _assignerRoleGroup, string memory _did) external;
 
     function getAssigners(bytes32 _role) external view returns (bytes32[] memory);
 
     function canAssign(bytes32 _context, bytes32 _assigner, bytes32 _assignee, bytes32 _role) external view returns (uint256);
 
     // utility methods
-    function generateContextFromDID(bytes32 _did) external pure returns (bytes32);
+    function generateContextFromDID(string memory _did) external pure returns (bytes32);
 
     /**
      * @dev Emitted when a role group gets updated.
@@ -71,7 +71,7 @@ interface IACL {
      * @param did The did the role got assigned to.
      * @param role The role which got assigned.
      */
-    event RoleAssigned(bytes32 indexed context, bytes32 indexed did, bytes32 indexed role);
+    event RoleAssigned(bytes32 indexed context, string indexed did, bytes32 indexed role);
 
     /**
      * @dev Emitted when a role gets unassigned.
@@ -79,7 +79,7 @@ interface IACL {
      * @param did The did the role got assigned to.
      * @param role The role which got unassigned.
      */
-    event RoleUnassigned(bytes32 indexed context, bytes32 indexed did, bytes32 indexed role);
+    event RoleUnassigned(bytes32 indexed context, string indexed did, bytes32 indexed role);
 
     /**
      * @dev Emitted when a role assigner gets added.

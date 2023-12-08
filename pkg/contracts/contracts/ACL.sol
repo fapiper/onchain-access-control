@@ -29,12 +29,12 @@ contract ACL is IACL, IACLConstants {
     bytes32 public adminRoleGroup;
     bytes32 public systemContext;
 
-    modifier assertIsAdmin(bytes32 _did) {
+    modifier assertIsAdmin(string memory _did) {
         require(isAdmin(_did, msg.sender), "unauthorized - must be admin");
         _;
     }
 
-    modifier assertIsController(bytes32 _did, address _actor) {
+    modifier assertIsController(string memory _did, address _actor) {
         require(didRegistry.isController(_did, _actor), "unauthorized - must be valid DID controller");
         _;
     }
@@ -73,7 +73,7 @@ contract ACL is IACL, IACLConstants {
 
     // Admins
 
-    function isAdmin(bytes32 _did, address _addr) public view override returns (bool) {
+    function isAdmin(string memory _did, address _addr) public view override returns (bool) {
         if(!didRegistry.isController(_did, _addr)){
             return false;
         }
@@ -108,15 +108,15 @@ contract ACL is IACL, IACLConstants {
 
     // Subjects
 
-    function getNumContextsForSubject(bytes32 _did) public view override returns (uint256) {
+    function getNumContextsForSubject(string memory _did) public view override returns (uint256) {
         return subjectContexts[_did].size();
     }
 
-    function getContextForSubjectAtIndex(bytes32 _did, uint256 _index) public view override returns (bytes32) {
+    function getContextForSubjectAtIndex(string memory _did, uint256 _index) public view override returns (bytes32) {
         return subjectContexts[_did].get(_index);
     }
 
-    function subjectSomeHasRoleInContext(bytes32 _context, bytes32 _did) public view override returns (bool) {
+    function subjectSomeHasRoleInContext(bytes32 _context, string memory _did) public view override returns (bool) {
         return subjectContexts[_did].has(_context);
     }
 
@@ -124,14 +124,14 @@ contract ACL is IACL, IACLConstants {
 
     function hasRoleInGroup(
         bytes32 _context,
-        bytes32 _did,
+        string memory _did,
         bytes32 _roleGroup
     ) public view override returns (bool) {
         return hasAnyRole(_context, _did, groupToRoles[_roleGroup].getAll());
     }
 
     // TODO: change systemContext admin assertion to context specific admin (assignee?)
-    function setRoleGroup(bytes32 _roleGroup, bytes32[] memory _roles, bytes32 _did) public override assertIsAdmin(_did) {
+    function setRoleGroup(bytes32 _roleGroup, bytes32[] memory _roles, string memory _did) public override assertIsAdmin(_did) {
         _setRoleGroup(_roleGroup, _roles);
     }
 
@@ -151,7 +151,7 @@ contract ACL is IACL, IACLConstants {
 
     function hasRole(
         bytes32 _context,
-        bytes32 _did,
+        string memory _did,
         bytes32 _role
     ) public view returns (uint256) {
         if (assignments[_context].hasRoleForSubject(_role, _did)) {
@@ -165,7 +165,7 @@ contract ACL is IACL, IACLConstants {
 
     function hasAnyRole(
         bytes32 _context,
-        bytes32 _did,
+        string memory _did,
         bytes32[] memory _roles
     ) public view override returns (bool) {
         bool hasAny = false;
@@ -213,7 +213,7 @@ contract ACL is IACL, IACLConstants {
         emit RoleUnassigned(_context, _assignee, _role);
     }
 
-    function getRolesForSubject(bytes32 _context, bytes32 _did) public view returns (bytes32[] memory) {
+    function getRolesForSubject(bytes32 _context, string memory _did) public view returns (bytes32[] memory) {
         return assignments[_context].getRolesForSubject(_did);
     }
 
@@ -223,12 +223,12 @@ contract ACL is IACL, IACLConstants {
 
     // Role assigners
 
-    function addAssigner(bytes32 _roleToAssign, bytes32 _assignerRoleGroup, bytes32 _did) public override assertIsAdmin(_did) assertIsRoleGroup(_assignerRoleGroup) {
+    function addAssigner(bytes32 _roleToAssign, bytes32 _assignerRoleGroup, string memory _did) public override assertIsAdmin(_did) assertIsRoleGroup(_assignerRoleGroup) {
         assigners[_roleToAssign].add(_assignerRoleGroup);
         emit AssignerAdded(_roleToAssign, _assignerRoleGroup);
     }
 
-    function removeAssigner(bytes32 _roleToAssign, bytes32 _assignerRoleGroup, bytes32 _did) public override assertIsAdmin(_did) assertIsRoleGroup(_assignerRoleGroup) {
+    function removeAssigner(bytes32 _roleToAssign, bytes32 _assignerRoleGroup, string memory _did) public override assertIsAdmin(_did) assertIsRoleGroup(_assignerRoleGroup) {
         assigners[_roleToAssign].remove(_assignerRoleGroup);
         emit AssignerRemoved(_roleToAssign, _assignerRoleGroup);
     }
@@ -276,7 +276,7 @@ contract ACL is IACL, IACLConstants {
         return CANNOT_ASSIGN;
     }
 
-    function generateContextFromDID(bytes32 _did) public pure override returns (bytes32) {
+    function generateContextFromDID(string memory _did) public pure override returns (bytes32) {
         return keccak256(abi.encodePacked(_did));
     }
 
