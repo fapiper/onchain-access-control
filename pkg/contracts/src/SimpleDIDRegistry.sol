@@ -23,11 +23,11 @@ contract SimpleDIDRegistry is IDIDRegistry {
         return controllers[identity];
     }
 
-    function isController(string memory identity, address actor) public view returns (bool) {
+    function isController(string memory identity, address actor) override public view returns (bool) {
         return actor == getController(identity);
     }
 
-    function getController(string memory identity) public view returns (address) {
+    function getController(string memory identity) override public view returns (address) {
         uint len = controllers[identity].length;
         require(len > 0, "identity not found");
         if (len == 1) return controllers[identity][0];
@@ -93,15 +93,15 @@ contract SimpleDIDRegistry is IDIDRegistry {
         }
     }
 
-    function addController(string memory identity, address controller) external {
+    function addController(string memory identity, address controller) override external {
         addController(identity, msg.sender, controller);
     }
 
-    function removeController(string memory identity, address controller) external {
+    function removeController(string memory identity, address controller) override external {
         removeController(identity, msg.sender, controller);
     }
 
-    function changeController(string memory identity, address newController) external {
+    function changeController(string memory identity, address newController) external override {
         changeController(identity, msg.sender, newController);
     }
 }

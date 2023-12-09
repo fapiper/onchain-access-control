@@ -3,7 +3,7 @@ pragma solidity >=0.8.4;
 
 interface IACL {
     // admin
-    function isAdmin(string memory _did, address _addr) external view returns (bool);
+    function isAdmin(string memory _did, address _addr) external returns (bool);
 
     function addAdmin(string memory _assigner, string memory _assignee) external;
 
@@ -54,7 +54,7 @@ interface IACL {
 
     function getAssigners(bytes32 _role) external view returns (bytes32[] memory);
 
-    function canAssign(bytes32 _context, string memory _assigner, string memory _assignee, bytes32 _role) external view returns (uint256);
+    function canAssign(bytes32 _context, string memory _assigner, string memory _assignee, bytes32 _role) external returns (uint256);
 
     // utility methods
     function generateContextFromDID(string memory _did) external pure returns (bytes32);

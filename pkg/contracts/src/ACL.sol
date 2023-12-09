@@ -72,18 +72,18 @@ contract ACL is IACL, IACLConstants {
 
     // Admins
 
-    function isAdmin(string memory _did, address _addr) public view override returns (bool) {
+    function isAdmin(string memory _did, address _addr) public override returns (bool) {
         if(!didRegistry.isController(_did, _addr)){
             return false;
         }
         return hasRoleInGroup(systemContext, _did, adminRoleGroup);
     }
 
-    function addAdmin(string memory _assigner, string memory _assignee) public {
+    function addAdmin(string memory _assigner, string memory _assignee) override public {
         assignRole(systemContext, _assigner, _assignee, adminRole);
     }
 
-    function removeAdmin(string memory _assigner, string memory _assignee) public {
+    function removeAdmin(string memory _assigner, string memory _assignee) override public {
         unassignRole(systemContext, _assigner, _assignee, adminRole);
     }
 
@@ -152,7 +152,7 @@ contract ACL is IACL, IACLConstants {
         bytes32 _context,
         string memory _did,
         bytes32 _role
-    ) public view returns (uint256) {
+    ) override public view returns (uint256) {
         if (assignments[_context].hasRoleForSubject(_role, _did)) {
             return HAS_ROLE_CONTEXT;
         } else if (assignments[systemContext].hasRoleForSubject(_role, _did)) {
@@ -187,7 +187,7 @@ contract ACL is IACL, IACLConstants {
         string memory _assigner,
         string memory _assignee,
         bytes32 _role
-    ) public assertIsAssigner(_context, _assigner, _assignee, _role) {
+    ) override public assertIsAssigner(_context, _assigner, _assignee, _role) {
         _assignRole(_context, _assigner, _assignee, _role);
     }
 
@@ -199,7 +199,7 @@ contract ACL is IACL, IACLConstants {
         string memory _assigner,
         string memory _assignee,
         bytes32 _role
-    ) public assertIsAssigner(_context, _assigner, _assignee, _role) {
+    ) override public assertIsAssigner(_context, _assigner, _assignee, _role) {
         if (assignments[_context].hasRoleForSubject(_role, _assignee)) {
             assignments[_context].removeRoleForSubject(_role, _assignee);
         }
@@ -212,7 +212,7 @@ contract ACL is IACL, IACLConstants {
         emit RoleUnassigned(_context, _assignee, _role);
     }
 
-    function getRolesForSubject(bytes32 _context, string memory _did) public view returns (bytes32[] memory) {
+    function getRolesForSubject(bytes32 _context, string memory _did) override public view returns (bytes32[] memory) {
         return assignments[_context].getRolesForSubject(_did);
     }
 
@@ -241,7 +241,7 @@ contract ACL is IACL, IACLConstants {
         string memory _assigner,
         string memory _assignee,
         bytes32 _role
-    ) public view returns (uint256) {
+    ) override public returns (uint256) {
         if(!didRegistry.isController(_assigner, msg.sender)){
             return CANNOT_ASSIGN_USER_NOT_APPROVED;
         }

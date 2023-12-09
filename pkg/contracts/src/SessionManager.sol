@@ -21,7 +21,7 @@ contract SessionManager is ISessionManager {
         _;
     }
 
-    function setSession(bytes32 _token, string memory _subject, uint256 _duration) external returns (SessionInfo memory) {
+    function setSession(bytes32 _token, string memory _subject, uint256 _duration) override external returns (SessionInfo memory) {
         require(_duration <= maxDuration, "Invalid duration");
 
         SessionInfo memory session = SessionInfo({
@@ -41,7 +41,7 @@ contract SessionManager is ISessionManager {
         delete sessions[_token];
     }
 
-    function isSessionValid(bytes32 _token) public view returns (bool) {
+    function isSessionValid(bytes32 _token) override public view returns (bool) {
         return sessions[_token].expiration >= block.timestamp;
     }
 

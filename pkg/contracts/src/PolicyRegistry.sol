@@ -17,26 +17,26 @@ contract PolicyRegistry is IPolicyRegistry {
         _;
     }
 
-    function isController(bytes32 _id, address _addr) public view returns (bool) {
+    function isController(bytes32 _id, address _addr) override public view returns (bool) {
         return policies[_id].controller == _addr;
     }
 
-    function addPolicy(bytes32 _id, address _controller, address _verifierContract, bytes4 _verifyMethodId) external {
+    function addPolicy(bytes32 _id, address _controller, address _verifierContract, bytes4 _verifyMethodId) override external {
         require(!policies[_id].exists, "policy id already exists");
         Policy memory policy = Policy(_id, _controller, _verifierContract, _verifyMethodId, block.timestamp, true);
         policies[_id] = policy;
         emit PolicyRegistered(policy);
     }
 
-    function getPolicy(bytes32 _id) policyExists(_id) public view returns (Policy memory){
+    function getPolicy(bytes32 _id) policyExists(_id) override public view returns (Policy memory){
         return policies[_id];
     }
 
-    function removePolicy(bytes32 _id) policyExists(_id) onlyController(_id) external {
+    function removePolicy(bytes32 _id) policyExists(_id) onlyController(_id) override external {
         delete policies[_id];
     }
 
-    function verifyPolicy(bytes32 _id, bytes memory _args) policyExists(_id) public returns (bool) {
+    function verifyPolicy(bytes32 _id, bytes memory _args) policyExists(_id) override public returns (bool) {
         Policy memory policy = policies[_id];
         (bool success, bytes memory result) = policy.verifierContract.delegatecall(
             abi.encodeWithSelector(
