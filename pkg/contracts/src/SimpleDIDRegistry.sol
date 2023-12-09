@@ -19,6 +19,13 @@ contract SimpleDIDRegistry is IDIDRegistry {
         _;
     }
 
+    constructor(string[] memory _identities, address[] memory _controllers) {
+        require(_identities.length == _controllers.length, "identities and controllers not equal");
+        for (uint i = 0; i < _identities.length; i++) {
+            addController(_identities[i], msg.sender, _controllers[i]);
+        }
+    }
+
     function getControllers(string memory identity) public view returns (address[] memory) {
         return controllers[identity];
     }
