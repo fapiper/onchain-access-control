@@ -1,7 +1,7 @@
 # On-Chain Access Control
 
-A proof-of-concept to showcase a smart contract-based access control.
-Integrates a role-based access control model, that manages roles by a smart contracts based on anonymous credentials (combines verifiable credentials and zero-knowledge proof-systems).
+A proof-of-concept to showcase SSI-oriented, on-chain access control systems.
+Leverages a role-based access control model, where roles are managed by smart contracts based on anonymous credentials (combining verifiable credentials and zero-knowledge proof-systems).
 
 [![Commitizen friendly](https://img.shields.io/badge/commitizen-friendly-brightgreen.svg)](http://commitizen.github.io/cz-cli/)
 ## Getting Started
