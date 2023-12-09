@@ -17,5 +17,6 @@
     "../../node_modules"
   ],
   "files": ["./hardhat.config.ts"],
-  "include": ["src/**/*", "tasks/**/*", "test/**/*", "deploy/**/*", "types/"],
+  "include": ["src/**/*", "deploy/**/*","tasks/**/*", "test/**/*",
+    "scripts/**/*", "types/"],
 }
