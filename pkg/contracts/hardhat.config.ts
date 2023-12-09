@@ -76,7 +76,7 @@ const config: HardhatUserConfig = {
     currency: "USD",
     enabled: !!process.env["REPORT_GAS"],
     excludeContracts: [],
-    src: "./contracts",
+    src: "./src",
   },
   networks: {
     hardhat: {
@@ -104,11 +104,11 @@ const config: HardhatUserConfig = {
   paths: {
     artifacts: "./artifacts",
     cache: "./cache",
-    sources: "./contracts",
+    sources: "./src",
     tests: "./test",
   },
   solidity: {
-    version: "0.8.19",
+    version: "0.8.4",
     settings: {
       metadata: {
         // Not including the metadata hash
