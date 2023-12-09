@@ -1,0 +1,26 @@
+load("@io_bazel_rules_go//go:def.bzl", "go_library")
+
+go_library(
+    name = "well-known",
+    srcs = [
+        "did_configuration.go",
+        "model.go",
+    ],
+    importpath = "github.com/fapiper/onchain-access-control/pkg/service/well-known",
+    visibility = ["//visibility:public"],
+    deps = [
+        "//internal/credential",
+        "//internal/util",
+        "//internal/verification",
+        "//pkg/service/framework",
+        "//pkg/service/keystore",
+        "//pkg/service/schema",
+        "@com_github_goccy_go_json//:go-json",
+        "@com_github_pkg_errors//:errors",
+        "@com_github_tbd54566975_ssi_sdk//credential",
+        "@com_github_tbd54566975_ssi_sdk//credential/integrity",
+        "@com_github_tbd54566975_ssi_sdk//did",
+        "@com_github_tbd54566975_ssi_sdk//did/resolution",
+        "@io_opentelemetry_go_contrib_instrumentation_net_http_otelhttp//:otelhttp",
+    ],
+)

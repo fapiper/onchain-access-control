@@ -1,0 +1,42 @@
+
+
+
+
+
+
+{
+  "$id": "https://example.com/schemas/supplyContract.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "name": "SupplyContractCredential",
+  "description": "An agreement between two parties that outlines the conditions related to procurement, delivery, and payment for goods or services within a supply chain.",
+  "type": "object",
+  "properties": {
+    "credentialSubject": {
+      "type": "object",
+      "properties": {
+        "deliveryDate": {
+          "type": "string",
+          "format": "datetime"
+        },
+        "paymentAmount": {
+          "type": "number",
+          "format": "double"
+        },
+        "currency": {
+          "type": "string"
+        },
+        "items": {
+          "type": "ItemList"
+        }
+      },
+      "required": [
+        "deliveryDate"
+      ]
+    }
+  }
+}
+
+
+
+
+

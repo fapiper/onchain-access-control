@@ -1,0 +1,32 @@
+load("@io_bazel_rules_go//go:def.bzl", "go_library", "go_test")
+
+go_library(
+    name = "did",
+    srcs = [
+        "access.go",
+        "resolver.go",
+    ],
+    importpath = "github.com/fapiper/onchain-access-control/internal/did",
+    visibility = ["//:__subpackages__"],
+    deps = [
+        "//internal/keyaccess",
+        "@com_github_pkg_errors//:errors",
+        "@com_github_sirupsen_logrus//:logrus",
+        "@com_github_tbd54566975_ssi_sdk//did",
+        "@com_github_tbd54566975_ssi_sdk//did/ion",
+        "@com_github_tbd54566975_ssi_sdk//did/jwk",
+        "@com_github_tbd54566975_ssi_sdk//did/key",
+        "@com_github_tbd54566975_ssi_sdk//did/peer",
+        "@com_github_tbd54566975_ssi_sdk//did/pkh",
+        "@com_github_tbd54566975_ssi_sdk//did/resolution",
+        "@com_github_tbd54566975_ssi_sdk//did/web",
+        "@com_github_tbd54566975_ssi_sdk//util",
+    ],
+)
+
+go_test(
+    name = "did_test",
+    srcs = ["resolver_test.go"],
+    embed = [":did"],
+    deps = ["@com_github_stretchr_testify//assert"],
+)

@@ -1,0 +1,18 @@
+{
+  "@context": [
+    "https://www.w3.org/ns/did/v1",
+    "https://w3id.org/security/suites/secp256k1recovery-2020/v2"
+  ],
+  "id": "did:web:example.com",
+  "verificationMethod": [
+    {
+      "id": "did:web:example.com",
+      "type": "EcdsaSecp256k1RecoveryMethod2020",
+      "controller": "did:web:example.com",
+      "blockchainAccountId": "eip155:1:0xB4e8589B747410858E227E68503E0142Ded1Aa3F"
+    }
+  ],
+  "authentication": [
+    "did:web:example.com"
+  ]
+}

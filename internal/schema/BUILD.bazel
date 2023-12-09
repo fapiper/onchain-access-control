@@ -1,0 +1,9 @@
+load("@io_bazel_rules_go//go:def.bzl", "go_library")
+
+go_library(
+    name = "schema",
+    srcs = ["resolver.go"],
+    importpath = "github.com/fapiper/onchain-access-control/internal/schema",
+    visibility = ["//:__subpackages__"],
+    deps = ["@com_github_tbd54566975_ssi_sdk//credential/schema"],
+)

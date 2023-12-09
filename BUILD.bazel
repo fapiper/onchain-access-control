@@ -1,15 +1,28 @@
 load("@bazel_gazelle//:def.bzl", "gazelle")
 
-# gazelle:prefix github.com/example/project
-# gazelle:proto disable_global
+exports_files([
+    "DEPS.bzl",
+    "WORKSPACE",
+    "go.mod",
+    "go.sum",
+])
 
-gazelle(name = "gazelle")
+gazelle(
+    name = "gazelle",
+    prefix = "github.com/fapiper/onchain-access-control",
+)
 
 gazelle(
     name = "gazelle-update-repos",
     args = [
         "-from_file=go.mod",
+        "-to_macro=DEPS.bzl%go_dependencies",
         "-prune",
     ],
     command = "update-repos",
 )
+
+# Gazelle needs the following resolve hints.
+#
+# gazelle:resolve go github.com/google/cel-go/cel @com_github_google_cel_go//cel:go_default_library
+# gazelle:resolve go github.com/google/cel-go/common/types/ref @com_github_google_cel_go//common/types/ref:go_default_library

@@ -1,0 +1,55 @@
+load("@io_bazel_rules_go//go:def.bzl", "go_library")
+
+go_library(
+    name = "server",
+    srcs = [
+        "errors.go",
+        "request.go",
+        "response.go",
+        "server.go",
+        "util.go",
+    ],
+    importpath = "github.com/fapiper/onchain-access-control/pkg/framework/server",
+    visibility = ["//visibility:public"],
+    deps = [
+        "//config",
+        "@com_github_gin_gonic_gin//:gin",
+        "@com_github_go_playground_locales//en",
+        "@com_github_go_playground_universal_translator//:universal-translator",
+        "@com_github_go_playground_validator_v10//:validator",
+        "@com_github_go_playground_validator_v10//translations/en",
+        "@com_github_goccy_go_json//:go-json",
+        "@com_github_pkg_errors//:errors",
+        "@com_github_sirupsen_logrus//:logrus",
+        "@com_github_tbd54566975_ssi_sdk//util",
+        "@io_opentelemetry_go_otel//:otel",
+        "@io_opentelemetry_go_otel_trace//:trace",
+    ],
+)
+
+go_library(
+    name = "framework",
+    srcs = [
+        "errors.go",
+        "request.go",
+        "response.go",
+        "server.go",
+        "util.go",
+    ],
+    importpath = "github.com/fapiper/onchain-access-control/pkg/server/framework",
+    visibility = ["//visibility:public"],
+    deps = [
+        "//config",
+        "@com_github_gin_gonic_gin//:gin",
+        "@com_github_go_playground_locales//en",
+        "@com_github_go_playground_universal_translator//:universal-translator",
+        "@com_github_go_playground_validator_v10//:validator",
+        "@com_github_go_playground_validator_v10//translations/en",
+        "@com_github_goccy_go_json//:go-json",
+        "@com_github_pkg_errors//:errors",
+        "@com_github_sirupsen_logrus//:logrus",
+        "@com_github_tbd54566975_ssi_sdk//util",
+        "@io_opentelemetry_go_otel//:otel",
+        "@io_opentelemetry_go_otel_trace//:trace",
+    ],
+)

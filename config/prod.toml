@@ -1,0 +1,57 @@
+# http service configuration
+[server]
+env = "prod" # either 'dev', 'test', or 'prod'
+api_host = "0.0.0.0:3000"
+jager_host = "http://jaeger:14268/api/traces"
+jager_enabled = true
+
+# 5 seconds, time is in nanoseconds
+read_timeout = 5000000000
+write_timeout = 5000000000
+shutdown_timeout = 5000000000
+
+log_location = "log"
+# options: trace, debug, info, warning, error, fatal, panic
+log_level = "info"
+
+enable_schema_caching = true
+enable_allow_all_cors = false
+
+[services.storage_encryption]
+# master_key_uri = "gcp-kms://projects/*/locations/*/keyRings/*/cryptoKeys/*"
+# kms_credentials_path = "credentials.json"
+disable_encryption = false
+
+# Storage Configuration
+[services]
+service_endpoint = "http://localhost:8080"
+storage = "redis"
+
+[[services.storage_option]]
+id = "redis-address-option"
+option = "redis:6379"
+
+[[services.storage_option]]
+id = "storage-password-option"
+option = "password"
+
+# per-service configuration
+[services.keystore]
+disable_encryption = false
+# master_key_uri = "gcp-kms://projects/*/locations/*/keyRings/*/cryptoKeys/*"
+# kms_credentials_path = "credentials.json"
+
+[services.did]
+methods = ["key", "web", "ion"]
+local_resolution_methods = ["ion", "key", "web", "pkh", "peer"]
+universal_resolver_url = "http://uni-resolver-web:8080"
+universal_resolver_methods = ["ion"]
+ion_resolver_url = "https://ion.tbddev.org"
+batch_create_max_items = 100
+
+[services.credential]
+batch_create_max_items = 100
+batch_update_status_max_items = 100
+
+[services.webhook]
+webhook_timeout = "10s"

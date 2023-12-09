@@ -1,0 +1,35 @@
+load("@io_bazel_rules_go//go:def.bzl", "go_library", "go_test")
+
+go_library(
+    name = "encryption",
+    srcs = ["encryption.go"],
+    importpath = "github.com/fapiper/onchain-access-control/internal/encryption",
+    visibility = ["//:__subpackages__"],
+    deps = [
+        "//internal/util",
+        "@com_github_google_tink_go//aead",
+        "@com_github_google_tink_go//core/registry",
+        "@com_github_google_tink_go//integration/awskms",
+        "@com_github_google_tink_go//integration/gcpkms",
+        "@com_github_google_tink_go//keyset",
+        "@com_github_google_tink_go//tink",
+        "@com_github_pkg_errors//:errors",
+        "@com_github_tbd54566975_ssi_sdk//util",
+        "@org_golang_google_api//option",
+    ],
+)
+
+go_test(
+    name = "encryption_test",
+    srcs = ["encryption_test.go"],
+    embed = [":encryption"],
+    deps = [
+        "//internal/util",
+        "@com_github_mr_tron_base58//:base58",
+        "@com_github_pkg_errors//:errors",
+        "@com_github_stretchr_testify//assert",
+        "@com_github_tbd54566975_ssi_sdk//crypto",
+        "@com_github_tbd54566975_ssi_sdk//util",
+        "@org_golang_x_crypto//chacha20poly1305",
+    ],
+)

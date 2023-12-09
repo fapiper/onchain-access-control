@@ -1,0 +1,18 @@
+load("@io_bazel_rules_go//go:def.bzl", "go_binary", "go_library")
+
+go_library(
+    name = "module_supplier_1_lib",
+    srcs = ["main.go"],
+    importpath = "github.com/fapiper/onchain-access-control/usecase/module_supplier_1",
+    visibility = ["//visibility:private"],
+    deps = [
+        "//pkg/issuer",
+        "//pkg/owner",
+    ],
+)
+
+go_binary(
+    name = "module_supplier_1",
+    embed = [":module_supplier_1_lib"],
+    visibility = ["//visibility:public"],
+)

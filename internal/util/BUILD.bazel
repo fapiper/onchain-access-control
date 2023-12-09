@@ -1,0 +1,32 @@
+load("@io_bazel_rules_go//go:def.bzl", "go_library", "go_test")
+
+go_library(
+    name = "util",
+    srcs = [
+        "crypto.go",
+        "error.go",
+        "jwt.go",
+        "util.go",
+    ],
+    importpath = "github.com/fapiper/onchain-access-control/internal/util",
+    visibility = ["//visibility:public"],
+    deps = [
+        "//internal/keyaccess",
+        "@com_github_lestrrat_go_jwx//jws",
+        "@com_github_lestrrat_go_jwx//jwt",
+        "@com_github_pkg_errors//:errors",
+        "@com_github_tbd54566975_ssi_sdk//did",
+        "@org_golang_x_crypto//argon2",
+        "@org_golang_x_crypto//chacha20poly1305",
+    ],
+)
+
+go_test(
+    name = "util_test",
+    srcs = ["crypto_test.go"],
+    embed = [":util"],
+    deps = [
+        "@com_github_stretchr_testify//assert",
+        "@org_golang_x_crypto//chacha20poly1305",
+    ],
+)

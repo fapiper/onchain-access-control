@@ -1,0 +1,20 @@
+load("@io_bazel_rules_go//go:def.bzl", "go_library")
+
+go_library(
+    name = "model",
+    srcs = ["model.go"],
+    importpath = "github.com/fapiper/onchain-access-control/pkg/service/presentation/model",
+    visibility = ["//visibility:public"],
+    deps = [
+        "//internal/credential",
+        "//internal/keyaccess",
+        "//pkg/server/pagination",
+        "//pkg/service/common",
+        "//pkg/service/presentation/storage",
+        "@com_github_goccy_go_json//:go-json",
+        "@com_github_tbd54566975_ssi_sdk//credential",
+        "@com_github_tbd54566975_ssi_sdk//credential/exchange",
+        "@com_github_tbd54566975_ssi_sdk//util",
+        "@tech_einride_go_aip//filtering",
+    ],
+)
