@@ -26,7 +26,7 @@ export function simpleDeploy(name: string, options?: DeployOptionsOrFn) {
     console.log(`${name} deployed to ${contract.address} on ${network.name} (${chainId})`);
   };
 
-  func.id = `deploy_${name}`;
+  func.id = name;
   func.tags = [name];
   return func;
 }
