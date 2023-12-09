@@ -9,16 +9,16 @@ import "./tasks/accounts";
 import "./tasks/greet";
 import "./tasks/taskDeploy";
 
-const dotenvConfigPath: string = process.env.DOTENV_CONFIG_PATH || "./.env";
+const dotenvConfigPath: string = process.env["DOTENV_CONFIG_PATH"] || "./.env";
 dotenvConfig({ path: resolve(__dirname, dotenvConfigPath) });
 
 // Ensure that we have all the environment variables we need.
-const mnemonic: string | undefined = process.env.MNEMONIC;
+const mnemonic: string | undefined = process.env["MNEMONIC"];
 if (!mnemonic) {
   throw new Error("Please set your MNEMONIC in a .env file");
 }
 
-const infuraApiKey: string | undefined = process.env.INFURA_API_KEY;
+const infuraApiKey: string | undefined = process.env["INFURA_API_KEY"];
 if (!infuraApiKey) {
   throw new Error("Please set your INFURA_API_KEY in a .env file");
 }
@@ -51,7 +51,7 @@ function getChainConfig(chain: keyof typeof chainIds): NetworkUserConfig {
   return {
     accounts: {
       count: 10,
-      mnemonic,
+      mnemonic: mnemonic!,
       path: "m/44'/60'/0'/0",
     },
     chainId: chainIds[chain],
@@ -66,19 +66,19 @@ const config: HardhatUserConfig = {
   },
   etherscan: {
     apiKey: {
-      arbitrumOne: process.env.ARBISCAN_API_KEY || "",
-      avalanche: process.env.SNOWTRACE_API_KEY || "",
-      bsc: process.env.BSCSCAN_API_KEY || "",
-      mainnet: process.env.ETHERSCAN_API_KEY || "",
-      optimisticEthereum: process.env.OPTIMISM_API_KEY || "",
-      polygon: process.env.POLYGONSCAN_API_KEY || "",
-      polygonMumbai: process.env.POLYGONSCAN_API_KEY || "",
-      sepolia: process.env.ETHERSCAN_API_KEY || "",
+      arbitrumOne: process.env["ARBISCAN_API_KEY"] || "",
+      avalanche: process.env["SNOWTRACE_API_KEY"] || "",
+      bsc: process.env["BSCSCAN_API_KEY"] || "",
+      mainnet: process.env["ETHERSCAN_API_KEY"] || "",
+      optimisticEthereum: process.env["OPTIMISM_API_KEY"] || "",
+      polygon: process.env["POLYGONSCAN_API_KEY"] || "",
+      polygonMumbai: process.env["POLYGONSCAN_API_KEY"] || "",
+      sepolia: process.env["ETHERSCAN_API_KEY"] || "",
     },
   },
   gasReporter: {
     currency: "USD",
-    enabled: process.env.REPORT_GAS ? true : false,
+    enabled: !!process.env["REPORT_GAS"],
     excludeContracts: [],
     src: "./contracts",
   },
