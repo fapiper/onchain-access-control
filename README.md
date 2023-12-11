@@ -1,6 +1,6 @@
 # On-Chain Access Control
 
-A proof-of-concept for SSI-oriented, on-chain access control systems.
+A proof-of-concept for SSI-oriented, on-chain access control.
 Smart contract managed roles, based on anonymous credentials that combine verifiable credentials and zero-knowledge proof systems.
 
 [![Commitizen friendly](https://img.shields.io/badge/commitizen-friendly-brightgreen.svg)](http://commitizen.github.io/cz-cli/)
