@@ -67,9 +67,6 @@ func NewServer(shutdown chan os.Signal, cfg config.SSIServiceConfig) (*Server, e
 	if err = handler.PresentationAPI(v1, consumer.Presentation, consumer.Webhook); err != nil {
 		return nil, sdkutil.LoggingErrorMsg(err, "unable to instantiate Presentation API")
 	}
-	if err = handler.ManifestAPI(v1, consumer.Manifest, consumer.Webhook); err != nil {
-		return nil, sdkutil.LoggingErrorMsg(err, "unable to instantiate Manifest API")
-	}
 	if err = handler.WebhookAPI(v1, consumer.Webhook); err != nil {
 		return nil, sdkutil.LoggingErrorMsg(err, "unable to instantiate Webhook API")
 	}

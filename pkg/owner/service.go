@@ -10,9 +10,7 @@ import (
 	"github.com/fapiper/onchain-access-control/pkg/service/credential"
 	"github.com/fapiper/onchain-access-control/pkg/service/did"
 	"github.com/fapiper/onchain-access-control/pkg/service/framework"
-	"github.com/fapiper/onchain-access-control/pkg/service/issuance"
 	"github.com/fapiper/onchain-access-control/pkg/service/keystore"
-	"github.com/fapiper/onchain-access-control/pkg/service/manifest"
 	"github.com/fapiper/onchain-access-control/pkg/service/operation"
 	"github.com/fapiper/onchain-access-control/pkg/service/presentation"
 	"github.com/fapiper/onchain-access-control/pkg/service/schema"
@@ -26,10 +24,8 @@ type Service struct {
 	KeyStore         *keystore.Service
 	Auth             *auth.Service
 	DID              *did.Service
-	Schema           *schema.Service
-	Issuance         *issuance.Service
+	Schema           *schema.Service // TODO seperate service into SchemaRead and SchemaWrite
 	Credential       *credential.Service
-	Manifest         *manifest.Service
 	Presentation     *presentation.Service
 	Operation        *operation.Service
 	Webhook          *webhook.Service
@@ -119,11 +115,6 @@ func instantiateServices(config config.ServicesConfig) (*Service, error) {
 		return nil, sdkutil.LoggingErrorMsg(err, "could not instantiate the schema service")
 	}
 
-	issuanceService, err := issuance.NewIssuanceService(storageProvider)
-	if err != nil {
-		return nil, sdkutil.LoggingErrorMsg(err, "could not instantiate the issuance service")
-	}
-
 	credentialService, err := credential.NewCredentialService(config.CredentialConfig, storageProvider, keyStoreService, didResolver, schemaService)
 	if err != nil {
 		return nil, sdkutil.LoggingErrorMsg(err, "could not instantiate the credential service")
@@ -132,11 +123,6 @@ func instantiateServices(config config.ServicesConfig) (*Service, error) {
 	presentationService, err := presentation.NewPresentationService(storageProvider, didResolver, schemaService, keyStoreService)
 	if err != nil {
 		return nil, sdkutil.LoggingErrorMsg(err, "could not instantiate the presentation service")
-	}
-
-	manifestService, err := manifest.NewManifestService(storageProvider, keyStoreService, didResolver, credentialService, presentationService)
-	if err != nil {
-		return nil, sdkutil.LoggingErrorMsg(err, "could not instantiate the manifest service")
 	}
 
 	operationService, err := operation.NewOperationService(storageProvider)
@@ -162,9 +148,7 @@ func instantiateServices(config config.ServicesConfig) (*Service, error) {
 		DID:              didService,
 		BatchDID:         batchDIDService,
 		Schema:           schemaService,
-		Issuance:         issuanceService,
 		Credential:       credentialService,
-		Manifest:         manifestService,
 		Presentation:     presentationService,
 		Operation:        operationService,
 		Webhook:          webhookService,
@@ -180,9 +164,7 @@ func (s *Service) GetServices() []framework.Service {
 		s.Auth,
 		s.DID,
 		s.Schema,
-		s.Issuance,
 		s.Credential,
-		s.Manifest,
 		s.Presentation,
 		s.Operation,
 		s.Webhook,
