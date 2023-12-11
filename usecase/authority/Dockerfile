@@ -11,9 +11,9 @@ RUN go mod download
 # Copy code /to the container image.
 COPY . ./
 
-# Build the binary and call it "docker-part-supplier-1"
-RUN go build -tags jwx_es256k -o /docker-part-supplier-1 ./
+# Build the binary and call it "docker-authority"
+RUN go build -tags jwx_es256k -o /docker-authority ./
 
 EXPOSE 3000
 
-CMD [ "/docker-part-supplier-1" ]
+CMD [ "/docker-authority" ]
