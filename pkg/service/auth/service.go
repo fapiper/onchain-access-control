@@ -107,7 +107,7 @@ func (s Service) CreateSession(ctx context.Context, request CreateSessionRequest
 	storedSession := StoredSession{
 		ID:         session.JwtID(),
 		Audience:   session.Audience(),
-		SessionJWT: sessionJWT,
+		SessionJWT: sessionJWT, // TODO only store encrypted token
 		Issuer:     session.Issuer(),
 		Subject:    session.Subject(),
 		CreatedAt:  session.IssuedAt(),

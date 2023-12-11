@@ -15,6 +15,7 @@ import (
 
 const (
 	OperationPrefix         = "/operations"
+	AuthPrefix              = "/auth"
 	DIDsPrefix              = "/dids"
 	ResolverPrefix          = "/resolver"
 	SchemasPrefix           = "/schemas"
@@ -53,15 +54,15 @@ func KeyStoreAPI(rg *gin.RouterGroup, service svcframework.Service) (err error) 
 }
 
 // AuthAPI registers all HTTP handlers for the Auth Service
-func AuthAPI(authAPI *gin.RouterGroup, service svcframework.Service) (err error) {
+func AuthAPI(rg *gin.RouterGroup, service svcframework.Service) (err error) {
 	// TODO move auth api to separate file as its not corresponding to any ssi handler
-	_, err = router.NewAuthRouter(service)
+	authRouter, err := router.NewAuthRouter(service)
 	if err != nil {
 		return sdkutil.LoggingErrorMsg(err, "creating auth router")
 	}
-
-	//authAPI.POST("/", authRouter.CreateSession)
-	//authAPI.GET("/:id", authRouter.VerifySession)
+	authAPI := rg.Group(AuthPrefix)
+	authAPI.PUT("/session", authRouter.CreateSession)
+	//authAPI.GET("/session/:id", authRouter.VerifySession)
 
 	return
 }

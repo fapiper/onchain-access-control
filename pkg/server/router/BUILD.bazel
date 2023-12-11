@@ -25,6 +25,7 @@ go_library(
         "//internal/keyaccess",
         "//internal/util",
         "//pkg/server/framework",
+        "//pkg/server/framework:server",
         "//pkg/server/pagination",
         "//pkg/service/auth",
         "//pkg/service/common",

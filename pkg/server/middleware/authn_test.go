@@ -14,7 +14,7 @@ import (
 func TestAuthMiddleware(t *testing.T) {
 
 	// USE_AUTH_TOKEN to true
-	t.Setenv("USE_AUTH_TOKEN", "TRUE")
+	t.Setenv("USE_AUTH_TOKEN", "true")
 
 	authService, err := testutil.CreateTestAuthService(t)
 	require.NoError(t, err)
@@ -61,7 +61,7 @@ func TestAuthMiddleware(t *testing.T) {
 func TestNoAuthMiddleware(t *testing.T) {
 
 	// USE_AUTH_TOKEN is empty so things just work
-	t.Setenv("USE_AUTH_TOKEN", "")
+	t.Setenv("USE_AUTH_TOKEN", "false")
 
 	authService, err := testutil.CreateTestAuthService(t)
 	require.NoError(t, err)
