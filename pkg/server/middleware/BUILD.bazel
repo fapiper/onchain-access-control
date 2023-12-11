@@ -28,14 +28,9 @@ go_test(
     srcs = ["authn_test.go"],
     embed = [":middleware"],
     deps = [
-        "//config",
-        "//pkg/service/auth",
-        "//pkg/service/did",
-        "//pkg/service/keystore",
         "//pkg/testutil",
         "@com_github_gin_gonic_gin//:gin",
         "@com_github_stretchr_testify//assert",
         "@com_github_stretchr_testify//require",
-        "@com_github_tbd54566975_ssi_sdk//did",
     ],
 )

@@ -1,11 +1,6 @@
 package middleware
 
 import (
-	didsdk "github.com/TBD54566975/ssi-sdk/did"
-	"github.com/fapiper/onchain-access-control/config"
-	"github.com/fapiper/onchain-access-control/pkg/service/auth"
-	"github.com/fapiper/onchain-access-control/pkg/service/did"
-	"github.com/fapiper/onchain-access-control/pkg/service/keystore"
 	"github.com/fapiper/onchain-access-control/pkg/testutil"
 	"github.com/stretchr/testify/require"
 	"net/http"
@@ -21,7 +16,9 @@ func TestAuthMiddleware(t *testing.T) {
 	// USE_AUTH_TOKEN to true
 	t.Setenv("USE_AUTH_TOKEN", "TRUE")
 
-	authService := testAuthService(t)
+	authService, err := testutil.CreateTestAuthService(t)
+	require.NoError(t, err)
+	require.NotEmpty(t, authService)
 
 	// Create a new gin engine
 	r := gin.Default()
@@ -66,7 +63,9 @@ func TestNoAuthMiddleware(t *testing.T) {
 	// USE_AUTH_TOKEN is empty so things just work
 	t.Setenv("USE_AUTH_TOKEN", "")
 
-	authService := testAuthService(t)
+	authService, err := testutil.CreateTestAuthService(t)
+	require.NoError(t, err)
+	require.NotEmpty(t, authService)
 
 	// Create a new gin engine
 	r := gin.Default()
@@ -90,37 +89,4 @@ func TestNoAuthMiddleware(t *testing.T) {
 
 	// Assert that the status code is 200 OK
 	assert.Equal(t, http.StatusOK, w.Code)
-}
-
-func testAuthService(t *testing.T) *auth.Service {
-	svcsConfig := new(config.ServicesConfig)
-	svcsConfig.DIDConfig.Methods = []string{didsdk.KeyMethod.String()}
-
-	db := testutil.TestDatabases[0].ServiceStorage(t)
-
-	storageEncrypter, storageDecrypter, err := keystore.NewServiceEncryption(db, svcsConfig.AppLevelEncryptionConfiguration, keystore.ServiceDataEncryptionKey)
-	require.NoError(t, err)
-	require.NotEmpty(t, storageEncrypter, storageDecrypter)
-
-	keyEncrypter, keyDecrypter, _ := keystore.NewServiceEncryption(db, svcsConfig.KeyStoreConfig.EncryptionConfig, keystore.ServiceKeyEncryptionKey)
-	keyStoreServiceFactory := keystore.NewKeyStoreServiceFactory(svcsConfig.KeyStoreConfig, db, keyEncrypter, keyDecrypter)
-	require.NoError(t, err)
-	require.NotEmpty(t, keyEncrypter, keyDecrypter)
-
-	keyStoreService, err := keyStoreServiceFactory(db)
-	require.NoError(t, err)
-	require.NotEmpty(t, keyStoreService)
-
-	didService, err := did.NewDIDService(svcsConfig.DIDConfig, db, keyStoreService, keyStoreServiceFactory)
-	require.NoError(t, err)
-	require.NotEmpty(t, didService)
-
-	didResolver := didService.GetResolver()
-	require.NotEmpty(t, didResolver)
-
-	authService, err := auth.NewAuthService(svcsConfig.AuthConfig, db, didResolver, keyStoreService)
-	require.NoError(t, err)
-	require.NotEmpty(t, authService)
-
-	return authService
 }
