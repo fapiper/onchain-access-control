@@ -11,9 +11,9 @@ RUN go mod download
 # Copy code /to the container image.
 COPY . ./
 
-# Build the binary and call it "docker-component-supplier-1"
-RUN go build -tags jwx_es256k -o /docker-component-supplier-1 ./
+# Build the binary and call it "docker-component-supplier"
+RUN go build -tags jwx_es256k -o /docker-component-supplier ./
 
 EXPOSE 3000
 
-CMD [ "/docker-component-supplier-1" ]
+CMD [ "/docker-component-supplier" ]

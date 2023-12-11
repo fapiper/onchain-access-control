@@ -21,11 +21,11 @@ services:
 #      - universal-resolver
 #    links:
 #      - uni-resolver
-#  module_supplier_1:
-#    container_name: module_supplier_1
-#    image: ghcr.io/fapiper/module_supplier_1:main
+#  module_supplier:
+#    container_name: module_supplier
+#    image: ghcr.io/fapiper/module_supplier:main
 #    build:
-#      context: ./module_supplier_1/
+#      context: ./module_supplier/
 #    ports:
 #      - "8080:3000"
 #    environment:
@@ -41,51 +41,11 @@ services:
 #      - universal-resolver
 #    links:
 #      - uni-resolver
-#  component_supplier_1:
-#    container_name: component_supplier_1
-#    image: ghcr.io/fapiper/component_supplier_1:main
+#  component_supplier:
+#    container_name: component_supplier
+#    image: ghcr.io/fapiper/component_supplier:main
 #    build:
-#      context: ./component_supplier_1/
-#    ports:
-#      - "8080:3000"
-#    environment:
-#      - CONFIG_PATH=/app/config/test.toml
-#      - JAEGER_HTTP_URL=http://jaeger:14268/api/traces
-#    depends_on:
-#      - jaeger
-#      - redis
-#    volumes:
-#      - ../config:/app/config
-#    networks:
-#      - oac_network
-#      - universal-resolver
-#    links:
-#      - uni-resolver
-#  part_supplier_1:
-#    container_name: part_supplier_1
-#    image: ghcr.io/fapiper/part_supplier_1:main
-#    build:
-#      context: ./part_supplier_1/
-#    ports:
-#      - "8080:3000"
-#    environment:
-#      - CONFIG_PATH=/app/config/test.toml
-#      - JAEGER_HTTP_URL=http://jaeger:14268/api/traces
-#    depends_on:
-#      - jaeger
-#      - redis
-#    volumes:
-#      - ../config:/app/config
-#    networks:
-#      - oac_network
-#      - universal-resolver
-#    links:
-#      - uni-resolver
-#  part_supplier_2:
-#    container_name: part_supplier_2
-#    image: ghcr.io/fapiper/part_supplier_2:main
-#    build:
-#      context: ./part_supplier_2/
+#      context: ./component_supplier/
 #    ports:
 #      - "8080:3000"
 #    environment:
