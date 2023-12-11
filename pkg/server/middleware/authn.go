@@ -32,6 +32,10 @@ const (
 	fileRefParamKey = "filepath"
 )
 
+type authHeader struct {
+	Token string `header:"Authorization"`
+}
+
 func AuthMiddleware(authService *auth.Service) gin.HandlerFunc {
 	useAuthToken, _ := strconv.ParseBool(os.Getenv("USE_AUTH_TOKEN"))
 
@@ -43,11 +47,18 @@ func AuthMiddleware(authService *auth.Service) gin.HandlerFunc {
 			return
 		}
 
-		token := c.GetHeader("Authorization")
+		header := authHeader{}
+
+		if err := c.ShouldBindHeader(header); err != nil {
+			c.JSON(http.StatusUnauthorized, gin.H{"error": "Authorization is required"})
+			c.Abort()
+			return
+		}
 
 		// Remove "Bearer " from the token
-		if len(token) > 7 && token[:7] == "Bearer " {
-			token = token[7:]
+		token := header.Token
+		if len(header.Token) > 7 && header.Token[:7] == "Bearer " {
+			token = header.Token[7:]
 		}
 
 		result, err := authService.VerifySession(c, auth.VerifySessionRequest{SessionJWT: keyaccess.JWT(token)})
@@ -65,7 +76,7 @@ func AuthMiddleware(authService *auth.Service) gin.HandlerFunc {
 
 		// 1. check if `fileRefFromToken` matches requested file
 		if fileRefFromToken != fileRefFromPath {
-			c.JSON(http.StatusUnauthorized, gin.H{"error": "Access token invalid"})
+			c.JSON(http.StatusUnauthorized, gin.H{"error": "Session token invalid"})
 			c.Abort()
 			return
 		}
