@@ -1,5 +1,4 @@
 # On-Chain Access Control
-**Non-Disclosing Blockchain-based Access Control for Data Sharing in Multi-Party Environments**
 
 A proof-of-concept for SSI-oriented, on-chain access control systems.
 Smart contract managed roles, based on anonymous credentials that combine verifiable credentials and zero-knowledge proof systems.
