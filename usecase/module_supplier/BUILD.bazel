@@ -12,7 +12,7 @@ go_library(
 )
 
 go_binary(
-    name = "module_supplier_1",
+    name = "module_supplier",
     embed = [":module_supplier_lib"],
     visibility = ["//visibility:public"],
 )
