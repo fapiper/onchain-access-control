@@ -2,6 +2,7 @@ node_modules
 pkg/ui/node_modules
 pkg/contracts/node_modules
 .bazelrc.user
+.bazelrc
 bazel-bin
 bazel-onchain-access-control
 bazel-out
