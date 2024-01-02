@@ -1446,6 +1446,13 @@ def go_dependencies():
         version = "v0.0.4-alpha.0.20230818212001-6e1043316e75",
     )
     go_repository(
+        name = "com_github_tbd54566975_ssi_sdk_sd_jwt",
+        importpath = "github.com/TBD54566975/ssi-sdk/sd-jwt",
+        sum = "h1:VU3kQDVt21T2TxfPRcsttEDwWQKeMp+bFSxKFHMPl04=",
+        version = "v0.0.0-20231214163001-bcffedff1fe0",
+    )
+
+    go_repository(
         name = "com_github_teserakt_io_golang_ed25519",
         importpath = "github.com/teserakt-io/golang-ed25519",
         sum = "h1:RBkacARv7qY5laaXGlF4wFB/tk5rnthhPb8oIBGoagY=",
@@ -1859,8 +1866,8 @@ def go_dependencies():
     go_repository(
         name = "org_golang_x_term",
         importpath = "golang.org/x/term",
-        sum = "h1:F9tnn/DA/Im8nCwm+fX+1/eBwi4qFjRT++MhtVC4ZX0=",
-        version = "v0.11.0",
+        sum = "h1:/ZfYdc3zq+q02Rv9vGqTeSItdzZTSNDmfTi0mBAuidU=",
+        version = "v0.12.0",
     )
 
     go_repository(
@@ -1903,8 +1910,8 @@ def go_dependencies():
 
     go_repository(
         name = "tech_einride_go_aip",
-        importpath = "go.einride.tech/aip",
         build_file_proto_mode = "disable_global",
+        importpath = "go.einride.tech/aip",
         sum = "h1:DVHT0kgIhHfEqcbTUZ/tKTc+YButvOuTVT4JQFWDGo0=",
         version = "v0.62.0",
     )

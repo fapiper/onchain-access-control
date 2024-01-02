@@ -190,6 +190,24 @@ func TestJWKKeyAccessSignVerifyCredentials(t *testing.T) {
 		assert.JSONEq(tt, string(testJSON), string(verifiedJSON))
 	})
 
+	t.Run("Sign and Verify SD-JWT Credentials - Happy Path", func(tt *testing.T) {
+		_, privKey, err := crypto.GenerateEd25519Key()
+		testID := "test-id"
+		kid := "test-kid"
+		assert.NoError(tt, err)
+		ka, err := NewJWKKeyAccess(testID, kid, privKey)
+		assert.NoError(tt, err)
+		assert.NotEmpty(tt, ka)
+
+		// sign
+		testCred := getTestCredential(testID)
+		testCredCopy := copyCred(t, testCred)
+		signedCred, err := ka.SignVerifiableCredentialSD(testCredCopy)
+		t.Logf("signed cred sdjwt %s", signedCred.String())
+		assert.NoError(tt, err)
+		assert.NotEmpty(tt, signedCred)
+	})
+
 	t.Run("Sign and Verify Credentials - Bad Data", func(tt *testing.T) {
 		_, privKey, err := crypto.GenerateEd25519Key()
 		testID := "test-id"

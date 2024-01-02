@@ -11,6 +11,8 @@ go_library(
     deps = [
         "@com_github_goccy_go_json//:go-json",
         "@com_github_lestrrat_go_jwx//jws",
+        "@com_github_lestrrat_go_jwx_v2//jwa",
+        "@com_github_lestrrat_go_jwx_v2//jwt",
         "@com_github_pkg_errors//:errors",
         "@com_github_tbd54566975_ssi_sdk//credential",
         "@com_github_tbd54566975_ssi_sdk//credential/integrity",
@@ -18,6 +20,7 @@ go_library(
         "@com_github_tbd54566975_ssi_sdk//cryptosuite",
         "@com_github_tbd54566975_ssi_sdk//cryptosuite/jws2020",
         "@com_github_tbd54566975_ssi_sdk//did/resolution",
+        "@com_github_tbd54566975_ssi_sdk_sd_jwt//:sd-jwt",
     ],
 )
 
@@ -31,6 +34,7 @@ go_test(
     deps = [
         "@com_github_goccy_go_json//:go-json",
         "@com_github_google_uuid//:uuid",
+        "@com_github_sirupsen_logrus//:logrus",
         "@com_github_stretchr_testify//assert",
         "@com_github_stretchr_testify//require",
         "@com_github_tbd54566975_ssi_sdk//credential",

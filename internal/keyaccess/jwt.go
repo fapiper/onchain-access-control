@@ -4,18 +4,40 @@ import (
 	"context"
 	gocrypto "crypto"
 	"fmt"
+	"github.com/lestrrat-go/jwx/v2/jwa"
+	"github.com/lestrrat-go/jwx/v2/jwt"
 
 	"github.com/TBD54566975/ssi-sdk/credential"
 	"github.com/TBD54566975/ssi-sdk/credential/integrity"
 	"github.com/TBD54566975/ssi-sdk/crypto/jwx"
 	"github.com/TBD54566975/ssi-sdk/did/resolution"
+	sdjwt "github.com/TBD54566975/ssi-sdk/sd-jwt"
 	"github.com/goccy/go-json"
 	"github.com/lestrrat-go/jwx/jws"
 	"github.com/pkg/errors"
 )
 
+// Create a struct that implements sd_jwt.Signer. Here we use the lestrat-go/jwx library to sign arbitrary payloads.
+type lestratSigner struct {
+	signer jwx.Signer
+}
+
+func (s lestratSigner) Sign(blindedClaimsData []byte) ([]byte, error) {
+	insecureSDJWT, err := jwt.ParseInsecure(blindedClaimsData)
+	if err != nil {
+		return nil, err
+	}
+
+	signed, err := jwt.Sign(insecureSDJWT, jwt.WithKey(jwa.KeyAlgorithmFrom(s.signer.ALG), s.signer.PrivateKey))
+	if err != nil {
+		return nil, err
+	}
+	return signed, nil
+}
+
 type JWKKeyAccess struct {
 	*jwx.Signer
+	*sdjwt.SDJWTSigner
 	*jwx.Verifier
 }
 
@@ -31,17 +53,24 @@ func NewJWKKeyAccess(id, kid string, key gocrypto.PrivateKey) (*JWKKeyAccess, er
 	if key == nil {
 		return nil, errors.New("key cannot be nil")
 	}
+
 	signer, err := jwx.NewJWXSigner(id, kid, key)
+
 	if err != nil {
 		return nil, errors.Wrapf(err, "could not create JWK Key Access object for kid: %s, error creating signer", kid)
 	}
+	sdjwtSigner := sdjwt.NewSDJWTSigner(&lestratSigner{
+		*signer,
+	}, sdjwt.NewSaltGenerator(16))
+
 	verifier, err := signer.ToVerifier(id)
 	if err != nil {
 		return nil, errors.Wrapf(err, "could not create JWK Key Access object for kid: %s, error creating verifier", kid)
 	}
 	return &JWKKeyAccess{
-		Signer:   signer,
-		Verifier: verifier,
+		Signer:      signer,
+		SDJWTSigner: sdjwtSigner,
+		Verifier:    verifier,
 	}, nil
 }
 
@@ -122,12 +151,44 @@ func (ka JWKKeyAccess) SignVerifiableCredential(cred credential.VerifiableCreden
 	if err := cred.IsValid(); err != nil {
 		return nil, errors.New("cannot sign invalid credential")
 	}
-
 	tokenBytes, err := integrity.SignVerifiableCredentialJWT(*ka.Signer, cred)
 	if err != nil {
 		return nil, errors.Wrap(err, "could not sign cred")
 	}
+
 	return JWT(tokenBytes).Ptr(), nil
+}
+
+func (ka JWKKeyAccess) SignVerifiableCredentialSD(cred credential.VerifiableCredential) (*JWT, error) {
+	if ka.SDJWTSigner == nil {
+		return nil, errors.New("cannot sign with nil signer")
+	}
+	if err := cred.IsValid(); err != nil {
+		return nil, errors.New("cannot sign invalid credential")
+	}
+	tokenBytes, err := signVerifiableCredentialSDJWT(ka.SDJWTSigner, cred)
+	if err != nil {
+		return nil, errors.Wrap(err, "could not sign sd-jwt cred")
+	}
+
+	return JWT(tokenBytes).Ptr(), nil
+}
+
+func signVerifiableCredentialSDJWT(signer *sdjwt.SDJWTSigner, cred credential.VerifiableCredential) ([]byte, error) {
+	credentialClaims, err := json.Marshal(cred.CredentialSubject)
+	if err != nil {
+		return nil, errors.New("cannot marshal credential subject")
+	}
+
+	format, err := signer.BlindAndSign(credentialClaims, map[string]sdjwt.BlindOption{
+		"happiness": sdjwt.RecursiveBlindOption{},
+	})
+
+	if err != nil {
+		return nil, errors.Wrap(err, "could not blind and sign sd-jwt cred")
+	}
+
+	return format, nil
 }
 
 func (ka JWKKeyAccess) VerifyVerifiableCredential(token JWT) (*credential.VerifiableCredential, error) {
