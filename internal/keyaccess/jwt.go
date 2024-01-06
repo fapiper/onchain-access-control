@@ -180,9 +180,13 @@ func signVerifiableCredentialSDJWT(signer *sdjwt.SDJWTSigner, cred credential.Ve
 		return nil, errors.New("cannot marshal credential subject")
 	}
 
-	format, err := signer.BlindAndSign(credentialClaims, map[string]sdjwt.BlindOption{
-		"happiness": sdjwt.RecursiveBlindOption{},
-	})
+	claimsToBlind := map[string]sdjwt.BlindOption{}
+
+	for _, c := range credentialClaims {
+		claimsToBlind[string(c)] = sdjwt.RecursiveBlindOption{}
+	}
+
+	format, err := signer.BlindAndSign(credentialClaims, claimsToBlind)
 
 	if err != nil {
 		return nil, errors.Wrap(err, "could not blind and sign sd-jwt cred")
