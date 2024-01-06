@@ -10,6 +10,7 @@ const (
 
 	DID              Type = "did"
 	Auth             Type = "auth"
+	Access           Type = "access"
 	Schema           Type = "schema"
 	Issuance         Type = "issuance"
 	Credential       Type = "credential"
