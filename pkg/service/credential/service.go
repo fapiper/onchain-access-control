@@ -286,10 +286,6 @@ func (s Service) signCredentialJWT(ctx context.Context, verificationMethodID str
 		return nil, errors.Wrapf(err, "could not sign credential with key<%s>", gotKey.ID)
 	}
 
-	//credToken, err := keyAccess.SignVerifiableCredential(cred)
-	//if err != nil {
-	//	return nil, errors.Wrapf(err, "could not sign credential with key<%s>", gotKey.ID)
-	//}
 	return credToken, nil
 }
 
