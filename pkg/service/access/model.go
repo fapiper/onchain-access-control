@@ -27,7 +27,7 @@ type PolicyURISet struct {
 	VerificationKey        string `json:"verification_key,omitempty"`
 }
 
-type AddPolicyResponse struct {
+type CreatePolicyResponse struct {
 	// Address of the created policy contract
 	PolicyContract string       `json:"policy_contract"`
 	URIs           PolicyURISet `json:"uris"`

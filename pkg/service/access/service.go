@@ -53,7 +53,7 @@ func NewAccessService(s storage.ServiceStorage, p *presentation.Service) (*Servi
 }
 
 // CreatePolicy uploads required policy artifacts to ipfs and deploys and registers an access policy on-chain.
-func (s Service) CreatePolicy(ctx context.Context, request CreatePolicyRequest) (*AddPolicyResponse, error) {
+func (s Service) CreatePolicy(ctx context.Context, request CreatePolicyRequest) (*CreatePolicyResponse, error) {
 	if !request.IsValid() {
 		return nil, errors.Errorf("invalid create session request: %+v", request)
 	}
@@ -69,7 +69,7 @@ func (s Service) CreatePolicy(ctx context.Context, request CreatePolicyRequest) 
 		return nil, errors.Wrap(err, "could not deploy and register policy contract")
 	}
 
-	return &AddPolicyResponse{PolicyContract: contract, URIs: *uris}, nil
+	return &CreatePolicyResponse{PolicyContract: contract, URIs: *uris}, nil
 }
 
 func (s Service) uploadPolicyArtifactsToIPFS(ctx context.Context, definitionRequest *model.GetPresentationDefinitionRequest, verifier PolicyVerifier) (*PolicyURISet, error) {
