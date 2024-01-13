@@ -3,6 +3,7 @@ package owner
 import (
 	"fmt"
 	sdkutil "github.com/TBD54566975/ssi-sdk/util"
+	"github.com/fapiper/onchain-access-control/pkg/service/access"
 	"github.com/fapiper/onchain-access-control/pkg/service/auth"
 	"github.com/pkg/errors"
 
@@ -23,6 +24,7 @@ import (
 type Service struct {
 	KeyStore         *keystore.Service
 	Auth             *auth.Service
+	Access           *access.Service
 	DID              *did.Service
 	Schema           *schema.Service // TODO seperate service into SchemaRead and SchemaWrite
 	Credential       *credential.Service
@@ -142,9 +144,15 @@ func instantiateServices(config config.ServicesConfig) (*Service, error) {
 		return nil, sdkutil.LoggingErrorMsg(err, "could not instantiate Auth service")
 	}
 
+	accessService, err := access.NewAccessService(storageProvider, presentationService)
+	if err != nil {
+		return nil, sdkutil.LoggingErrorMsg(err, "could not instantiate Access service")
+	}
+
 	return &Service{
 		KeyStore:         keyStoreService,
 		Auth:             authService,
+		Access:           accessService,
 		DID:              didService,
 		BatchDID:         batchDIDService,
 		Schema:           schemaService,
@@ -162,6 +170,7 @@ func (s *Service) GetServices() []framework.Service {
 	return []framework.Service{
 		s.KeyStore,
 		s.Auth,
+		s.Access,
 		s.DID,
 		s.Schema,
 		s.Credential,

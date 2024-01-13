@@ -63,6 +63,9 @@ func NewServer(shutdown chan os.Signal, cfg config.SSIServiceConfig) (*Server, e
 
 	// register all v1 routers
 	v1 := engine.Group(V1Prefix)
+	if err = handler.AccessAPI(v1, owner.Access); err != nil {
+		return nil, sdkutil.LoggingErrorMsg(err, "unable to instantiate Access API")
+	}
 	if err = handler.KeyStoreAPI(v1, owner.KeyStore); err != nil {
 		return nil, sdkutil.LoggingErrorMsg(err, "unable to instantiate KeyStore API")
 	}
