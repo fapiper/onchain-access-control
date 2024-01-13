@@ -16,6 +16,7 @@ import (
 const (
 	OperationPrefix         = "/operations"
 	AuthPrefix              = "/auth"
+	AccessPrefix            = "/access"
 	DIDsPrefix              = "/dids"
 	ResolverPrefix          = "/resolver"
 	SchemasPrefix           = "/schemas"
@@ -64,6 +65,19 @@ func AuthAPI(rg *gin.RouterGroup, service svcframework.Service) (err error) {
 	authAPI.PUT("/session", authRouter.CreateSession)
 	//authAPI.GET("/session/:id", authRouter.VerifySession)
 
+	return
+}
+
+// AccessAPI registers all HTTP handlers for the Access Service
+func AccessAPI(rg *gin.RouterGroup, service svcframework.Service) (err error) {
+	accessRouter, err := router.NewAccessRouter(service)
+	if err != nil {
+		return sdkutil.LoggingErrorMsg(err, "creating key store router")
+	}
+	// make sure the access service is configured to use the correct path
+	config.SetServicePath(svcframework.Access, AccessPrefix)
+	accessAPI := rg.Group(AccessPrefix)
+	accessAPI.PUT("/policy", accessRouter.CreatePolicy)
 	return
 }
 
