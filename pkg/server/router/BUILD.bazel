@@ -3,6 +3,7 @@ load("@io_bazel_rules_go//go:def.bzl", "go_library", "go_test")
 go_library(
     name = "router",
     srcs = [
+        "access.go",
         "auth.go",
         "credential.go",
         "did.go",
@@ -27,6 +28,7 @@ go_library(
         "//pkg/server/framework",
         "//pkg/server/framework:server",
         "//pkg/server/pagination",
+        "//pkg/service/access",
         "//pkg/service/auth",
         "//pkg/service/common",
         "//pkg/service/credential",
