@@ -12,6 +12,24 @@ pnpm i
 pnpm dev
 ```
 
+## Zokrates
+
+### Usage via Docker
+A sample policy [supplier_agreement.zok](./usecase/component_supplier/code/supplier_agreement.zok) with verification function is already created. 
+
+From root dir, start a docker container for zokrates cli
+```
+bash dev/zokrates/run_docker.sh
+```
+Generate required sample zk artifacts
+```
+bash /app/setup.sh <path_to_code_file> <path_to_out_dir> <witness_args>
+```
+For example for the provided component supplier
+```
+bash /app/setup.sh /app/usecase/component_supplier/code/supplier_agreement.zok /app/usecase/component_supplier/gen 2 4
+```
+
 ## Commit Guidelines
 
 This repo is set up to use [AngularJS's commit message convention](https://github.com/angular/angular.js/blob/master/DEVELOPERS.md#-git-commit-guidelines).
