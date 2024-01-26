@@ -4,45 +4,54 @@ pragma solidity ^0.8.4;
 contract Policies {
 
     struct Policy {
+        bytes32 context;
         bytes32 id;
-        address policy;
+        address instance;
         bytes4 verify;
         bool exists;
     }
 
-    // id -> policies
-    mapping(bytes32 => Policy) internal policies;
+    // context -> id -> policies
+    mapping(bytes32 => mapping(bytes32 => Policy)) internal policies;
 
     function _registerPolicy(
+        bytes32 _context,
         bytes32 _id,
-        address _policy,
+        address _instance,
         bytes4 _verify
     ) private {
-        require(!policies[_id].exists, "policy already exists");
+        require(!policies[_context][_id].exists, "policy already exists");
         Policy memory policy = Policy(
+            _context,
             _id,
-            _policy,
+            _instance,
             _verify,
             true
         );
-        policies[_id] = policy;
+        policies[_context][_id] = policy;
     }
 
     function _unregisterPolicy(
+        bytes32 _context,
         bytes32 _id
     ) private {
-        delete policies[_id];
+        delete policies[_context][_id];
+    }
+
+    function _getPolicy(
+        bytes32 _context,
+        bytes32 _id
+    ) private returns (Policy memory) {
+        return policies[_context][_id];
     }
 
     function _verifyPolicy(
-        bytes32 _id,
+        Policy memory _policy,
         bytes memory _args
     ) private returns (bool) {
-        require(policies[_id].exists, "policy not found");
-        Policy memory policy = policies[_id];
-        (bool success, bytes memory result) = policy.verifierContract.delegatecall(
+        (bool success, bytes memory result) = _policy.instance.delegatecall(
             abi.encodeWithSelector(
-                policy.verifyMethodId,
+                _policy.verify,
                 _args
             )
         );
@@ -54,7 +63,7 @@ contract Policies {
     }
 
     function _verifyPolicies (
-        bytes32[] memory _policies,
+        Policy[] memory _policies,
         bytes[] memory _args
     ) private returns (bool) {
         for (uint256 i = 0; i < _policies.length; i++) {

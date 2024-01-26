@@ -6,51 +6,47 @@ import "./Roles.sol";
 
 contract AccessControlList {
 
-    // role contexts -> role ids -> count policies
+    // role context -> roles -> count policies
     mapping(bytes32 => mapping(bytes32 => bytes32)) private policyCount;
-    // role context -> role -> policy context -> policy ids
+    // role context -> roles -> policy context -> policies
     mapping(bytes32 => mapping(bytes32 => mapping(bytes32 => bytes32))) private policies;
-    // role context -> role -> permission context -> permission ids
-    mapping(bytes32 => mapping(bytes32 => mapping(bytes32 => bytes32))) private permissions;
+    // role context -> roles -> permissions
+    mapping(bytes32 => mapping(bytes32 => bytes32)) private permissions;
 
     function _assignPermissionsToRole(
         bytes32 _roleContext,
         bytes32 _role,
-        bytes32[] memory _permissionContexts,
         bytes32[] memory _permissions
     ) private {
-        for (uint256 i = 0; i < _permissionContexts.length; i++) {
-            _assignPermissionToRole(_roleContext, _role, _permissionContexts[i], _permissions[i]);
+        for (uint256 i = 0; i < _permissions.length; i++) {
+            _assignPermissionToRole(_roleContext, _role, _permissions[i]);
         }
     }
 
     function _assignPermissionToRole(
         bytes32 _roleContext,
         bytes32 _role,
-        bytes32 _permissionContext,
         bytes32 _permission
     ) private {
-        permissions[_roleContext][_role][_permissionContext] = _permission;
+        permissions[_roleContext][_role] = _permission;
     }
 
     function _unassignPermissionsToRole(
         bytes32 _roleContext,
         bytes32 _role,
-        bytes32[] memory _permissionContexts,
         bytes32[] memory _permissions
     ) private {
-        for (uint256 i = 0; i < _permissionContexts.length; i++) {
-            _unassignPermissionForRole(_roleContext, _role, _permissionContexts[i], _permissions[i]);
+        for (uint256 i = 0; i < _permissions.length; i++) {
+            _unassignPermissionForRole(_roleContext, _role, _permissions[i]);
         }
     }
 
     function _unassignPermissionToRole(
         bytes32 _roleContext,
         bytes32 _role,
-        bytes32 _permissionContext,
         bytes32 _permission
     ) private {
-        delete permissions[_roleContext][_role][_permissionContext][_permission];
+        delete permissions[_roleContext][_role][_permission];
     }
 
     function _assignPoliciesToRole(
@@ -96,21 +92,32 @@ contract AccessControlList {
         policyCount[_roleContext][_role] -= 1;
     }
 
+    function _hasRolePolicies(
+        bytes32 _roleContext,
+        bytes32 _role,
+        Policy[] memory _policies
+    ) private view returns (bool) {
+        for (uint256 i = 0; i < _policies.length; i++) {
+            if(policies[_roleContext][_role][_policies[i].context][_policies[i].id] == bytes32("")) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    function _hasRoleExpectedPolicyCount(
+        bytes32 _roleContext,
+        bytes32 _role,
+        bytes32 _expectedCount
+    ) private view returns (bool) {
+        return _getPolicyCount(_roleContext, _role) == _expectedCount;
+    }
+
     function _getPolicyCount(
         bytes32 _roleContext,
         bytes32 _role
     ) private view returns (uint256) {
         return policyCount[_roleContext][_role];
     }
-
-/*
-    function _context(bytes32 _context) internal view returns (IAccessContext) {
-        return _contextHandler().getAccessContext(_context);
-    }
-
-    function _contextHandler() internal view returns (IContextHandler) {
-        return "";
-    }
-*/
 
 }
