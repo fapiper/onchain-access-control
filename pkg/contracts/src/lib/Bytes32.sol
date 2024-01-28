@@ -13,18 +13,18 @@ library Bytes32 {
     /**
      * @dev add a value
      */
-    function add(Set storage _obj, bytes32 _assignerRole) internal {
-        if (_obj.map[_assignerRole] == 0) {
-            _obj.list.push(_assignerRole);
-            _obj.map[_assignerRole] = _obj.list.length;
+    function add(Set storage _obj, bytes32 _value) internal {
+        if (_obj.map[_value] == 0) {
+            _obj.list.push(_value);
+            _obj.map[_value] = _obj.list.length;
         }
     }
 
     /**
-     * @dev remove an value for this role
+     * @dev remove a value
      */
-    function remove(Set storage _obj, bytes32 _assignerRole) internal {
-        uint256 idx = _obj.map[_assignerRole];
+    function remove(Set storage _obj, bytes32 _value) internal {
+        uint256 idx = _obj.map[_value];
 
         if (idx > 0) {
             uint256 actualIdx = idx - 1;
@@ -36,7 +36,7 @@ library Bytes32 {
             }
 
             _obj.list.pop();
-            _obj.map[_assignerRole] = 0;
+            _obj.map[_value] = 0;
         }
     }
 

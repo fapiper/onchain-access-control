@@ -60,14 +60,14 @@ type CreateDIDConfigurationResponse struct {
 	// The location in which the `didConfiguration` value should be hosted.
 	WellKnownLocation string `json:"wellKnownLocation"`
 
-	// The DID Configuration Resource according to https://identity.foundation/.well-known/resources/did-configuration/#did-configuration-resource
+	// The DID Configuration Groups.sol according to https://identity.foundation/.well-known/resources/did-configuration/#did-configuration-resource
 	DIDConfiguration DIDConfiguration `json:"didConfiguration"`
 }
 
 // CreateDIDConfiguration godoc
 //
 //	@Summary		Create DID Configurations
-//	@Description	Creates a DID Configuration Resource which conforms to https://identity.foundation/.well-known/resources/did-configuration/#did-configuration-resource
+//	@Description	Creates a DID Configuration Groups.sol.sol.sol which conforms to https://identity.foundation/.well-known/resources/did-configuration/#did-configuration-resource
 //	@Description	The `didConfiguration` can be hosted at the `wellKnownLocation` specified in the response.
 //	@Tags			DIDConfigurations
 //	@Accept			json
@@ -112,8 +112,8 @@ func (wr DIDConfigurationRouter) CreateDIDConfiguration(c *gin.Context) {
 
 // VerifyDIDConfiguration godoc
 //
-//	@Summary		Verifies a DID Configuration Resource
-//	@Description	Verifies a DID Configuration Resource according to https://identity.foundation/.well-known/resources/did-configuration/#did-configuration-resource-verification
+//	@Summary		Verifies a DID Configuration Groups.sol.sol
+//	@Description	Verifies a DID Configuration Groups.sol according to https://identity.foundation/.well-known/resources/did-configuration/#did-configuration-resource-verification
 //	@Tags			DIDConfigurations
 //	@Accept			json
 //	@Produce		json

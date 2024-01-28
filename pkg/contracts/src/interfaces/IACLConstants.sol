@@ -2,7 +2,7 @@
 pragma solidity >=0.8.4;
 
 /**
- * @dev ACL Constants.
+ * @dev AccessControlList.sol Constants.
  */
 abstract contract IACLConstants {
     bytes32 public constant ROLE_APPROVED_USER = 0x9c259f9342405d034b902fd5e1bba083f008e305ea4eb6a0dce9ac9a6256b63a;

@@ -9,8 +9,9 @@ interface IPolicyRegistry {
     struct Policy {
         bytes32 id;
         address controller;
-        address verifierContract;
-        bytes4 verifyMethodId;
+        address policy;
+        string document;
+        bytes4 verify;
         uint256 timestamp;
         bool exists;
     }

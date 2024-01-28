@@ -4,7 +4,7 @@
 {
   "query": [
     {
-      "type": "AuthorizationQuery",
+      "type": "ZKAuthQuery",
       "role": "0x06f8...aac6",
       "proof_program": "ipfs://12D3...69yew",
       "verifier": "did:pkh:eip155:1:0x2f3a...4405",
@@ -14,12 +14,17 @@
             "https://www.w3.org/2018/credentials/v1",
             "https://w3id.org/contracts/v1"
           ],
-          "type": "SupplyContractCredential"
+          "type": "SupplyAgreementCredential"
         }
       ]
     }
   ],
-  "challenge": "c-123456",
+  // Challenge that will be digitally signed in the authentication proof
+  // that will be attached to the VerifiablePresentation response
+  "challenge": "3182bdea-63d9-11ea-b6de-3b7c1404d57f",
+  // the domain that will be digitally signed in the authentication
+  // proof that will be attached to the VerifiablePresentation
+  // response, identifying the recipient
   "domain": "did:web:example.com"
 }
 

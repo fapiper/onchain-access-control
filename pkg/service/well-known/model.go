@@ -18,7 +18,7 @@ type CreateDIDConfigurationRequest struct {
 }
 
 type CreateDIDConfigurationResponse struct {
-	// The DID Configuration Resource value to host.
+	// The DID Configuration Groups.sol value to host.
 	DIDConfiguration DIDConfiguration `json:"didConfiguration"`
 
 	// URL where the `didConfiguration` value should be hosted at.
@@ -55,7 +55,7 @@ func (c *DIDConfiguration) UnmarshalJSON(data []byte) error {
 }
 
 type VerifyDIDConfigurationRequest struct {
-	// Represents an origin to fetch the DID Configuration Resource from. Must be serialized as described in https://html.spec.whatwg.org/multipage/browsers.html#origin.
+	// Represents an origin to fetch the DID Configuration Groups.sol from. Must be serialized as described in https://html.spec.whatwg.org/multipage/browsers.html#origin.
 	// The `scheme` MUST be `https`.
 	Origin string `json:"origin" validate:"required" example:"https://example.com"`
 }

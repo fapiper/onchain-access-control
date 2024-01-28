@@ -15,9 +15,23 @@ library Assignments {
         bytes32[] list;
     }
 
+    struct RolePermissions {
+        mapping(string => uint256) map;
+        string[] list;
+    }
+
+    struct PermissionRoles {
+        mapping(bytes32 => uint256) map;
+        string[] list;
+    }
+
     struct Context {
+        mapping(string => RolePermissions) rolePermissions;
+        mapping(bytes32 => PermissionRoles) permissionRoles;
         mapping(bytes32 => RoleSubjects) roleSubjects;
         mapping(string => SubjectRoles) subjectRoles;
+        mapping(string => uint256) permissionMap;
+        string[] permissionList;
         mapping(string => uint256) subjectMap;
         string[] subjectList;
     }
@@ -109,6 +123,71 @@ library Assignments {
     }
 
     /**
+     * @dev give a did access to a role
+     */
+    function addPermissionForRole(
+        Context storage _context,
+        bytes32 _id,
+        bytes32 _role
+    ) internal {
+        RolePermissions storage rp = _context.rolePermissions[_role];
+        PermissionRoles storage pr = _context.permissionRoles[_id];
+
+        _context.permissionList.push(_id);
+        _context.permissionMap[_did] = _context.permissionList.length;
+
+        // set permission for role
+        pr.list.push(_role);
+        pr.map[_role] = pr.list.length;
+
+        // set role for permission
+        rp.list.push(_id);
+        rp.map[_id] = rp.list.length;
+    }
+
+    /**
+     * @dev remove a permissions assignment to a role
+     */
+    function removePermissionForRole(
+        Context storage _context,
+        bytes32 _id,
+        bytes32 _role
+    ) internal {
+        RolePermissions storage rp = _context.rolePermissions[_role];
+        PermissionRoles storage pr = _context.permissionRoles[_id];
+
+        // remove from role -> permission map
+        uint256 idx = rp.map[_role];
+        if (idx > 0) {
+            uint256 actualIdx = idx - 1;
+
+            // replace item to remove with last item in list and update mappings
+            if (rp.list.length - 1 > actualIdx) {
+                rp.list[actualIdx] = rp.list[rp.list.length - 1];
+                rp.map[rp.list[actualIdx]] = actualIdx + 1;
+            }
+
+            rp.list.pop();
+            rp.map[_role] = 0;
+        }
+
+        // remove from permission -> role map
+        idx = pr.map[_id];
+        if (idx > 0) {
+            uint256 actualIdx = idx - 1;
+
+            // replace item to remove with last item in list and update mappings
+            if (pr.list.length - 1 > actualIdx) {
+                pr.list[actualIdx] = pr.list[pr.list.length - 1];
+                pr.map[pr.list[actualIdx]] = actualIdx + 1;
+            }
+
+            pr.list.pop();
+            pr.map[_id] = 0;
+        }
+    }
+
+    /**
      * @dev check if a did has a role
      * @return bool
      */
@@ -123,6 +202,20 @@ library Assignments {
     }
 
     /**
+     * @dev check if a role has a permission
+     * @return bool
+     */
+    function hasPermissionForRole(
+        Context storage _context,
+        bytes32 _role,
+        bytes32 _id
+    ) internal view returns (bool) {
+        PermissionRoles storage pr = _context.permissionRoles[_id];
+
+        return (pr.map[_role] > 0);
+    }
+
+    /**
      * @dev get all roles for did
      * @return bytes32[]
      */
@@ -133,6 +226,16 @@ library Assignments {
     }
 
     /**
+     * @dev get all permissions for a role
+     * @return bytes32[]
+     */
+    function getPermissionsForRole(Context storage _context, bytes32 _role) internal view returns (bytes32[] storage) {
+        RolePermissions storage rp = _context.rolePermissions[_role];
+
+        return rp.list;
+    }
+
+    /**
      * @dev get all dids assigned the given role
      * @return string[]
      */
@@ -140,6 +243,16 @@ library Assignments {
         RoleSubjects storage ru = _context.roleSubjects[_role];
 
         return ru.list;
+    }
+
+    /**
+     * @dev get all roles mapped to a permission
+     * @return string[]
+     */
+    function getRolesForPermission(Context storage _context, bytes32 _permission) internal view returns (string[] storage) {
+        PermissionRoles storage pr = _context.permissionRoles[_permission];
+
+        return pr.list;
     }
 
     /**

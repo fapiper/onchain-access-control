@@ -11,12 +11,10 @@ contract ACL is IACL, IACLConstants {
     using Assignments for Assignments.Context;
     using Bytes32 for Bytes32.Set;
 
-    IDIDRegistry didRegistry;
+    IDIDRegistry public didRegistry;
 
     mapping(bytes32 => Assignments.Context) private assignments;
     mapping(bytes32 => Bytes32.Set) private assigners;
-    mapping(bytes32 => Bytes32.Set) private roleToGroups;
-    mapping(bytes32 => Bytes32.Set) private groupToRoles;
     mapping(string => Bytes32.Set) private subjectContexts;
     mapping(bytes32 => address) private operators;
 
@@ -25,7 +23,6 @@ contract ACL is IACL, IACLConstants {
     uint256 public numContexts;
 
     bytes32 public adminRole;
-    bytes32 public adminRoleGroup;
     bytes32 public systemContext;
 
     modifier assertIsAdmin(string memory _did) {
@@ -49,25 +46,17 @@ contract ACL is IACL, IACLConstants {
         _;
     }
 
-    modifier assertIsRoleGroup(bytes32 _roleGroup) {
-        require(isRoleGroup(_roleGroup), "must be role group");
-        _;
-    }
-
-    constructor(address _didRegistry, bytes32 _system, string memory _admin, bytes32 _adminRole, bytes32 _adminRoleGroup) {
+    constructor(address _didRegistry, bytes32 _system, string memory _admin, bytes32 _adminRole) {
         didRegistry = IDIDRegistry(_didRegistry);
-
         adminRole = _adminRole;
-        adminRoleGroup = _adminRoleGroup;
         systemContext = keccak256(abi.encodePacked(_system));
 
-        // setup admin rolegroup
+        // setup admin role
         bytes32[] memory roles = new bytes32[](1);
         roles[0] = _adminRole;
-        _setRoleGroup(adminRoleGroup, roles);
 
-        // set creator as admin
-        _assignRole(systemContext, _admin, _admin, _adminRole);
+        // set initial admin
+        addAdmin(_admin, _adminRole);
     }
 
     // Admins
@@ -76,7 +65,7 @@ contract ACL is IACL, IACLConstants {
         if(!didRegistry.isController(_did, _addr)){
             return false;
         }
-        return hasRoleInGroup(systemContext, _did, adminRoleGroup);
+        return hasRole(systemContext, _did, adminRole);
     }
 
     function addAdmin(string memory _assigner, string memory _assignee) override public {
@@ -119,34 +108,7 @@ contract ACL is IACL, IACLConstants {
         return subjectContexts[_did].has(_context);
     }
 
-    // Role groups
-
-    function hasRoleInGroup(
-        bytes32 _context,
-        string memory _did,
-        bytes32 _roleGroup
-    ) public view override returns (bool) {
-        return hasAnyRole(_context, _did, groupToRoles[_roleGroup].getAll());
-    }
-
-    // TODO: change systemContext admin assertion to context specific admin (assignee?)
-    function setRoleGroup(bytes32 _roleGroup, bytes32[] memory _roles, string memory _did) public override assertIsAdmin(_did) {
-        _setRoleGroup(_roleGroup, _roles);
-    }
-
-    function getRoleGroup(bytes32 _roleGroup) public view override returns (bytes32[] memory) {
-        return groupToRoles[_roleGroup].getAll();
-    }
-
-    function isRoleGroup(bytes32 _roleGroup) public view override returns (bool) {
-        return getRoleGroup(_roleGroup).length > 0;
-    }
-
-    function getRoleGroupsForRole(bytes32 _role) public view override returns (bytes32[] memory) {
-        return roleToGroups[_role].getAll();
-    }
-
-    // Roles
+    // ContextHandler.sol
 
     function hasRole(
         bytes32 _context,
@@ -309,25 +271,4 @@ contract ACL is IACL, IACLConstants {
 
         emit RoleAssigned(_context, _assignee, _role);
     }
-
-    function _setRoleGroup(bytes32 _roleGroup, bytes32[] memory _roles) private {
-        // remove old roles
-        bytes32[] storage oldRoles = groupToRoles[_roleGroup].getAll();
-
-        for (uint256 i = 0; i < oldRoles.length; i += 1) {
-            bytes32 r = oldRoles[i];
-            roleToGroups[r].remove(_roleGroup);
-        }
-
-        groupToRoles[_roleGroup].clear();
-
-        // set new roles
-        for (uint256 i = 0; i < _roles.length; i += 1) {
-            bytes32 r = _roles[i];
-            roleToGroups[r].add(_roleGroup);
-            groupToRoles[_roleGroup].add(r);
-        }
-
-        emit RoleGroupUpdated(_roleGroup);
-    }
-} 
+}
