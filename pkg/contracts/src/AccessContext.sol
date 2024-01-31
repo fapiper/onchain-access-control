@@ -12,7 +12,7 @@ import "./extension/PermissionExtension.sol";
 contract AccessContext is IContextInstance, DIDOwnable, AccessControlListExtension, PermissionExtension, PolicyExtension, RoleExtension {
 
     constructor(
-        address initialOwner,
+        bytes32 initialOwner,
         address contextId,
         address contextHandler,
         address didRegistry
@@ -23,8 +23,11 @@ contract AccessContext is IContextInstance, DIDOwnable, AccessControlListExtensi
      *
      *  @param _role           Uid of the role within this context.
      */
-    modifier onlyOwnerOrRole(bytes32 _role){
-        require(_hasRole(_role) && _isDID() || _checkOwner());
+    modifier onlyOwnerOrRole(
+        bytes32 _role,
+        bytes32 _did
+    ){
+        require(_hasRole(_role, _did) || _checkOwner(_did));
         _;
     }
 
@@ -79,7 +82,7 @@ contract AccessContext is IContextInstance, DIDOwnable, AccessControlListExtensi
     function revokeRole(
         bytes32 _role,
         bytes32 _did
-    ) external onlyOwnerOrRole(_role) {
+    ) external onlyOwnerOrRole(_role, _did) {
         _revokeRole(_role, _did);
     }
 

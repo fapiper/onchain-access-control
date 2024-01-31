@@ -8,7 +8,7 @@ contract PermissionExtension {
     }
 
     // permission id -> resources -> operations
-    mapping(bytes32 => mapping(bytes32 => mapping(bytes32 => Operation))) private permissions;
+    mapping(bytes32 => mapping(bytes32 => mapping(Operation => bool))) private permissions;
 
     function _registerPermissionForResource(
         bytes32 _permission,
@@ -30,15 +30,15 @@ contract PermissionExtension {
         bytes32 _permission,
         bytes32 _resource,
         Operation _operation
-    ) internal {
-        return uint(permissions[_permission][_resource][_operation]) > 0;
+    ) internal returns (bool) {
+        return permissions[_permission][_resource][_operation];
     }
 
     function _hasAnyPermissionToResource(
         bytes32 _permission,
         bytes32 _resource,
         Operation[] memory _operations
-    ) internal {
+    ) internal returns (bool) {
         for (uint256 i = 0; i < _operations.length; i++) {
             if(_hasPermissionToResource(_permission, _resource, _operations[i])){
                 return true;

@@ -8,13 +8,13 @@ contract ContextHandlerRecipient {
     IContextHandler private contextHandler_;
 
     constructor(
-        IContextHandler contextHandler
+        address contextHandler
     ) {
         _setContextHandler(contextHandler);
     }
 
-    function _setContextHandler(IContextHandler contextHandler) internal {
-        contextHandler_ = contextHandler;
+    function _setContextHandler(address contextHandler) internal {
+        contextHandler_ = IContextHandler(contextHandler);
     }
 
     function _checkContextHandler() internal view returns (bool) {
@@ -29,7 +29,7 @@ contract ContextHandlerRecipient {
         return contextHandler_;
     }
 
-    function _context(bytes32 context) internal view returns (IContextInstance) {
+    function _contextInstance(bytes32 context) internal view returns (IContextInstance) {
         return _contextHandler().getContextInstance(context);
     }
 }

@@ -10,7 +10,7 @@ contract PolicyExtension is IPolicyExtension, ContextInstance {
     mapping(bytes32 => mapping(bytes32 => Policy)) private policies_;
 
     constructor(
-        address contextId,
+        bytes32 contextId,
         address contextHandler
     ) ContextInstance(contextId, contextHandler) {}
 
