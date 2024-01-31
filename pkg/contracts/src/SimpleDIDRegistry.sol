@@ -5,8 +5,8 @@ import "./interfaces/IDIDRegistry.sol";
 
 contract SimpleDIDRegistry is IDIDRegistry {
 
-    mapping(string => address[]) public controllers;
-    mapping(string => DIDConfig) private configs;
+    mapping(bytes32 => address[]) public controllers;
+    mapping(bytes32 => DIDConfig) private configs;
     mapping(address => uint) public changed;
 
     modifier onlyController(bytes32 identity, address actor) {
@@ -50,8 +50,7 @@ contract SimpleDIDRegistry is IDIDRegistry {
     }
 
     function setCurrentController(bytes32 identity, uint index) internal {
-        DIDConfig storage config = configs[identity];
-        config.currentController = index;
+        configs[identity].currentController = index;
     }
 
     function _getControllerIndex(bytes32 identity, address controller) internal view returns (int) {

@@ -50,11 +50,15 @@ contract AccessContext is IContextInstance, DIDOwnable, AccessControlListExtensi
         bytes[] memory _args
     ) external {
         bytes32 thisContext = _thisContext();
-        require(_hasRoleExpectedPolicyCount(thisContext, _role, _policies.length), "policy len not allowed");
-        // TODO with get policies or only policy context sufficient?
-        require(_hasRolePolicies(thisContext, _role, _getPolicies(_policyContexts, _policies)), "policy for role not allowed");
-        // TODO use policy struct instead of bytes. Or even better (possible?): use policy context and bytes32 id sufficient?
-        require(_verifyPolicies(_policyContexts, _policies, _args), "not allowed");
+        uint256 policyCount = _policies.length;
+        require(_hasRoleExpectedPolicyCount(thisContext, _role, policyCount), "policy len not allowed");
+        for (uint256 i = 0; i < policyCount; i++) {
+            Policy storage policy_ = _getPolicy(_policyContexts[i], _policies[i]);
+            // TODO with get policies or only policy context sufficient?
+            require(_hasRolePolicy(thisContext, _role, policy_.context, policy_.id), "policy for role not allowed");
+            // TODO (possible?): use policy context and bytes32 id sufficient?
+            require(_verifyPolicy(policy_, _args[i]), "policy not satisfied");
+        }
         _grantRole(_role, _did);
     }
 
@@ -68,7 +72,8 @@ contract AccessContext is IContextInstance, DIDOwnable, AccessControlListExtensi
         bytes32 _did,
         address _account
     ) external view returns (bool) {
-       return _checkOwner(_did, _account);
+        _checkOwner(_did, _account);
+       return true;
     }
 
     /**
@@ -98,6 +103,7 @@ contract AccessContext is IContextInstance, DIDOwnable, AccessControlListExtensi
      *  @param _permission     Uid of the permission.
      *  @param _resource       Uid of the resource for which to assign permissions to.
      *  @param _operations     Permitted operations for the resource. Currently either [READ] or [READ, WRITE].
+     *  @param _did            DID of the admin of this context.
      */
     function setupRole(
         bytes32 _role,
@@ -105,8 +111,9 @@ contract AccessContext is IContextInstance, DIDOwnable, AccessControlListExtensi
         bytes32 _policy,
         bytes32 _permission,
         bytes32 _resource,
-        Operation[] memory _operations
-    ) external onlyOwner {
+        Operation[] memory _operations,
+        bytes32 _did
+    ) external onlyOwner(_did) {
         bytes32 thisContext = _thisContext();
         _assignPolicyToRole(thisContext, _role, _policyContext, _policy);
         _registerPermissionForResource(_permission, _resource, _operations);
@@ -126,6 +133,7 @@ contract AccessContext is IContextInstance, DIDOwnable, AccessControlListExtensi
      *  @param _operations     Permitted operations for the resource. Currently either [READ] or [READ, WRITE].
      *  @param _instance       Address of the policy contract instance.
      *  @param _verify         Function identifier of the policy verification function of `_contract`.
+     *  @param _did            DID of the admin of this context.
      */
     function setupRole(
         bytes32 _role,
@@ -134,8 +142,9 @@ contract AccessContext is IContextInstance, DIDOwnable, AccessControlListExtensi
         bytes32 _resource,
         Operation[] memory _operations,
         address _instance,
-        bytes4 _verify
-    ) external onlyOwner {
+        bytes4 _verify,
+        bytes32 _did
+    ) external onlyOwner(_did) {
         bytes32 thisContext = _thisContext();
         _registerPolicy(thisContext, _policy, _instance, _verify);
         _assignPolicyToRole(thisContext, _role, thisContext, _policy);
@@ -151,13 +160,15 @@ contract AccessContext is IContextInstance, DIDOwnable, AccessControlListExtensi
      *  @param _policy         Uid of the policy within this context.
      *  @param _contract       Address of the policy contract.
      *  @param _verify         Function identifier of the policy verification function of `_contract`.
+     *  @param _did            DID of the admin of this context.
      */
     function registerPolicy(
         bytes32 _policy,
         address _contract,
-        bytes4 _verify
-    ) external onlyOwner {
-        _registerPolicy(_policy, _contract, _verify);
+        bytes4 _verify,
+        bytes32 _did
+    ) external onlyOwner(_did) {
+        _registerPolicy(_thisContext(), _policy, _contract, _verify);
     }
 
     /**
@@ -169,15 +180,17 @@ contract AccessContext is IContextInstance, DIDOwnable, AccessControlListExtensi
      *  @param _contract       Address of the policy contract.
      *  @param _verify         Function identifier of the policy verification function of `_contract`.
      *  @param _role           Uid of the role within `_roleContext`.
+     *  @param _did            DID of the admin of this context.
      */
     function registerPolicy(
         bytes32 _policy,
         address _contract,
         bytes4 _verify,
-        bytes32 _role
-    ) external onlyOwner {
+        bytes32 _role,
+        bytes32 _did
+    ) external onlyOwner(_did) {
         bytes32 thisContext = _thisContext();
-        _registerPolicy(_policy, _contract, _verify);
+        _registerPolicy(thisContext, _policy, _contract, _verify);
         _assignPolicyToRole(thisContext, _role, thisContext, _policy);
     }
 
@@ -219,12 +232,14 @@ contract AccessContext is IContextInstance, DIDOwnable, AccessControlListExtensi
      *  @param _policyContext  Uid of the access context for the policy.
      *  @param _policy         Uid of the policy within `_policyContext`.
      *  @param _role           Uid of the role within `_roleContext`.
+     *  @param _did            DID of the admin of this context.
      */
     function assignPolicy(
         bytes32 _policyContext,
         bytes32 _policy,
-        bytes32 _role
-    ) external onlyOwner {
+        bytes32 _role,
+        bytes32 _did
+    ) external onlyOwner(_did) {
         _assignPolicyToRole(_thisContext(), _role, _policyContext, _policy);
     }
 
@@ -255,14 +270,16 @@ contract AccessContext is IContextInstance, DIDOwnable, AccessControlListExtensi
      *  @param _operations     Permitted operations for the resource. Currently either [READ] or [READ, WRITE].
      *  @param _roleContext    Uid of the access context for the role.
      *  @param _role           Uid of the role within `_roleContext`.
+     *  @param _did            DID of the admin of this context.
      */
     function registerPermission(
         bytes32 _permission,
         bytes32 _resource,
         Operation[] memory _operations,
         bytes32 _roleContext,
-        bytes32 _role
-    ) external onlyOwner {
+        bytes32 _role,
+        bytes32 _did
+    ) external onlyOwner(_did) {
         _registerPermissionForResource(_permission, _resource, _operations);
         _assignPermissionToRole(_roleContext, _role, _permission);
     }
@@ -275,12 +292,14 @@ contract AccessContext is IContextInstance, DIDOwnable, AccessControlListExtensi
      *  @param _permission     Uid of the permission.
      *  @param _roleContext    Uid of the access context for the role.
      *  @param _role           Uid of the role within `_roleContext`.
+     *  @param _did            DID of the admin of this context.
      */
     function assignPermission(
         bytes32 _permission,
         bytes32 _roleContext,
-        bytes32 _role
-    ) external onlyOwner {
+        bytes32 _role,
+        bytes32 _did
+    ) external onlyOwner(_did) {
         _assignPermissionToRole(_roleContext, _role, _permission);
     }
 
@@ -292,12 +311,14 @@ contract AccessContext is IContextInstance, DIDOwnable, AccessControlListExtensi
      *  @param _permission     Uid of the permission.
      *  @param _roleContext    Uid of the access context for the role.
      *  @param _role           Uid of the role within `_roleContext`.
+     *  @param _did            DID of the admin of this context.
      */
     function unassignPermission(
         bytes32 _permission,
         bytes32 _roleContext,
-        bytes32 _role
-    ) external onlyOwner {
+        bytes32 _role,
+        bytes32 _did
+    ) external onlyOwner(_did) {
         _unassignPermissionToRole(_roleContext, _role, _permission);
     }
 }

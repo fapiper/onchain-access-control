@@ -98,7 +98,7 @@ contract AccessControlListExtension {
         bytes32 _roleContext,
         bytes32 _role,
         bytes32[] memory _policyContexts,
-        uint256[] memory _policies
+        bytes32[] memory _policies
     ) internal view returns (bool) {
         for (uint256 i = 0; i < _policies.length; i++) {
             if(!_hasRolePolicy(_roleContext, _role, _policyContexts[i], _policies[i])){
@@ -112,7 +112,7 @@ contract AccessControlListExtension {
         bytes32 _roleContext,
         bytes32 _role,
         bytes32 _policyContext,
-        uint256 _policy
+        bytes32 _policy
     ) internal view returns (bool) {
         return assignments[_roleContext][_role].policies[_policyContext][_policy];
     }

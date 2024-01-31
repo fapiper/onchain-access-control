@@ -7,7 +7,7 @@ interface IDIDRegistry {
     }
 
     event DIDControllerChanged(
-        string indexed identity,
+        bytes32 identity,
         address controller
     );
 

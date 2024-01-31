@@ -8,7 +8,7 @@ import "./ISessionRegistry.sol";
 contract SessionRecipient is Context {
     ISessionRegistry private sessionRegistry_;
 
-    constructor (ISessionRegistry sessionRegistry) {
+    constructor (address sessionRegistry) {
         _setSessionRegistry(sessionRegistry);
     }
 
@@ -22,12 +22,12 @@ contract SessionRecipient is Context {
     }
 
     function _setSessionRegistry(
-        ISessionRegistry _sessionRegistry
+        address _sessionRegistry
     ) internal {
-        sessionRegistry_ = _sessionRegistry;
+        sessionRegistry_ = ISessionRegistry(_sessionRegistry);
     }
 
     function _checkSessionRegistry() internal view {
-        require(_getSessionRegistry() == _msgSender(), "SessionRecipient: unauthorized account");
+        require(address(_getSessionRegistry()) == _msgSender(), "SessionRecipient: unauthorized account");
     }
 }

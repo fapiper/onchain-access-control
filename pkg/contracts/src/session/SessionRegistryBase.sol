@@ -10,7 +10,7 @@ contract SessionRegistryBase is DIDRecipient {
     struct SessionInfo {
         bytes32 id;
         bytes32 token;
-        string subject;
+        bytes32 subject;
         uint256 expiration;
         bool exists;
     }
@@ -51,7 +51,7 @@ contract SessionRegistryBase is DIDRecipient {
     function _checkSessionSubject(
         bytes32 _id
     ) internal view returns (bool) {
-        return _checkDID(_sessions[_id].subject);
+        return _isDID(_sessions[_id].subject);
     }
 
     function _checkSessionExists(
