@@ -16,7 +16,7 @@ import (
 	"github.com/stretchr/testify/require"
 	"go.einride.tech/aip/filtering"
 
-	"github.com/fapiper/onchain-access-control/config"
+	"github.com/fapiper/onchain-access-control/core/config"
 	"github.com/fapiper/onchain-access-control/core/server/pagination"
 	"github.com/fapiper/onchain-access-control/core/service/credential"
 	"github.com/fapiper/onchain-access-control/core/service/did"

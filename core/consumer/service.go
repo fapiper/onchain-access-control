@@ -6,7 +6,7 @@ import (
 	sdkutil "github.com/TBD54566975/ssi-sdk/util"
 	"github.com/pkg/errors"
 
-	"github.com/fapiper/onchain-access-control/config"
+	"github.com/fapiper/onchain-access-control/core/config"
 	"github.com/fapiper/onchain-access-control/core/service/credential"
 	"github.com/fapiper/onchain-access-control/core/service/did"
 	"github.com/fapiper/onchain-access-control/core/service/framework"

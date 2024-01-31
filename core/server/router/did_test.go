@@ -7,7 +7,7 @@ import (
 
 	"github.com/TBD54566975/ssi-sdk/crypto"
 	didsdk "github.com/TBD54566975/ssi-sdk/did"
-	"github.com/fapiper/onchain-access-control/config"
+	"github.com/fapiper/onchain-access-control/core/config"
 	"github.com/fapiper/onchain-access-control/core/service/common"
 	"github.com/fapiper/onchain-access-control/core/service/did"
 	"github.com/fapiper/onchain-access-control/core/service/framework"

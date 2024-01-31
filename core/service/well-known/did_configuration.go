@@ -17,12 +17,12 @@ import (
 	"github.com/pkg/errors"
 	"go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp"
 
+	credint "github.com/fapiper/onchain-access-control/core/internal/credential"
+	"github.com/fapiper/onchain-access-control/core/internal/util"
+	"github.com/fapiper/onchain-access-control/core/internal/verification"
 	svcframework "github.com/fapiper/onchain-access-control/core/service/framework"
 	"github.com/fapiper/onchain-access-control/core/service/keystore"
 	"github.com/fapiper/onchain-access-control/core/service/schema"
-	credint "github.com/fapiper/onchain-access-control/internal/credential"
-	"github.com/fapiper/onchain-access-control/internal/util"
-	"github.com/fapiper/onchain-access-control/internal/verification"
 )
 
 type DIDConfigurationService struct {

@@ -6,7 +6,7 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
-	"github.com/fapiper/onchain-access-control/config"
+	"github.com/fapiper/onchain-access-control/core/config"
 	"github.com/fapiper/onchain-access-control/core/service/framework"
 	"github.com/fapiper/onchain-access-control/core/service/webhook"
 	"github.com/fapiper/onchain-access-control/core/testutil"

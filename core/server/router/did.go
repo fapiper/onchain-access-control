@@ -13,11 +13,11 @@ import (
 	"github.com/goccy/go-json"
 	"github.com/pkg/errors"
 
+	"github.com/fapiper/onchain-access-control/core/internal/util"
 	framework "github.com/fapiper/onchain-access-control/core/server/framework"
 	"github.com/fapiper/onchain-access-control/core/server/pagination"
 	"github.com/fapiper/onchain-access-control/core/service/did"
 	svcframework "github.com/fapiper/onchain-access-control/core/service/framework"
-	"github.com/fapiper/onchain-access-control/internal/util"
 )
 
 const (

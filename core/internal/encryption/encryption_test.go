@@ -11,7 +11,7 @@ import (
 	"github.com/stretchr/testify/assert"
 	"golang.org/x/crypto/chacha20poly1305"
 
-	cryptoutil "github.com/fapiper/onchain-access-control/internal/util"
+	cryptoutil "github.com/fapiper/onchain-access-control/core/internal/util"
 )
 
 func createServiceKey() (key string, err error) {

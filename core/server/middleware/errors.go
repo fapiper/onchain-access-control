@@ -1,7 +1,7 @@
 package middleware
 
 import (
-	"github.com/fapiper/onchain-access-control/config"
+	"github.com/fapiper/onchain-access-control/core/config"
 	"github.com/fapiper/onchain-access-control/core/server/framework"
 	"os"
 	"syscall"

@@ -2,7 +2,7 @@ package auth
 
 import (
 	"github.com/TBD54566975/ssi-sdk/util"
-	"github.com/fapiper/onchain-access-control/internal/keyaccess"
+	"github.com/fapiper/onchain-access-control/core/internal/keyaccess"
 )
 
 type CreateSessionRequest struct {

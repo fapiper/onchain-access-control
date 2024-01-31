@@ -8,10 +8,10 @@ go_library(
         "jwt.go",
         "util.go",
     ],
-    importpath = "github.com/fapiper/onchain-access-control/internal/util",
+    importpath = "github.com/fapiper/onchain-access-control/core/internal/util",
     visibility = ["//visibility:public"],
     deps = [
-        "//internal/keyaccess",
+        "//core/internal/keyaccess",
         "@com_github_lestrrat_go_jwx//jws",
         "@com_github_lestrrat_go_jwx//jwt",
         "@com_github_pkg_errors//:errors",

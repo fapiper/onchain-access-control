@@ -1,7 +1,7 @@
 package log
 
 import (
-	"github.com/fapiper/onchain-access-control/config"
+	"github.com/fapiper/onchain-access-control/core/config"
 	"github.com/sirupsen/logrus"
 	"io"
 	"os"

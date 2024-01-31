@@ -5,10 +5,10 @@ import (
 
 	"github.com/gin-gonic/gin"
 
+	"github.com/fapiper/onchain-access-control/core/internal/credential"
 	framework "github.com/fapiper/onchain-access-control/core/server/framework"
 	svcframework "github.com/fapiper/onchain-access-control/core/service/framework"
 	wellknown "github.com/fapiper/onchain-access-control/core/service/well-known"
-	"github.com/fapiper/onchain-access-control/internal/credential"
 )
 
 type DIDConfigurationRouter struct {

@@ -5,7 +5,7 @@ import (
 
 	"github.com/pkg/errors"
 
-	"github.com/fapiper/onchain-access-control/internal/encryption"
+	"github.com/fapiper/onchain-access-control/core/internal/encryption"
 )
 
 type EncryptedWrapper struct {

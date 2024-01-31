@@ -1,7 +1,7 @@
 package wellknown
 
 import (
-	"github.com/fapiper/onchain-access-control/internal/credential"
+	"github.com/fapiper/onchain-access-control/core/internal/credential"
 	"github.com/goccy/go-json"
 	"github.com/pkg/errors"
 )

@@ -15,6 +15,8 @@ import (
 	"github.com/pkg/errors"
 	"github.com/sirupsen/logrus"
 
+	credint "github.com/fapiper/onchain-access-control/core/internal/credential"
+	"github.com/fapiper/onchain-access-control/core/internal/keyaccess"
 	"github.com/fapiper/onchain-access-control/core/service/common"
 	"github.com/fapiper/onchain-access-control/core/service/credential"
 	"github.com/fapiper/onchain-access-control/core/service/framework"
@@ -28,8 +30,6 @@ import (
 	"github.com/fapiper/onchain-access-control/core/service/presentation"
 	presmodel "github.com/fapiper/onchain-access-control/core/service/presentation/model"
 	"github.com/fapiper/onchain-access-control/core/storage"
-	credint "github.com/fapiper/onchain-access-control/internal/credential"
-	"github.com/fapiper/onchain-access-control/internal/keyaccess"
 )
 
 const requestNamespace = "manifest_request"

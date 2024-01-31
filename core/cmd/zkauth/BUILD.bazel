@@ -3,6 +3,6 @@ load("@io_bazel_rules_go//go:def.bzl", "go_library")
 go_library(
     name = "zkauth",
     srcs = ["main.go"],
-    importpath = "github.com/fapiper/onchain-access-control/cmd/zkauth",
+    importpath = "github.com/fapiper/onchain-access-control/core/cmd/zkauth",
     visibility = ["//visibility:private"],
 )

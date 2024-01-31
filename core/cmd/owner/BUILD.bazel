@@ -6,7 +6,7 @@ load("@io_bazel_rules_go//go:def.bzl", "go_binary", "go_library")
 go_library(
     name = "owner_lib",
     srcs = ["main.go"],
-    importpath = "github.com/fapiper/onchain-access-control/cmd/owner",
+    importpath = "github.com/fapiper/onchain-access-control/core/cmd/owner",
     visibility = ["//visibility:private"],
     deps = ["//core/owner"],
 )

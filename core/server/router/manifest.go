@@ -14,10 +14,10 @@ import (
 	"github.com/fapiper/onchain-access-control/core/service/common"
 	"github.com/fapiper/onchain-access-control/core/service/manifest/model"
 
+	"github.com/fapiper/onchain-access-control/core/internal/credential"
+	"github.com/fapiper/onchain-access-control/core/internal/keyaccess"
+	"github.com/fapiper/onchain-access-control/core/internal/util"
 	"github.com/fapiper/onchain-access-control/core/service/manifest"
-	"github.com/fapiper/onchain-access-control/internal/credential"
-	"github.com/fapiper/onchain-access-control/internal/keyaccess"
-	"github.com/fapiper/onchain-access-control/internal/util"
 
 	"github.com/pkg/errors"
 	"github.com/sirupsen/logrus"

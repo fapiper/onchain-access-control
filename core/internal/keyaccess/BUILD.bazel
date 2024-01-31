@@ -6,7 +6,7 @@ go_library(
         "dataintegrity.go",
         "jwt.go",
     ],
-    importpath = "github.com/fapiper/onchain-access-control/internal/keyaccess",
+    importpath = "github.com/fapiper/onchain-access-control/core/internal/keyaccess",
     visibility = ["//:__subpackages__"],
     deps = [
         "@com_github_goccy_go_json//:go-json",

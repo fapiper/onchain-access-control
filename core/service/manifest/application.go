@@ -11,9 +11,9 @@ import (
 	sdkutil "github.com/TBD54566975/ssi-sdk/util"
 	"github.com/lestrrat-go/jwx/v2/jws"
 
+	didint "github.com/fapiper/onchain-access-control/core/internal/did"
+	"github.com/fapiper/onchain-access-control/core/internal/keyaccess"
 	"github.com/fapiper/onchain-access-control/core/service/credential"
-	didint "github.com/fapiper/onchain-access-control/internal/did"
-	"github.com/fapiper/onchain-access-control/internal/keyaccess"
 )
 
 // validateCredentialApplication validates the credential application's signature(s) in addition to making sure it

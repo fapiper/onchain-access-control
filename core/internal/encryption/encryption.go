@@ -5,7 +5,7 @@ import (
 	"strings"
 
 	sdkutil "github.com/TBD54566975/ssi-sdk/util"
-	"github.com/fapiper/onchain-access-control/internal/util"
+	"github.com/fapiper/onchain-access-control/core/internal/util"
 	"github.com/google/tink/go/aead"
 	"github.com/google/tink/go/core/registry"
 	"github.com/google/tink/go/integration/awskms"

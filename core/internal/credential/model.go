@@ -9,7 +9,7 @@ import (
 	"github.com/TBD54566975/ssi-sdk/credential/parsing"
 	"github.com/pkg/errors"
 
-	"github.com/fapiper/onchain-access-control/internal/keyaccess"
+	"github.com/fapiper/onchain-access-control/core/internal/keyaccess"
 )
 
 // Container acts as an abstraction over both possible credential representations

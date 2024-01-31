@@ -13,13 +13,13 @@ import (
 	"github.com/pkg/errors"
 	"go.einride.tech/aip/filtering"
 
+	credint "github.com/fapiper/onchain-access-control/core/internal/credential"
+	"github.com/fapiper/onchain-access-control/core/internal/keyaccess"
 	framework "github.com/fapiper/onchain-access-control/core/server/framework"
 	"github.com/fapiper/onchain-access-control/core/server/pagination"
 	svcframework "github.com/fapiper/onchain-access-control/core/service/framework"
 	"github.com/fapiper/onchain-access-control/core/service/presentation"
 	"github.com/fapiper/onchain-access-control/core/service/presentation/model"
-	credint "github.com/fapiper/onchain-access-control/internal/credential"
-	"github.com/fapiper/onchain-access-control/internal/keyaccess"
 )
 
 type PresentationRouter struct {

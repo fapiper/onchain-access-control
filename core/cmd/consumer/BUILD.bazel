@@ -3,7 +3,7 @@ load("@io_bazel_rules_go//go:def.bzl", "go_binary", "go_library")
 go_library(
     name = "consumer_lib",
     srcs = ["main.go"],
-    importpath = "github.com/fapiper/onchain-access-control/cmd/consumer",
+    importpath = "github.com/fapiper/onchain-access-control/core/cmd/consumer",
     visibility = ["//visibility:private"],
     deps = ["//core/consumer"],
 )

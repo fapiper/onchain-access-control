@@ -11,8 +11,8 @@ import (
 	"os/signal"
 	"syscall"
 
-	"github.com/fapiper/onchain-access-control/config"
-	"github.com/fapiper/onchain-access-control/log"
+	"github.com/fapiper/onchain-access-control/core/config"
+	"github.com/fapiper/onchain-access-control/core/log"
 )
 
 func Init() {

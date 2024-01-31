@@ -3,7 +3,7 @@ package testutil
 import (
 	didsdk "github.com/TBD54566975/ssi-sdk/did"
 	miniredis "github.com/alicebob/miniredis/v2"
-	"github.com/fapiper/onchain-access-control/config"
+	"github.com/fapiper/onchain-access-control/core/config"
 	"github.com/fapiper/onchain-access-control/core/service/auth"
 	"github.com/fapiper/onchain-access-control/core/service/did"
 	"github.com/fapiper/onchain-access-control/core/service/keystore"

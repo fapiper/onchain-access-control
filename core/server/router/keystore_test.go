@@ -10,7 +10,7 @@ import (
 
 	"github.com/fapiper/onchain-access-control/core/testutil"
 
-	"github.com/fapiper/onchain-access-control/config"
+	"github.com/fapiper/onchain-access-control/core/config"
 	"github.com/fapiper/onchain-access-control/core/service/framework"
 	"github.com/fapiper/onchain-access-control/core/service/keystore"
 )

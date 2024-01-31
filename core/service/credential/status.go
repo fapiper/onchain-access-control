@@ -11,9 +11,9 @@ import (
 	"github.com/google/uuid"
 	"github.com/pkg/errors"
 
-	"github.com/fapiper/onchain-access-control/config"
+	"github.com/fapiper/onchain-access-control/core/config"
+	credint "github.com/fapiper/onchain-access-control/core/internal/credential"
 	"github.com/fapiper/onchain-access-control/core/storage"
-	credint "github.com/fapiper/onchain-access-control/internal/credential"
 )
 
 func (s Service) createStatusListEntryForCredential(ctx context.Context, credID string, request CreateCredentialRequest,

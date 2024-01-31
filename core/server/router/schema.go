@@ -9,11 +9,11 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/pkg/errors"
 
+	"github.com/fapiper/onchain-access-control/core/internal/keyaccess"
 	framework "github.com/fapiper/onchain-access-control/core/server/framework"
 	"github.com/fapiper/onchain-access-control/core/server/pagination"
 	svcframework "github.com/fapiper/onchain-access-control/core/service/framework"
 	"github.com/fapiper/onchain-access-control/core/service/schema"
-	"github.com/fapiper/onchain-access-control/internal/keyaccess"
 )
 
 type SchemaRouter struct {

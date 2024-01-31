@@ -7,11 +7,11 @@ import (
 	"github.com/goccy/go-json"
 	"go.einride.tech/aip/filtering"
 
+	"github.com/fapiper/onchain-access-control/core/internal/credential"
+	"github.com/fapiper/onchain-access-control/core/internal/keyaccess"
 	"github.com/fapiper/onchain-access-control/core/server/pagination"
 	"github.com/fapiper/onchain-access-control/core/service/common"
 	"github.com/fapiper/onchain-access-control/core/service/presentation/storage"
-	"github.com/fapiper/onchain-access-control/internal/credential"
-	"github.com/fapiper/onchain-access-control/internal/keyaccess"
 )
 
 type CreatePresentationDefinitionRequest struct {

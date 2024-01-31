@@ -15,7 +15,7 @@ import (
 	"github.com/stretchr/testify/require"
 	gock "gopkg.in/h2non/gock.v1"
 
-	"github.com/fapiper/onchain-access-control/config"
+	"github.com/fapiper/onchain-access-control/core/config"
 	"github.com/fapiper/onchain-access-control/core/service/keystore"
 	"github.com/fapiper/onchain-access-control/core/storage"
 	"github.com/fapiper/onchain-access-control/core/testutil"

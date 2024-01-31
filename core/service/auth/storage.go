@@ -4,9 +4,9 @@ import (
 	"context"
 	"encoding/json"
 	sdkutil "github.com/TBD54566975/ssi-sdk/util"
+	"github.com/fapiper/onchain-access-control/core/internal/encryption"
+	"github.com/fapiper/onchain-access-control/core/internal/keyaccess"
 	"github.com/fapiper/onchain-access-control/core/storage"
-	"github.com/fapiper/onchain-access-control/internal/encryption"
-	"github.com/fapiper/onchain-access-control/internal/keyaccess"
 	"time"
 )
 

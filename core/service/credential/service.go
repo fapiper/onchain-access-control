@@ -16,15 +16,15 @@ import (
 	"github.com/sirupsen/logrus"
 	"go.einride.tech/aip/filtering"
 
-	"github.com/fapiper/onchain-access-control/config"
+	"github.com/fapiper/onchain-access-control/core/config"
+	credint "github.com/fapiper/onchain-access-control/core/internal/credential"
+	"github.com/fapiper/onchain-access-control/core/internal/keyaccess"
+	"github.com/fapiper/onchain-access-control/core/internal/verification"
 	"github.com/fapiper/onchain-access-control/core/server/pagination"
 	"github.com/fapiper/onchain-access-control/core/service/framework"
 	"github.com/fapiper/onchain-access-control/core/service/keystore"
 	"github.com/fapiper/onchain-access-control/core/service/schema"
 	"github.com/fapiper/onchain-access-control/core/storage"
-	credint "github.com/fapiper/onchain-access-control/internal/credential"
-	"github.com/fapiper/onchain-access-control/internal/keyaccess"
-	"github.com/fapiper/onchain-access-control/internal/verification"
 )
 
 type Service struct {

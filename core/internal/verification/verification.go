@@ -14,10 +14,10 @@ import (
 	sdkutil "github.com/TBD54566975/ssi-sdk/util"
 	"github.com/pkg/errors"
 
-	"github.com/fapiper/onchain-access-control/internal/credential"
-	didint "github.com/fapiper/onchain-access-control/internal/did"
-	"github.com/fapiper/onchain-access-control/internal/keyaccess"
-	"github.com/fapiper/onchain-access-control/internal/schema"
+	"github.com/fapiper/onchain-access-control/core/internal/credential"
+	didint "github.com/fapiper/onchain-access-control/core/internal/did"
+	"github.com/fapiper/onchain-access-control/core/internal/keyaccess"
+	"github.com/fapiper/onchain-access-control/core/internal/schema"
 )
 
 type Verifier struct {

@@ -10,7 +10,7 @@ import (
 	"go.opentelemetry.io/otel"
 	"go.opentelemetry.io/otel/trace"
 
-	"github.com/fapiper/onchain-access-control/config"
+	"github.com/fapiper/onchain-access-control/core/config"
 )
 
 const (

@@ -6,10 +6,10 @@ go_library(
     importpath = "github.com/fapiper/onchain-access-control/core/service/manifest/model",
     visibility = ["//visibility:public"],
     deps = [
+        "//core/internal/credential",
+        "//core/internal/keyaccess",
         "//core/service/common",
         "//core/service/manifest/storage",
-        "//internal/credential",
-        "//internal/keyaccess",
         "@com_github_tbd54566975_ssi_sdk//credential/exchange",
         "@com_github_tbd54566975_ssi_sdk//credential/manifest",
         "@com_github_tbd54566975_ssi_sdk//util",

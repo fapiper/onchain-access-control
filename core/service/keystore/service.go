@@ -12,12 +12,12 @@ import (
 	"github.com/sirupsen/logrus"
 	"golang.org/x/crypto/chacha20poly1305"
 
-	"github.com/fapiper/onchain-access-control/config"
+	"github.com/fapiper/onchain-access-control/core/config"
+	"github.com/fapiper/onchain-access-control/core/internal/encryption"
+	"github.com/fapiper/onchain-access-control/core/internal/keyaccess"
+	crypto "github.com/fapiper/onchain-access-control/core/internal/util"
 	"github.com/fapiper/onchain-access-control/core/service/framework"
 	"github.com/fapiper/onchain-access-control/core/storage"
-	"github.com/fapiper/onchain-access-control/internal/encryption"
-	"github.com/fapiper/onchain-access-control/internal/keyaccess"
-	crypto "github.com/fapiper/onchain-access-control/internal/util"
 )
 
 type ServiceFactory func(storage.Tx) (*Service, error)

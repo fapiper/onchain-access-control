@@ -14,12 +14,12 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
+	"github.com/fapiper/onchain-access-control/core/internal/keyaccess"
 	"github.com/fapiper/onchain-access-control/core/service/common"
 	"github.com/fapiper/onchain-access-control/core/service/did"
 	"github.com/fapiper/onchain-access-control/core/service/presentation"
 	"github.com/fapiper/onchain-access-control/core/service/presentation/model"
 	"github.com/fapiper/onchain-access-control/core/testutil"
-	"github.com/fapiper/onchain-access-control/internal/keyaccess"
 )
 
 func TestPresentationDefinitionRouter(t *testing.T) {

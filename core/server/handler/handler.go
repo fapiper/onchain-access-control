@@ -5,7 +5,7 @@ import (
 	sdkutil "github.com/TBD54566975/ssi-sdk/util"
 	"github.com/gin-gonic/gin"
 
-	"github.com/fapiper/onchain-access-control/config"
+	"github.com/fapiper/onchain-access-control/core/config"
 	"github.com/fapiper/onchain-access-control/core/server/middleware"
 	"github.com/fapiper/onchain-access-control/core/server/router"
 	didsvc "github.com/fapiper/onchain-access-control/core/service/did"

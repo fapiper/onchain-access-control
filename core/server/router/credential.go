@@ -10,12 +10,12 @@ import (
 	"github.com/pkg/errors"
 	"go.einride.tech/aip/filtering"
 
+	credmodel "github.com/fapiper/onchain-access-control/core/internal/credential"
+	"github.com/fapiper/onchain-access-control/core/internal/keyaccess"
 	framework "github.com/fapiper/onchain-access-control/core/server/framework"
 	"github.com/fapiper/onchain-access-control/core/server/pagination"
 	"github.com/fapiper/onchain-access-control/core/service/credential"
 	svcframework "github.com/fapiper/onchain-access-control/core/service/framework"
-	credmodel "github.com/fapiper/onchain-access-control/internal/credential"
-	"github.com/fapiper/onchain-access-control/internal/keyaccess"
 )
 
 const (

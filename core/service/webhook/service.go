@@ -15,10 +15,10 @@ import (
 	"github.com/pkg/errors"
 	"github.com/sirupsen/logrus"
 
-	"github.com/fapiper/onchain-access-control/config"
+	"github.com/fapiper/onchain-access-control/core/config"
+	"github.com/fapiper/onchain-access-control/core/internal/util"
 	"github.com/fapiper/onchain-access-control/core/service/framework"
 	"github.com/fapiper/onchain-access-control/core/storage"
-	"github.com/fapiper/onchain-access-control/internal/util"
 
 	"go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp"
 )

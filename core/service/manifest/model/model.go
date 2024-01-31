@@ -8,9 +8,9 @@ import (
 	manifestsdk "github.com/TBD54566975/ssi-sdk/credential/manifest"
 	sdkutil "github.com/TBD54566975/ssi-sdk/util"
 
+	cred "github.com/fapiper/onchain-access-control/core/internal/credential"
+	"github.com/fapiper/onchain-access-control/core/internal/keyaccess"
 	"github.com/fapiper/onchain-access-control/core/service/common"
-	cred "github.com/fapiper/onchain-access-control/internal/credential"
-	"github.com/fapiper/onchain-access-control/internal/keyaccess"
 )
 
 // Manifest

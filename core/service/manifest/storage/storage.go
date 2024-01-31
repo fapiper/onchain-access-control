@@ -9,13 +9,13 @@ import (
 	"github.com/pkg/errors"
 	"github.com/sirupsen/logrus"
 
+	cred "github.com/fapiper/onchain-access-control/core/internal/credential"
+	"github.com/fapiper/onchain-access-control/core/internal/keyaccess"
 	"github.com/fapiper/onchain-access-control/core/service/operation/credential"
 	opstorage "github.com/fapiper/onchain-access-control/core/service/operation/storage"
 	"github.com/fapiper/onchain-access-control/core/service/operation/storage/namespace"
 	opsubmission "github.com/fapiper/onchain-access-control/core/service/operation/submission"
 	"github.com/fapiper/onchain-access-control/core/storage"
-	cred "github.com/fapiper/onchain-access-control/internal/credential"
-	"github.com/fapiper/onchain-access-control/internal/keyaccess"
 )
 
 const (

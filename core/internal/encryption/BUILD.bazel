@@ -3,10 +3,10 @@ load("@io_bazel_rules_go//go:def.bzl", "go_library", "go_test")
 go_library(
     name = "encryption",
     srcs = ["encryption.go"],
-    importpath = "github.com/fapiper/onchain-access-control/internal/encryption",
+    importpath = "github.com/fapiper/onchain-access-control/core/internal/encryption",
     visibility = ["//:__subpackages__"],
     deps = [
-        "//internal/util",
+        "//core/internal/util",
         "@com_github_google_tink_go//aead",
         "@com_github_google_tink_go//core/registry",
         "@com_github_google_tink_go//integration/awskms",
@@ -24,7 +24,7 @@ go_test(
     srcs = ["encryption_test.go"],
     embed = [":encryption"],
     deps = [
-        "//internal/util",
+        "//core/internal/util",
         "@com_github_mr_tron_base58//:base58",
         "@com_github_pkg_errors//:errors",
         "@com_github_stretchr_testify//assert",

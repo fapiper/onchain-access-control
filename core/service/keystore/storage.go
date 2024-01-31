@@ -12,8 +12,8 @@ import (
 	"github.com/mr-tron/base58"
 	"github.com/pkg/errors"
 
+	"github.com/fapiper/onchain-access-control/core/internal/encryption"
 	"github.com/fapiper/onchain-access-control/core/storage"
-	"github.com/fapiper/onchain-access-control/internal/encryption"
 )
 
 // StoredKey represents a common data model to store data on all key types

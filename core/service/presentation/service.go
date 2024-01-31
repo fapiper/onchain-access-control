@@ -13,6 +13,9 @@ import (
 	"github.com/pkg/errors"
 	"github.com/sirupsen/logrus"
 
+	didint "github.com/fapiper/onchain-access-control/core/internal/did"
+	"github.com/fapiper/onchain-access-control/core/internal/keyaccess"
+	"github.com/fapiper/onchain-access-control/core/internal/verification"
 	"github.com/fapiper/onchain-access-control/core/service/common"
 	"github.com/fapiper/onchain-access-control/core/service/framework"
 	"github.com/fapiper/onchain-access-control/core/service/keystore"
@@ -22,9 +25,6 @@ import (
 	presentationstorage "github.com/fapiper/onchain-access-control/core/service/presentation/storage"
 	"github.com/fapiper/onchain-access-control/core/service/schema"
 	"github.com/fapiper/onchain-access-control/core/storage"
-	didint "github.com/fapiper/onchain-access-control/internal/did"
-	"github.com/fapiper/onchain-access-control/internal/keyaccess"
-	"github.com/fapiper/onchain-access-control/internal/verification"
 )
 
 const presentationRequestNamespace = "presentation_request"

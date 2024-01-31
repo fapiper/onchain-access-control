@@ -10,7 +10,8 @@ go_library(
     importpath = "github.com/fapiper/onchain-access-control/core/issuer",
     visibility = ["//visibility:public"],
     deps = [
-        "//config",
+        "//core/config",
+        "//core/log",
         "//core/server/framework",
         "//core/server/handler",
         "//core/server/middleware",
@@ -27,7 +28,6 @@ go_library(
         "//core/service/webhook",
         "//core/service/well-known",
         "//core/storage",
-        "//log",
         "@com_github_ardanlabs_conf//:conf",
         "@com_github_gin_gonic_gin//:gin",
         "@com_github_pkg_errors//:errors",

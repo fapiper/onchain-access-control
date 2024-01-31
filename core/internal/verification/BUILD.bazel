@@ -3,13 +3,13 @@ load("@io_bazel_rules_go//go:def.bzl", "go_library")
 go_library(
     name = "verification",
     srcs = ["verification.go"],
-    importpath = "github.com/fapiper/onchain-access-control/internal/verification",
+    importpath = "github.com/fapiper/onchain-access-control/core/internal/verification",
     visibility = ["//:__subpackages__"],
     deps = [
-        "//internal/credential",
-        "//internal/did",
-        "//internal/keyaccess",
-        "//internal/schema",
+        "//core/internal/credential",
+        "//core/internal/did",
+        "//core/internal/keyaccess",
+        "//core/internal/schema",
         "@com_github_pkg_errors//:errors",
         "@com_github_tbd54566975_ssi_sdk//credential",
         "@com_github_tbd54566975_ssi_sdk//credential/integrity",

@@ -9,8 +9,8 @@ import (
 	"github.com/lestrrat-go/jwx/jws"
 	"github.com/lestrrat-go/jwx/jwt"
 
-	didint "github.com/fapiper/onchain-access-control/internal/did"
-	"github.com/fapiper/onchain-access-control/internal/keyaccess"
+	didint "github.com/fapiper/onchain-access-control/core/internal/did"
+	"github.com/fapiper/onchain-access-control/core/internal/keyaccess"
 )
 
 func (s Service) verifyManifestJWT(ctx context.Context, token keyaccess.JWT) (*manifest.CredentialManifest, error) {

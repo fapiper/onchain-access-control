@@ -3,10 +3,10 @@ load("@io_bazel_rules_go//go:def.bzl", "go_library")
 go_library(
     name = "log",
     srcs = ["log.go"],
-    importpath = "github.com/fapiper/onchain-access-control/log",
+    importpath = "github.com/fapiper/onchain-access-control/core/log",
     visibility = ["//visibility:public"],
     deps = [
-        "//config",
+        "//core/config",
         "@com_github_sirupsen_logrus//:logrus",
     ],
 )
