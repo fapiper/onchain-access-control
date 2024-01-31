@@ -45,7 +45,7 @@ contract PolicyExtension is IPolicyExtension, ContextInstance {
         if(context_ == _thisContext()){
             return policies_[context_][id_];
         } else {
-            return _context(context_).getPolicy(context_, id_);
+            return _contextInstance(context_).getPolicy(context_, id_);
         }
     }
 

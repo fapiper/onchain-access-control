@@ -16,7 +16,7 @@ contract ContextInstance is ContextHandlerRecipient {
     }
 
     function _thisContext() internal view returns (bytes32) {
-        return _context(_contextId);
+        return _contextId;
     }
 
     function _thisContextInstance() internal view returns (IContextInstance) {

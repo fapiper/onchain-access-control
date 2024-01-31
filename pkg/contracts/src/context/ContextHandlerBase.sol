@@ -15,14 +15,14 @@ contract ContextHandlerBase is Context {
         bytes32 _context,
         bytes32 _did
     ){
-        require(_checkContextAdmin(_context, _did));
+        require((_checkContextAdmin(_context, _did)), "not allowed");
         _;
     }
 
     function _checkContextAdmin(
         bytes32 _context,
         bytes32 _did
-    ) internal {
+    ) internal returns (bool) {
         return _getContextInstance(_context).checkAdmin(_did, _msgSender());
     }
 
