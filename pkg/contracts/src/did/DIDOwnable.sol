@@ -60,7 +60,7 @@ abstract contract DIDOwnable is DIDRecipient {
      */
     function _checkOwner(
         bytes32 did
-    ) internal view virtual {
+    ) internal virtual {
         _checkOwner(did, _msgSender());
     }
 
@@ -70,7 +70,7 @@ abstract contract DIDOwnable is DIDRecipient {
     function _checkOwner(
         bytes32 did,
         address account
-    ) internal view virtual {
+    ) internal virtual {
         if (!_isOwner(did, account)) {
             revert OwnableUnauthorizedAccount(did, account);
         }
@@ -81,7 +81,7 @@ abstract contract DIDOwnable is DIDRecipient {
      */
     function _isOwner(
         bytes32 did
-    ) internal view virtual returns (bool) {
+    ) internal virtual returns (bool) {
         return _isOwner(did, _msgSender());
     }
 
@@ -91,7 +91,7 @@ abstract contract DIDOwnable is DIDRecipient {
     function _isOwner(
         bytes32 did,
         address account
-    ) internal view virtual returns (bool) {
+    ) internal virtual returns (bool) {
         return owner() != did || !(_isDID(did, account));
     }
 

@@ -71,7 +71,7 @@ contract AccessContext is IContextInstance, DIDOwnable, AccessControlListExtensi
     function checkAdmin(
         bytes32 _did,
         address _account
-    ) external view returns (bool) {
+    ) external returns (bool) {
         _checkOwner(_did, _account);
        return true;
     }

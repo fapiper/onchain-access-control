@@ -30,7 +30,7 @@ contract PermissionExtension {
         bytes32 _permission,
         bytes32 _resource,
         Operation _operation
-    ) internal returns (bool) {
+    ) internal view returns (bool) {
         return permissions[_permission][_resource][_operation];
     }
 
@@ -38,7 +38,7 @@ contract PermissionExtension {
         bytes32 _permission,
         bytes32 _resource,
         Operation[] memory _operations
-    ) internal returns (bool) {
+    ) internal view returns (bool) {
         for (uint256 i = 0; i < _operations.length; i++) {
             if(_hasPermissionToResource(_permission, _resource, _operations[i])){
                 return true;

@@ -50,7 +50,7 @@ contract SessionRegistryBase is DIDRecipient {
 
     function _checkSessionSubject(
         bytes32 _id
-    ) internal view returns (bool) {
+    ) internal returns (bool) {
         return _isDID(_sessions[_id].subject);
     }
 

@@ -30,20 +30,20 @@ contract DIDRecipient is Context {
     /**
     * @dev Throws if the sender is not the owner.
      */
-    function _checkDID(bytes32 did) internal view virtual {
+    function _checkDID(bytes32 did) internal virtual {
         require(!_isDID(did), "DIDRecipient: unauthorized account");
     }
 
     function _isDID(
         bytes32 did
-    ) internal view returns (bool) {
+    ) internal returns (bool) {
         return _isDID(did, _msgSender());
     }
 
     function _isDID(
         bytes32 did,
         address account
-    ) internal view returns (bool) {
+    ) internal returns (bool) {
         return _getRegistry().isController(did, account);
     }
 
