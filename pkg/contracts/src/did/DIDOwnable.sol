@@ -1,8 +1,8 @@
 // SPDX-License-Identifier: UNLICENSED
-pragma solidity >=0.8.4;
+pragma solidity >=0.8.20;
 
 import "./DIDRecipient.sol";
-
+ 
 /**
  * @dev Contract module which provides a basic access control mechanism, where
  * there is an account (an owner) that can be granted exclusive access to
@@ -51,17 +51,28 @@ abstract contract DIDOwnable is DIDRecipient {
     /**
      * @dev Returns the did of the current owner.
      */
-    function owner() public view virtual returns (string) {
+    function owner() public view virtual returns (string memory) {
         return _owner;
     }
 
     /**
      * @dev Throws if the sender is not the owner.
      */
-    function _checkOwner(string memory did) internal view virtual {
-        address sender = _msgSender();
-        if (owner() != sender || !_isDID(did, sender)) {
-            revert OwnableUnauthorizedAccount(did, sender);
+    function _checkOwner(
+        string memory did
+    ) internal view virtual {
+        _checkOwner(did, _msgSender());
+    }
+
+    /**
+     * @dev Throws if the actor is not the owner.
+     */
+    function _checkOwner(
+        string memory did,
+        address account
+    ) internal view virtual {
+        if (owner() != account || !(_isDID(did, account))) {
+            revert OwnableUnauthorizedAccount(did, account);
         }
     }
 
@@ -72,7 +83,7 @@ abstract contract DIDOwnable is DIDRecipient {
      * NOTE: Renouncing ownership will leave the contract without an owner,
      * thereby disabling any functionality that is only available to the owner.
      */
-    function renounceOwnership() public virtual onlyOwner {
+    function renounceOwnership(string memory owner) public virtual onlyOwner(owner) {
         _transferOwnership("");
     }
 
@@ -80,10 +91,10 @@ abstract contract DIDOwnable is DIDRecipient {
      * @dev Transfers ownership of the contract to a new account (`newOwner`).
      * Can only be called by the current owner.
      */
-    function transferOwnership(string memory newOwner) public virtual onlyOwner {
-        if (newOwner == "") {
-            revert OwnableInvalidOwner("");
-        }
+    function transferOwnership(
+        string memory oldOwner,
+        string memory newOwner
+    ) public virtual onlyOwner(oldOwner) {
         _transferOwnership(newOwner);
     }
 
