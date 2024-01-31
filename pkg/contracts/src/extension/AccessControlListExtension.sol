@@ -7,7 +7,7 @@ contract AccessControlListExtension {
         // count policies
         uint256 policyCount;
         // policy context -> policies -> exists
-        mapping(bytes32 => bytes32) policies;
+        mapping(bytes32 => mapping(bytes32 => bool)) policies;
         // permission -> exists
         mapping(bytes32 => bool) permissions;
     }
@@ -68,9 +68,8 @@ contract AccessControlListExtension {
         bytes32 _policyContext,
         bytes32 policy_
     ) internal {
-        Assignment storage a  = _getAssignment(_roleContext, _role);
-        a.policies[_policyContext][policy_] = true;
-        a.policyCount += 1;
+        assignments[_roleContext][_role].policies[_policyContext][policy_] = true;
+        assignments[_roleContext][_role].policyCount += 1;
     }
 
     function _unassignPoliciesToRole(
@@ -131,13 +130,6 @@ contract AccessControlListExtension {
         bytes32 _role
     ) internal view returns (uint256) {
         return assignments[_roleContext][_role].policyCount;
-    }
-
-    function _getAssignment(
-        bytes32 _roleContext,
-        bytes32 _role
-    ) internal returns (Assignment storage) {
-        return assignments[_roleContext][_role];
     }
 
 }
