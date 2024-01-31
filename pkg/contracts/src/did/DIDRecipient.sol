@@ -3,7 +3,7 @@ pragma solidity >=0.8.20;
 
 import { Context } from "@openzeppelin/contracts/utils/Context.sol";
 
-import "../interfaces/IDIDRegistry.sol";
+import "./IDIDRegistry.sol";
 
 contract DIDRecipient is Context {
     IDIDRegistry private _registry;
