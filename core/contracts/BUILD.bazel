@@ -1,0 +1,21 @@
+load("@io_bazel_rules_go//go:def.bzl", "go_library")
+
+go_library(
+    name = "contracts",
+    srcs = [
+        "AccessContext.go",
+        "AccessContextHandler.go",
+        "SessionRegistry.go",
+        "SimpleDIDRegistry.go",
+    ],
+    importpath = "github.com/fapiper/onchain-access-control/core/contracts",
+    visibility = ["//visibility:public"],
+    deps = [
+        "@com_github_ethereum_go_ethereum//:go_default_library",
+        "@com_github_ethereum_go_ethereum//accounts/abi:go_default_library",
+        "@com_github_ethereum_go_ethereum//accounts/abi/bind:go_default_library",
+        "@com_github_ethereum_go_ethereum//common:go_default_library",
+        "@com_github_ethereum_go_ethereum//core/types:go_default_library",
+        "@com_github_ethereum_go_ethereum//event:go_default_library",
+    ],
+)

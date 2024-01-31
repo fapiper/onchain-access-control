@@ -1,0 +1,592 @@
+[
+  {
+    "inputs": [
+      {
+        "internalType": "bytes32",
+        "name": "initialOwner",
+        "type": "bytes32"
+      },
+      {
+        "internalType": "bytes32",
+        "name": "contextId",
+        "type": "bytes32"
+      },
+      {
+        "internalType": "address",
+        "name": "contextHandler",
+        "type": "address"
+      },
+      {
+        "internalType": "address",
+        "name": "didRegistry",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "nonpayable",
+    "type": "constructor"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "bytes32",
+        "name": "owner",
+        "type": "bytes32"
+      }
+    ],
+    "name": "OwnableInvalidOwner",
+    "type": "error"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "bytes32",
+        "name": "did",
+        "type": "bytes32"
+      },
+      {
+        "internalType": "address",
+        "name": "account",
+        "type": "address"
+      }
+    ],
+    "name": "OwnableUnauthorizedAccount",
+    "type": "error"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "bytes32",
+        "name": "previousOwner",
+        "type": "bytes32"
+      },
+      {
+        "indexed": true,
+        "internalType": "bytes32",
+        "name": "newOwner",
+        "type": "bytes32"
+      }
+    ],
+    "name": "OwnershipTransferred",
+    "type": "event"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "bytes32",
+        "name": "_permission",
+        "type": "bytes32"
+      },
+      {
+        "internalType": "bytes32",
+        "name": "_roleContext",
+        "type": "bytes32"
+      },
+      {
+        "internalType": "bytes32",
+        "name": "_role",
+        "type": "bytes32"
+      },
+      {
+        "internalType": "bytes32",
+        "name": "_did",
+        "type": "bytes32"
+      }
+    ],
+    "name": "assignPermission",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "bytes32",
+        "name": "_policyContext",
+        "type": "bytes32"
+      },
+      {
+        "internalType": "bytes32",
+        "name": "_policy",
+        "type": "bytes32"
+      },
+      {
+        "internalType": "bytes32",
+        "name": "_role",
+        "type": "bytes32"
+      },
+      {
+        "internalType": "bytes32",
+        "name": "_did",
+        "type": "bytes32"
+      }
+    ],
+    "name": "assignPolicy",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "bytes32",
+        "name": "_did",
+        "type": "bytes32"
+      },
+      {
+        "internalType": "address",
+        "name": "_account",
+        "type": "address"
+      }
+    ],
+    "name": "checkAdmin",
+    "outputs": [
+      {
+        "internalType": "bool",
+        "name": "",
+        "type": "bool"
+      }
+    ],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "bytes32[]",
+        "name": "_contexts",
+        "type": "bytes32[]"
+      },
+      {
+        "internalType": "bytes32[]",
+        "name": "_ids",
+        "type": "bytes32[]"
+      }
+    ],
+    "name": "getPolicies",
+    "outputs": [
+      {
+        "components": [
+          {
+            "internalType": "bytes32",
+            "name": "context",
+            "type": "bytes32"
+          },
+          {
+            "internalType": "bytes32",
+            "name": "id",
+            "type": "bytes32"
+          },
+          {
+            "internalType": "address",
+            "name": "instance",
+            "type": "address"
+          },
+          {
+            "internalType": "bytes4",
+            "name": "verify",
+            "type": "bytes4"
+          },
+          {
+            "internalType": "bool",
+            "name": "exists",
+            "type": "bool"
+          }
+        ],
+        "internalType": "struct IPolicyExtension.Policy[]",
+        "name": "policies",
+        "type": "tuple[]"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "bytes32",
+        "name": "_context",
+        "type": "bytes32"
+      },
+      {
+        "internalType": "bytes32",
+        "name": "_id",
+        "type": "bytes32"
+      }
+    ],
+    "name": "getPolicy",
+    "outputs": [
+      {
+        "components": [
+          {
+            "internalType": "bytes32",
+            "name": "context",
+            "type": "bytes32"
+          },
+          {
+            "internalType": "bytes32",
+            "name": "id",
+            "type": "bytes32"
+          },
+          {
+            "internalType": "address",
+            "name": "instance",
+            "type": "address"
+          },
+          {
+            "internalType": "bytes4",
+            "name": "verify",
+            "type": "bytes4"
+          },
+          {
+            "internalType": "bool",
+            "name": "exists",
+            "type": "bool"
+          }
+        ],
+        "internalType": "struct IPolicyExtension.Policy",
+        "name": "",
+        "type": "tuple"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "bytes32",
+        "name": "_role",
+        "type": "bytes32"
+      },
+      {
+        "internalType": "bytes32",
+        "name": "_did",
+        "type": "bytes32"
+      },
+      {
+        "internalType": "bytes32[]",
+        "name": "_policyContexts",
+        "type": "bytes32[]"
+      },
+      {
+        "internalType": "bytes32[]",
+        "name": "_policies",
+        "type": "bytes32[]"
+      },
+      {
+        "internalType": "bytes[]",
+        "name": "_args",
+        "type": "bytes[]"
+      }
+    ],
+    "name": "grantRole",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "owner",
+    "outputs": [
+      {
+        "internalType": "bytes32",
+        "name": "",
+        "type": "bytes32"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "bytes32",
+        "name": "_permission",
+        "type": "bytes32"
+      },
+      {
+        "internalType": "bytes32",
+        "name": "_resource",
+        "type": "bytes32"
+      },
+      {
+        "internalType": "enum PermissionExtension.Operation[]",
+        "name": "_operations",
+        "type": "uint8[]"
+      }
+    ],
+    "name": "registerPermission",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "bytes32",
+        "name": "_permission",
+        "type": "bytes32"
+      },
+      {
+        "internalType": "bytes32",
+        "name": "_resource",
+        "type": "bytes32"
+      },
+      {
+        "internalType": "enum PermissionExtension.Operation[]",
+        "name": "_operations",
+        "type": "uint8[]"
+      },
+      {
+        "internalType": "bytes32",
+        "name": "_roleContext",
+        "type": "bytes32"
+      },
+      {
+        "internalType": "bytes32",
+        "name": "_role",
+        "type": "bytes32"
+      },
+      {
+        "internalType": "bytes32",
+        "name": "_did",
+        "type": "bytes32"
+      }
+    ],
+    "name": "registerPermission",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "bytes32",
+        "name": "_policy",
+        "type": "bytes32"
+      },
+      {
+        "internalType": "address",
+        "name": "_contract",
+        "type": "address"
+      },
+      {
+        "internalType": "bytes4",
+        "name": "_verify",
+        "type": "bytes4"
+      },
+      {
+        "internalType": "bytes32",
+        "name": "_role",
+        "type": "bytes32"
+      },
+      {
+        "internalType": "bytes32",
+        "name": "_did",
+        "type": "bytes32"
+      }
+    ],
+    "name": "registerPolicy",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "bytes32",
+        "name": "_policy",
+        "type": "bytes32"
+      },
+      {
+        "internalType": "address",
+        "name": "_contract",
+        "type": "address"
+      },
+      {
+        "internalType": "bytes4",
+        "name": "_verify",
+        "type": "bytes4"
+      },
+      {
+        "internalType": "bytes32",
+        "name": "_did",
+        "type": "bytes32"
+      }
+    ],
+    "name": "registerPolicy",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "bytes32",
+        "name": "owner_",
+        "type": "bytes32"
+      }
+    ],
+    "name": "renounceOwnership",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "bytes32",
+        "name": "_role",
+        "type": "bytes32"
+      },
+      {
+        "internalType": "bytes32",
+        "name": "_did",
+        "type": "bytes32"
+      }
+    ],
+    "name": "revokeRole",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "bytes32",
+        "name": "_role",
+        "type": "bytes32"
+      },
+      {
+        "internalType": "bytes32",
+        "name": "_policyContext",
+        "type": "bytes32"
+      },
+      {
+        "internalType": "bytes32",
+        "name": "_policy",
+        "type": "bytes32"
+      },
+      {
+        "internalType": "bytes32",
+        "name": "_permission",
+        "type": "bytes32"
+      },
+      {
+        "internalType": "bytes32",
+        "name": "_resource",
+        "type": "bytes32"
+      },
+      {
+        "internalType": "enum PermissionExtension.Operation[]",
+        "name": "_operations",
+        "type": "uint8[]"
+      },
+      {
+        "internalType": "bytes32",
+        "name": "_did",
+        "type": "bytes32"
+      }
+    ],
+    "name": "setupRole",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "bytes32",
+        "name": "_role",
+        "type": "bytes32"
+      },
+      {
+        "internalType": "bytes32",
+        "name": "_policy",
+        "type": "bytes32"
+      },
+      {
+        "internalType": "bytes32",
+        "name": "_permission",
+        "type": "bytes32"
+      },
+      {
+        "internalType": "bytes32",
+        "name": "_resource",
+        "type": "bytes32"
+      },
+      {
+        "internalType": "enum PermissionExtension.Operation[]",
+        "name": "_operations",
+        "type": "uint8[]"
+      },
+      {
+        "internalType": "address",
+        "name": "_instance",
+        "type": "address"
+      },
+      {
+        "internalType": "bytes4",
+        "name": "_verify",
+        "type": "bytes4"
+      },
+      {
+        "internalType": "bytes32",
+        "name": "_did",
+        "type": "bytes32"
+      }
+    ],
+    "name": "setupRole",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "bytes32",
+        "name": "oldOwner",
+        "type": "bytes32"
+      },
+      {
+        "internalType": "bytes32",
+        "name": "newOwner",
+        "type": "bytes32"
+      }
+    ],
+    "name": "transferOwnership",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "bytes32",
+        "name": "_permission",
+        "type": "bytes32"
+      },
+      {
+        "internalType": "bytes32",
+        "name": "_roleContext",
+        "type": "bytes32"
+      },
+      {
+        "internalType": "bytes32",
+        "name": "_role",
+        "type": "bytes32"
+      },
+      {
+        "internalType": "bytes32",
+        "name": "_did",
+        "type": "bytes32"
+      }
+    ],
+    "name": "unassignPermission",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  }
+]
