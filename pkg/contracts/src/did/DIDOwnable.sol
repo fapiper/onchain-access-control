@@ -16,24 +16,24 @@ import "./DIDRecipient.sol";
  * the owner.
  */
 abstract contract DIDOwnable is DIDRecipient {
-    string private _owner;
+    bytes32 private _owner;
 
     /**
      * @dev The caller account is not authorized to perform an operation.
      */
-    error OwnableUnauthorizedAccount(string did, address account);
+    error OwnableUnauthorizedAccount(bytes32 did, address account);
 
     /**
-     * @dev The owner is not a valid owner account. (eg. `address(0)`)
+     * @dev The owner is not a valid owner account. (eg. `bytes32(0)`)
      */
-    error OwnableInvalidOwner(string owner);
+    error OwnableInvalidOwner(bytes32 owner);
 
-    event OwnershipTransferred(string indexed previousOwner, string indexed newOwner);
+    event OwnershipTransferred(bytes32 indexed previousOwner, bytes32 indexed newOwner);
 
     /**
      * @dev Initializes the contract setting the address provided by the deployer as the initial owner.
      */
-    constructor(string memory initialOwner, address didRegistry) DIDRecipient(didRegistry) {
+    constructor(bytes32 initialOwner, address didRegistry) DIDRecipient(didRegistry) {
         if (initialOwner == "") {
             revert OwnableInvalidOwner("");
         }
@@ -43,7 +43,7 @@ abstract contract DIDOwnable is DIDRecipient {
     /**
      * @dev Throws if called by any account other than the owner.
      */
-    modifier onlyOwner(string memory did) {
+    modifier onlyOwner(bytes32 did) {
         _checkOwner(did);
         _;
     }
@@ -51,7 +51,7 @@ abstract contract DIDOwnable is DIDRecipient {
     /**
      * @dev Returns the did of the current owner.
      */
-    function owner() public view virtual returns (string memory) {
+    function owner() public view virtual returns (bytes32) {
         return _owner;
     }
 
@@ -59,7 +59,7 @@ abstract contract DIDOwnable is DIDRecipient {
      * @dev Throws if the sender is not the owner.
      */
     function _checkOwner(
-        string memory did
+        bytes32 did
     ) internal view virtual {
         _checkOwner(did, _msgSender());
     }
@@ -68,10 +68,10 @@ abstract contract DIDOwnable is DIDRecipient {
      * @dev Throws if the actor is not the owner.
      */
     function _checkOwner(
-        string memory did,
+        bytes32 did,
         address account
     ) internal view virtual {
-        if (owner() != account || !(_isDID(did, account))) {
+        if (owner() != did || !(_isDID(did, account))) {
             revert OwnableUnauthorizedAccount(did, account);
         }
     }
@@ -83,7 +83,7 @@ abstract contract DIDOwnable is DIDRecipient {
      * NOTE: Renouncing ownership will leave the contract without an owner,
      * thereby disabling any functionality that is only available to the owner.
      */
-    function renounceOwnership(string memory owner) public virtual onlyOwner(owner) {
+    function renounceOwnership(bytes32 owner) public virtual onlyOwner(owner) {
         _transferOwnership("");
     }
 
@@ -92,8 +92,8 @@ abstract contract DIDOwnable is DIDRecipient {
      * Can only be called by the current owner.
      */
     function transferOwnership(
-        string memory oldOwner,
-        string memory newOwner
+        bytes32 oldOwner,
+        bytes32 newOwner
     ) public virtual onlyOwner(oldOwner) {
         _transferOwnership(newOwner);
     }
@@ -102,8 +102,8 @@ abstract contract DIDOwnable is DIDRecipient {
      * @dev Transfers ownership of the contract to a new account (`newOwner`).
      * Internal function without access restriction.
      */
-    function _transferOwnership(string memory newOwner) internal virtual {
-        string memory oldOwner = _owner;
+    function _transferOwnership(bytes32 newOwner) internal virtual {
+        bytes32 oldOwner = _owner;
         _owner = newOwner;
         emit OwnershipTransferred(oldOwner, newOwner);
     }

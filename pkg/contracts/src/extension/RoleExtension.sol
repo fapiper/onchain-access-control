@@ -7,21 +7,21 @@ contract RoleExtension {
 
     function _grantRole(
         bytes32 _role,
-        string memory _did
+        bytes32 _did
     ) internal {
         hasRole[_role] = _did;
     }
 
     function _revokeRole(
         bytes32 _role,
-        string memory _did
+        bytes32 _did
     ) internal {
         delete hasRole[_role] = _did;
     }
 
     function _hasRole(
         bytes32 _role,
-        string memory _did
+        bytes32 _did
     ) internal view returns (bool){
         return hasRole[_role][_did] != "";
     }

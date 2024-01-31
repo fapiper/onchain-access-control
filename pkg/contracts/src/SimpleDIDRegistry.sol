@@ -9,32 +9,32 @@ contract SimpleDIDRegistry is IDIDRegistry {
     mapping(string => DIDConfig) private configs;
     mapping(address => uint) public changed;
 
-    modifier onlyController(string memory identity, address actor) {
+    modifier onlyController(bytes32 identity, address actor) {
         require(isController(identity, actor), 'Not authorized');
         _;
     }
 
-    modifier onlyControllerOrNew(string memory identity, address actor) {
+    modifier onlyControllerOrNew(bytes32 identity, address actor) {
         require(controllers[identity].length <= 0 || isController(identity, actor), 'Not authorized');
         _;
     }
 
-    constructor(string[] memory _identities, address[] memory _controllers) {
+    constructor(bytes32[] memory _identities, address[] memory _controllers) {
         require(_identities.length == _controllers.length, "identities and controllers not equal");
         for (uint i = 0; i < _identities.length; i++) {
             addController(_identities[i], msg.sender, _controllers[i]);
         }
     }
 
-    function getControllers(string memory identity) public view returns (address[] memory) {
+    function getControllers(bytes32 identity) public view returns (address[] memory) {
         return controllers[identity];
     }
 
-    function isController(string memory identity, address actor) override public view returns (bool) {
+    function isController(bytes32 identity, address actor) override public view returns (bool) {
         return actor == getController(identity);
     }
 
-    function getController(string memory identity) override public view returns (address) {
+    function getController(bytes32 identity) override public view returns (address) {
         uint len = controllers[identity].length;
         require(len > 0, "identity not found");
         if (len == 1) return controllers[identity][0];
@@ -49,12 +49,12 @@ contract SimpleDIDRegistry is IDIDRegistry {
         return controller;
     }
 
-    function setCurrentController(string memory identity, uint index) internal {
+    function setCurrentController(bytes32 identity, uint index) internal {
         DIDConfig storage config = configs[identity];
         config.currentController = index;
     }
 
-    function _getControllerIndex(string memory identity, address controller) internal view returns (int) {
+    function _getControllerIndex(bytes32 identity, address controller) internal view returns (int) {
         for (uint i = 0; i < controllers[identity].length; i++) {
             if (controllers[identity][i] == controller) {
                 return int(i);
@@ -63,7 +63,7 @@ contract SimpleDIDRegistry is IDIDRegistry {
         return - 1;
     }
 
-    function addController(string memory identity, address actor, address newController) internal onlyControllerOrNew(identity, actor) {
+    function addController(bytes32 identity, address actor, address newController) internal onlyControllerOrNew(identity, actor) {
         int controllerIndex = _getControllerIndex(identity, newController);
 
         if (controllerIndex < 0) {
@@ -71,7 +71,7 @@ contract SimpleDIDRegistry is IDIDRegistry {
         }
     }
 
-    function removeController(string memory identity, address actor, address controller) internal onlyController(identity, actor) {
+    function removeController(bytes32 identity, address actor, address controller) internal onlyController(identity, actor) {
         require(controllers[identity].length > 1, 'You need at least two controllers to delete' );
         require(getController(identity) != controller , 'Cannot delete current controller' );
         int controllerIndex = _getControllerIndex(identity, controller);
@@ -88,7 +88,7 @@ contract SimpleDIDRegistry is IDIDRegistry {
         controllers[identity].pop();
     }
 
-    function changeController(string memory identity, address actor, address newController) internal onlyController(identity, actor) {
+    function changeController(bytes32 identity, address actor, address newController) internal onlyController(identity, actor) {
         int controllerIndex = _getControllerIndex(identity, newController);
 
         require( controllerIndex >= 0, 'Controller not exist' );
@@ -100,15 +100,15 @@ contract SimpleDIDRegistry is IDIDRegistry {
         }
     }
 
-    function addController(string memory identity, address controller) override external {
+    function addController(bytes32 identity, address controller) override external {
         addController(identity, msg.sender, controller);
     }
 
-    function removeController(string memory identity, address controller) override external {
+    function removeController(bytes32 identity, address controller) override external {
         removeController(identity, msg.sender, controller);
     }
 
-    function changeController(string memory identity, address newController) external override {
+    function changeController(bytes32 identity, address newController) external override {
         changeController(identity, msg.sender, newController);
     }
 }

@@ -27,7 +27,7 @@ contract SessionRegistry is ISessionRegistry, SessionRegistryBase, ContextHandle
     function startSession(
         bytes32 _id,
         bytes32 _token,
-        string memory _subject
+        bytes32 _subject
     ) override external {
         require(!_checkSessionExists(_id), "session already exists");
         _setSession(_id, _token, _subject, 100);

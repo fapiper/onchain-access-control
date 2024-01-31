@@ -24,7 +24,7 @@ contract SessionRegistryBase is DIDRecipient {
     function _setSession(
         bytes32 _id,
         bytes32 _token,
-        string memory _subject,
+        bytes32 _subject,
         uint256 duration
     ) internal {
         _sessions[_id] = SessionInfo({

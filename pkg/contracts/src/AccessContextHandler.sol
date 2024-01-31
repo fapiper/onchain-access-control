@@ -11,7 +11,7 @@ contract AccessContextHandler is IContextHandler, SessionRecipient, ContextHandl
  
     function createContextInstance(
         bytes32 _id,
-        string memory _did
+        bytes32 _did
     ) onlyContextAdmin(_id, _did) external {
         // TODO deploy access context
         IContextInstance _ctx = IContextInstance(0);
@@ -27,7 +27,7 @@ contract AccessContextHandler is IContextHandler, SessionRecipient, ContextHandl
     function startSession(
         bytes32 _roleContext,
         bytes32 _role,
-        string memory _did,
+        bytes32 _did,
         bytes32[] memory _policyContexts,
         bytes32[] memory _policies,
         bytes[] memory _args,
@@ -40,7 +40,7 @@ contract AccessContextHandler is IContextHandler, SessionRecipient, ContextHandl
 
     function deleteContextInstance(
         bytes32 _id,
-        string memory _did
+        bytes32 _did
     ) onlyContextAdmin(_id, _did) external {
         _setContextInstance(_id, address(0));
     }

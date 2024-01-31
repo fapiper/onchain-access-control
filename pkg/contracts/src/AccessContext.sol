@@ -41,7 +41,7 @@ contract AccessContext is IContextInstance, DIDOwnable, AccessControlListExtensi
      */
     function grantRole(
         bytes32 _role,
-        string memory _did,
+        bytes32 _did,
         bytes32[] memory _policyContexts,
         bytes32[] memory _policies,
         bytes[] memory _args
@@ -62,7 +62,7 @@ contract AccessContext is IContextInstance, DIDOwnable, AccessControlListExtensi
      *  @param _account     Address of the DID controller.
      */
     function checkAdmin(
-        string memory _did,
+        bytes32 _did,
         address _account
     ) external view returns (bool) {
        return _checkOwner(_did, _account);
@@ -78,7 +78,7 @@ contract AccessContext is IContextInstance, DIDOwnable, AccessControlListExtensi
      */
     function revokeRole(
         bytes32 _role,
-        string memory _did
+        bytes32 _did
     ) external onlyOwnerOrRole(_role) {
         _revokeRole(_role, _did);
     }

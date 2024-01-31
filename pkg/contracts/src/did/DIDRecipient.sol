@@ -8,14 +8,14 @@ import "../interfaces/IDIDRegistry.sol";
 contract DIDRecipient is Context {
     IDIDRegistry private _registry;
 
-    constructor (IDIDRegistry registry) {
-        _registry = registry;
+    constructor (address registry) {
+        _registry = IDIDRegistry(registry);
     }
 
     /**
     * @dev Throws if called by any account other than the owner.
     */
-    modifier onlyDID(string memory did) {
+    modifier onlyDID(bytes32 did) {
         _checkDID(did);
         _;
     }
@@ -30,18 +30,18 @@ contract DIDRecipient is Context {
     /**
     * @dev Throws if the sender is not the owner.
      */
-    function _checkDID(string memory did) internal view virtual {
+    function _checkDID(bytes32 did) internal view virtual {
         require(!_isDID(did), "DIDRecipient: unauthorized account");
     }
 
     function _isDID(
-        string memory did
+        bytes32 did
     ) internal view returns (bool) {
         return _isDID(did, _msgSender());
     }
 
     function _isDID(
-        string memory did,
+        bytes32 did,
         address account
     ) internal view returns (bool) {
         return _getRegistry().isController(did, account);

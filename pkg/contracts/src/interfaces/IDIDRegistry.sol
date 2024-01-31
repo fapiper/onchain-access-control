@@ -11,9 +11,9 @@ interface IDIDRegistry {
         address controller
     );
 
-    function getController(string memory identity) external returns (address);
-    function addController(string memory identity, address controller) external;
-    function removeController(string memory identity, address controller) external;
-    function changeController(string memory identity, address newController) external;
-    function isController(string memory identity, address actor) external returns (bool);
+    function getController(bytes32 identity) external returns (address);
+    function addController(bytes32 identity, address controller) external;
+    function removeController(bytes32 identity, address controller) external;
+    function changeController(bytes32 identity, address newController) external;
+    function isController(bytes32 identity, address actor) external returns (bool);
 }

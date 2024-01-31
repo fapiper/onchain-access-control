@@ -13,7 +13,7 @@ contract ContextHandlerBase is Context {
 
     modifier onlyContextAdmin(
         bytes32 _context,
-        string memory _did
+        bytes32 _did
     ){
         require(_checkContextAdmin(_context, _did));
         _;
@@ -21,7 +21,7 @@ contract ContextHandlerBase is Context {
 
     function _checkContextAdmin(
         bytes32 _context,
-        string memory _did
+        bytes32 _did
     ) internal {
         return _getContextInstance(_context).checkAdmin(_did, _msgSender());
     }
