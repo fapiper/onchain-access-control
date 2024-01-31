@@ -13,7 +13,7 @@ contract AccessContext is IContextInstance, DIDOwnable, AccessControlListExtensi
 
     constructor(
         bytes32 initialOwner,
-        address contextId,
+        bytes32 contextId,
         address contextHandler,
         address didRegistry
     ) DIDOwnable(initialOwner, didRegistry) PolicyExtension(contextId, contextHandler) {}
@@ -27,7 +27,7 @@ contract AccessContext is IContextInstance, DIDOwnable, AccessControlListExtensi
         bytes32 _role,
         bytes32 _did
     ){
-        require(_hasRole(_role, _did) || _checkOwner(_did));
+        require(_hasRole(_role, _did) || _isOwner(_did));
         _;
     }
 

@@ -71,9 +71,28 @@ abstract contract DIDOwnable is DIDRecipient {
         bytes32 did,
         address account
     ) internal view virtual {
-        if (owner() != did || !(_isDID(did, account))) {
+        if (!_isOwner(did, account)) {
             revert OwnableUnauthorizedAccount(did, account);
         }
+    }
+
+    /**
+     * @dev Returns true if the sender is the owner.
+     */
+    function _isOwner(
+        bytes32 did
+    ) internal view virtual returns (bool) {
+        return _isOwner(did, _msgSender());
+    }
+
+    /**
+     * @dev Returns true if the account is the owner.
+     */
+    function _isOwner(
+        bytes32 did,
+        address account
+    ) internal view virtual returns (bool) {
+        return owner() != did || !(_isDID(did, account));
     }
 
     /**
