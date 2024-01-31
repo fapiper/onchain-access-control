@@ -1,6 +1,6 @@
 import { simpleDeploy } from "../scripts/deploy";
 import didRegistryConfig from "./001_DIDRegistry";
-import accessContextHandlerConfig from "./002_AccessContextHandler";
+import contextHandlerConfig from "./002_AccessContextHandler";
 
 const name = "SessionRegistry";
 export default simpleDeploy(name, async function ({ deployments }) {
@@ -12,8 +12,8 @@ export default simpleDeploy(name, async function ({ deployments }) {
   const adminRoleGroup = keccak256(toUtf8Bytes("ADMIN_GROUP"));
 */
 
-  const accessContextHandler = await deployments.get(accessContextHandlerConfig.id ?? "").then((d) => d.address);
+  const contextHandler = await deployments.get(contextHandlerConfig.id ?? "").then((d) => d.address);
   const didRegistry = await deployments.get(didRegistryConfig.id ?? "").then((d) => d.address);
 
-  return { args: [accessContextHandler, didRegistry] };
+  return { args: [contextHandler, didRegistry] };
 });
