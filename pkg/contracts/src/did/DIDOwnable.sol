@@ -83,7 +83,7 @@ abstract contract DIDOwnable is DIDRecipient {
      * NOTE: Renouncing ownership will leave the contract without an owner,
      * thereby disabling any functionality that is only available to the owner.
      */
-    function renounceOwnership(bytes32 owner) public virtual onlyOwner(owner) {
+    function renounceOwnership(bytes32 owner_) public virtual onlyOwner(owner_) {
         _transferOwnership("");
     }
 
