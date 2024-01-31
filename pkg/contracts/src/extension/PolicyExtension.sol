@@ -41,18 +41,18 @@ contract PolicyExtension is IPolicyExtension, ContextInstance {
     function _getPolicy(
         bytes32 context_,
         bytes32 id_
-    ) internal returns (Policy memory) {
+    ) internal view returns (Policy memory) {
         if(context_ == _thisContext()){
             return policies_[context_][id_];
         } else {
-            return _context(context_).getPolicy(id_);
+            return _context(context_).getPolicy(context_, id_);
         }
     }
 
     function _getPolicies(
         bytes32[] memory _contexts,
         bytes32[] memory _ids
-    ) internal returns (Policy[] memory _policies) {
+    ) internal view returns (Policy[] memory _policies) {
         uint256 len = _contexts.length;
         _policies = new Policy[](len);
         for (uint256 i = 0; i < len; i++) {

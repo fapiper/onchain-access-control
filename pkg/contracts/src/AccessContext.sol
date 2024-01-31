@@ -189,7 +189,7 @@ contract AccessContext is IContextInstance, DIDOwnable, AccessControlListExtensi
     function getPolicy(
         bytes32 _context,
         bytes32 _id
-    ) public returns (Policy memory) {
+    ) external view returns (Policy memory) {
         return _getPolicy(_context, _id);
     }
 
@@ -204,7 +204,7 @@ contract AccessContext is IContextInstance, DIDOwnable, AccessControlListExtensi
     function getPolicies(
         bytes32[] memory _contexts,
         bytes32[] memory _ids
-    ) external returns (Policy[] memory policies) {
+    ) external view returns (Policy[] memory policies) {
         return _getPolicies(_contexts, _ids);
     }
 
