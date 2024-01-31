@@ -1,0 +1,12 @@
+load("@io_bazel_rules_go//go:def.bzl", "go_library")
+
+go_library(
+    name = "client",
+    srcs = [
+        "client.go",
+        "policy.go",
+        "proof.go",
+    ],
+    importpath = "github.com/fapiper/onchain-access-control/core/client",
+    visibility = ["//visibility:public"],
+)

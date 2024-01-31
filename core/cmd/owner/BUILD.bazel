@@ -1,0 +1,53 @@
+load("@io_bazel_rules_go//go:def.bzl", "go_binary", "go_library")
+#load("@aspect_bazel_lib//lib:transitions.bzl", "platform_transition_filegroup")
+#load("@rules_oci//oci:defs.bzl", "oci_image", "oci_push", "oci_tarball")
+#load("@rules_pkg//:pkg.bzl", "pkg_tar")
+
+go_library(
+    name = "owner_lib",
+    srcs = ["main.go"],
+    importpath = "github.com/fapiper/onchain-access-control/cmd/owner",
+    visibility = ["//visibility:private"],
+    deps = ["//core/owner"],
+)
+
+go_binary(
+    name = "owner",
+    embed = [":owner_lib"],
+    visibility = ["//visibility:public"],
+)
+
+#pkg_tar(
+#    name = "owner_tar",
+#    srcs = [":owner"],
+#)
+#
+#oci_image(
+#    name = "image",
+#    base = "@distroless_base",
+#    entrypoint = ["/owner"],
+#    tars = [":owner_tar"],
+#)
+#
+## This is the target that should be released to the target platform
+#platform_transition_filegroup(
+#    name = "owner_image",
+#    srcs = [":image"],
+#    target_platform = select({
+#        "@platforms//cpu:arm64": "@io_bazel_rules_go//go/toolchain:linux_arm64",
+#        "@platforms//cpu:x86_64": "@io_bazel_rules_go//go/toolchain:linux_amd64",
+#    }),
+#)
+#
+#oci_tarball(
+#    name = "owner_tarball",
+#    image = ":owner_image",
+#    repo_tags = ["gcr.io/example:latest"],
+#)
+#
+#oci_push(
+#    name = "owner_push",
+#    image = ":owner_image",
+#    remote_tags = ["latest"],
+#    repository = "onchain-access-control/owner",
+#)

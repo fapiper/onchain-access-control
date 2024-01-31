@@ -1,0 +1,15 @@
+load("@io_bazel_rules_go//go:def.bzl", "go_library")
+
+go_library(
+    name = "pagination",
+    srcs = ["pagination.go"],
+    importpath = "github.com/fapiper/onchain-access-control/core/server/pagination",
+    visibility = ["//visibility:public"],
+    deps = [
+        "//core/server/framework",
+        "//core/service/common",
+        "@com_github_gin_gonic_gin//:gin",
+        "@com_github_goccy_go_json//:go-json",
+        "@com_github_sirupsen_logrus//:logrus",
+    ],
+)

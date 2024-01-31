@@ -1,7 +1,6 @@
 {
   "extends": "./tsconfig.base.json",
   "references": [
-    { "path": "pkg/ui/" },
-    { "path": "pkg/contracts/" },
+    { "path": "contracts/" },
   ]
 }

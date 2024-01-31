@@ -6,8 +6,8 @@ go_library(
     importpath = "github.com/fapiper/onchain-access-control/usecase/module_supplier",
     visibility = ["//visibility:private"],
     deps = [
-        "//pkg/consumer",
-        "//pkg/owner",
+        "//core/consumer",
+        "//core/owner",
     ],
 )
 

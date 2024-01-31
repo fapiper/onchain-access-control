@@ -1,9 +1,0 @@
-load("@io_bazel_rules_go//go:def.bzl", "go_library")
-
-go_library(
-    name = "storage",
-    srcs = ["storage.go"],
-    importpath = "github.com/fapiper/onchain-access-control/pkg/service/operation/storage",
-    visibility = ["//visibility:public"],
-    deps = ["@tech_einride_go_aip//filtering"],
-)

@@ -1,0 +1,23 @@
+load("@io_bazel_rules_go//go:def.bzl", "go_library")
+
+go_library(
+    name = "testutil",
+    srcs = [
+        "setup.go",
+        "testutil.go",
+    ],
+    importpath = "github.com/fapiper/onchain-access-control/core/testutil",
+    visibility = ["//visibility:public"],
+    deps = [
+        "//config",
+        "//core/service/auth",
+        "//core/service/did",
+        "//core/service/keystore",
+        "//core/storage",
+        "@com_github_alicebob_miniredis_v2//:miniredis",
+        "@com_github_stretchr_testify//assert",
+        "@com_github_stretchr_testify//require",
+        "@com_github_tbd54566975_ssi_sdk//did",
+        "@com_github_tbd54566975_ssi_sdk//schema",
+    ],
+)

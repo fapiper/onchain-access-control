@@ -5,7 +5,7 @@ go_library(
     srcs = ["main.go"],
     importpath = "github.com/fapiper/onchain-access-control/usecase/component_supplier",
     visibility = ["//visibility:private"],
-    deps = ["//pkg/owner"],
+    deps = ["//core/owner"],
 )
 
 go_binary(

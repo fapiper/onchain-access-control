@@ -1,0 +1,24 @@
+load("@io_bazel_rules_go//go:def.bzl", "go_library", "go_test")
+
+go_library(
+    name = "submission",
+    srcs = ["submission.go"],
+    importpath = "github.com/fapiper/onchain-access-control/core/service/operation/submission",
+    visibility = ["//visibility:public"],
+    deps = [
+        "//core/service/operation/storage",
+        "//core/storage",
+        "@com_github_goccy_go_json//:go-json",
+        "@com_github_pkg_errors//:errors",
+    ],
+)
+
+go_test(
+    name = "submission_test",
+    srcs = ["submission_test.go"],
+    embed = [":submission"],
+    deps = [
+        "//core/service/operation/storage",
+        "@com_github_stretchr_testify//assert",
+    ],
+)

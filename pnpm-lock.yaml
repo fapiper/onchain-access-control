@@ -45,7 +45,7 @@ importers:
         specifier: ^1.6.3
         version: 1.10.16
 
-  pkg/contracts:
+  contracts:
     devDependencies:
       '@nomicfoundation/hardhat-chai-matchers':
         specifier: ^2.0.0

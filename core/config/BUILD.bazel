@@ -1,0 +1,38 @@
+load("@io_bazel_rules_go//go:def.bzl", "go_library", "go_test")
+
+go_library(
+    name = "config",
+    srcs = [
+        "config.go",
+        "info.go",
+    ],
+    data = [
+        "dev.toml",
+        "kitchensink.toml",
+        "prod.toml",
+        "test.toml",
+    ],
+    importpath = "github.com/fapiper/onchain-access-control/config",
+    visibility = ["//visibility:public"],
+    deps = [
+        "//core/service/framework",
+        "//core/storage",
+        "@com_github_ardanlabs_conf//:conf",
+        "@com_github_burntsushi_toml//:toml",
+        "@com_github_joho_godotenv//:godotenv",
+        "@com_github_pkg_errors//:errors",
+        "@com_github_sirupsen_logrus//:logrus",
+    ],
+)
+
+go_test(
+    name = "config_test",
+    srcs = ["config_test.go"],
+    data = glob(["testdata/**"]),
+    embed = [":config"],
+    embedsrcs = [
+        "testdata/credential_issuer_metadata.example.json",
+        "testdata/test1.toml",
+    ],
+    deps = ["@com_github_stretchr_testify//assert"],
+)
