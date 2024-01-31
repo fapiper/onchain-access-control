@@ -28,9 +28,9 @@ contract ContextHandlerBase is Context {
 
     function _setContextInstance(
         bytes32 _id,
-        IContextInstance _ctx
+        address _ctx
     ) internal {
-        _contexts[_id] = _ctx;
+        _contexts[_id] = IContextInstance(_ctx);
     }
 
     function _getContextInstance(

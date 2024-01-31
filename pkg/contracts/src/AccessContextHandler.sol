@@ -14,7 +14,7 @@ contract AccessContextHandler is IContextHandler, SessionRecipient, ContextHandl
         bytes32 _did
     ) onlyContextAdmin(_id, _did) external {
         // TODO deploy access context
-        address _ctx = IContextInstance(address(0));
+        address _ctx = address(0);
         _setContextInstance(_id, _ctx);
     }
 
@@ -42,7 +42,7 @@ contract AccessContextHandler is IContextHandler, SessionRecipient, ContextHandl
         bytes32 _id,
         bytes32 _did
     ) onlyContextAdmin(_id, _did) external {
-        _setContextInstance(_id, IContextInstance(address(0)));
+        _setContextInstance(_id, address(0));
     }
 
     function getContextInstance(bytes32 _id) external view returns (IContextInstance) {
