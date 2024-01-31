@@ -1,10 +1,7 @@
 // SPDX-License-Identifier: UNLICENSED
-pragma solidity ^0.8.4;
+pragma solidity ^0.8.20;
 
-import "./lib/Groups.sol";
-import "./Resources.sol";
-
-contract Permissions {
+contract PermissionExtension {
     enum Operation {
         READ,
         WRITE
@@ -17,7 +14,7 @@ contract Permissions {
         bytes32 _permission,
         bytes32 _resource,
         Operation[] memory _operations
-    ) private {
+    ) internal {
         _setPermissionForResource(_permission, _resource, _operations, true);
     }
 
@@ -25,7 +22,7 @@ contract Permissions {
         bytes32 _permission,
         bytes32 _resource,
         Operation[] memory _operations
-    ) private {
+    ) internal {
         _setPermissionForResource(_permission, _resource, _operations, false);
     }
 
@@ -33,7 +30,7 @@ contract Permissions {
         bytes32 _permission,
         bytes32 _resource,
         Operation _operation
-    ) private {
+    ) internal {
         return uint(permissions[_permission][_resource][_operation]) > 0;
     }
 
@@ -41,7 +38,7 @@ contract Permissions {
         bytes32 _permission,
         bytes32 _resource,
         Operation[] memory _operations
-    ) private {
+    ) internal {
         for (uint256 i = 0; i < _operations.length; i++) {
             if(_hasPermissionToResource(_permission, _resource, _operations[i])){
                 return true;
@@ -55,7 +52,7 @@ contract Permissions {
         bytes32 _resource,
         Operation[] memory _operations,
         bool _permit
-    ) internal {
+    ) private {
         for (uint256 i = 0; i < _operations.length; i++) {
             permissions[_permission][_resource][_operations[i]] = _permit;
         }
