@@ -1,4 +1,16 @@
-def main(private field a, field b) {
-    assert(a * a == b);
-    return;
+import "hashes/sha256/512bitPadded" as sha256;
+from "ecc/babyjubjubParams" import BabyJubJubParams;
+import "signatures/verifyEddsa.code" as verifyEddsa;
+import "ecc/babyjubjubParams.code" as context;
+
+def main(u32 maxExp, private u32[8] claimName, private u32[8] claimValue, private field[2] R, private field S, field[2] A, u32[8] M0, u32[8] M1) -> bool {
+	BabyJubJubParams context = context();
+	bool isVerified = verifyEddsa(R, S, A, M0, M1, context);
+
+    u32[8] h = sha256(claimName, claimValue);
+
+    bool isHash = h == M0;
+    bool isExpired = maxExp < claimValue[7];
+
+    return isVerified && isHash && !isExpired;
 }
