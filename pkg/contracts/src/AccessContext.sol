@@ -137,7 +137,7 @@ contract AccessContext is IContextInstance, DIDOwnable, AccessControlListExtensi
         _registerPolicy(thisContext, _policy, _instance, _verify);
         _assignPolicyToRole(thisContext, _role, thisContext, _policy);
         _registerPermissionForResource(_permission, _resource, _operations);
-        _assignPermissionToRole(thisContext, _role, thisContext, _permission);
+        _assignPermissionToRole(thisContext, _role, _permission);
     }
 
     /**

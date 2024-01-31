@@ -2,13 +2,18 @@
 pragma solidity >=0.8.20;
 
 contract AccessControlListExtension {
- 
-    // role context -> roles -> count policies
-    mapping(bytes32 => mapping(bytes32 => uint256)) internal policyCount;
-    // role context -> roles -> policy context -> policies
-    mapping(bytes32 => mapping(bytes32 => mapping(bytes32 => bytes32))) internal policies;
-    // role context -> roles -> permissions
-    mapping(bytes32 => mapping(bytes32 => bytes32)) internal permissions;
+
+    struct Assignment {
+        // count policies
+        uint256 policyCount;
+        // policy context -> policies -> exists
+        mapping(bytes32 => bytes32) policies;
+        // permission -> exists
+        mapping(bytes32 => bool) permissions;
+    }
+
+    // role context -> roles -> assignment
+    mapping(bytes32 => mapping(bytes32 => Assignment)) internal assignments;
 
     function _assignPermissionsToRole(
         bytes32 _roleContext,
@@ -25,7 +30,7 @@ contract AccessControlListExtension {
         bytes32 _role,
         bytes32 _permission
     ) internal {
-        permissions[_roleContext][_role] = _permission;
+        assignments[_roleContext][_role].permissions[_permission] = true;
     }
 
     function _unassignPermissionsToRole(
@@ -43,7 +48,7 @@ contract AccessControlListExtension {
         bytes32 _role,
         bytes32 _permission
     ) internal {
-        delete permissions[_roleContext][_role][_permission];
+        assignments[_roleContext][_role].permissions[_permission] = false;
     }
 
     function _assignPoliciesToRole(
@@ -61,10 +66,11 @@ contract AccessControlListExtension {
         bytes32 _roleContext,
         bytes32 _role,
         bytes32 _policyContext,
-        bytes32 _policy
+        bytes32 policy_
     ) internal {
-        policies[_roleContext][_role][_policyContext] = _policy;
-        policyCount[_roleContext][_role] += 1;
+        Assignment storage a  = _getAssignment(_roleContext, _role);
+        a.policies[_policyContext][policy_] = true;
+        a.policyCount += 1;
     }
 
     function _unassignPoliciesToRole(
@@ -85,8 +91,8 @@ contract AccessControlListExtension {
         bytes32 _policy
     ) internal {
         require(_getPolicyCount(_roleContext, _role) > 0, "no policy found for role");
-        delete policies[_role][_policyContext][_policy];
-        policyCount[_roleContext][_role] -= 1;
+        assignments[_roleContext][_role].policies[_policyContext][_policy] = false;
+        assignments[_roleContext][_role].policyCount -= 1;
     }
 
     function _hasRolePolicies(
@@ -109,7 +115,7 @@ contract AccessControlListExtension {
         bytes32 _policyContext,
         uint256 _policy
     ) internal view returns (bool) {
-        return policies[_roleContext][_role][_policyContext][_policy] == bytes32("");
+        return assignments[_roleContext][_role].policies[_policyContext][_policy];
     }
 
     function _hasRoleExpectedPolicyCount(
@@ -124,7 +130,14 @@ contract AccessControlListExtension {
         bytes32 _roleContext,
         bytes32 _role
     ) internal view returns (uint256) {
-        return policyCount[_roleContext][_role];
+        return assignments[_roleContext][_role].policyCount;
+    }
+
+    function _getAssignment(
+        bytes32 _roleContext,
+        bytes32 _role
+    ) internal returns (Assignment storage) {
+        return assignments[_roleContext][_role];
     }
 
 }
