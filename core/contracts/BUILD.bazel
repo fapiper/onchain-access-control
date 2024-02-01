@@ -11,11 +11,11 @@ go_library(
     importpath = "github.com/fapiper/onchain-access-control/core/contracts",
     visibility = ["//visibility:public"],
     deps = [
-        "@com_github_ethereum_go_ethereum//:go_default_library",
-        "@com_github_ethereum_go_ethereum//accounts/abi:go_default_library",
-        "@com_github_ethereum_go_ethereum//accounts/abi/bind:go_default_library",
-        "@com_github_ethereum_go_ethereum//common:go_default_library",
-        "@com_github_ethereum_go_ethereum//core/types:go_default_library",
-        "@com_github_ethereum_go_ethereum//event:go_default_library",
+        "@com_github_ethereum_go_ethereum//:go-ethereum",
+        "@com_github_ethereum_go_ethereum//accounts/abi",
+        "@com_github_ethereum_go_ethereum//accounts/abi/bind",
+        "@com_github_ethereum_go_ethereum//common",
+        "@com_github_ethereum_go_ethereum//core/types",
+        "@com_github_ethereum_go_ethereum//event",
     ],
 )
