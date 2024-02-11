@@ -1,0 +1,17 @@
+load("@io_bazel_rules_go//go:def.bzl", "go_library")
+
+go_library(
+    name = "rpc",
+    srcs = ["rpc.go"],
+    importpath = "github.com/fapiper/onchain-access-control/core/service/rpc",
+    visibility = ["//visibility:public"],
+    deps = [
+        "//core/contracts",
+        "//core/env",
+        "//core/service/persist",
+        "@com_github_ethereum_go_ethereum//accounts/abi/bind",
+        "@com_github_ethereum_go_ethereum//core/types",
+        "@com_github_ethereum_go_ethereum//ethclient",
+        "@com_github_ethereum_go_ethereum//rpc",
+    ],
+)
