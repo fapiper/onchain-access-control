@@ -1,0 +1,29 @@
+load("@io_bazel_rules_go//go:def.bzl", "go_library", "go_test")
+
+go_library(
+    name = "authorize",
+    srcs = [
+        "model.go",
+        "service.go",
+        "storage.go",
+    ],
+    importpath = "github.com/fapiper/onchain-access-control/core/service/authorize",
+    visibility = ["//visibility:public"],
+    deps = [
+        "//core/service/framework",
+        "//core/service/persist",
+        "//core/service/rpc",
+        "//core/storage",
+        "//core/tx",
+        "@com_github_ethereum_go_ethereum//ethclient",
+        "@com_github_ipfs_go_ipfs_api//:go-ipfs-api",
+        "@com_github_pkg_errors//:errors",
+        "@com_github_tbd54566975_ssi_sdk//util",
+    ],
+)
+
+go_test(
+    name = "authorize_test",
+    srcs = ["service_test.go"],
+    embed = [":authorize"],
+)
