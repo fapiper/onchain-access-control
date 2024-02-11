@@ -1,0 +1,12 @@
+load("@io_bazel_rules_go//go:def.bzl", "go_library")
+
+go_library(
+    name = "env",
+    srcs = ["env.go"],
+    importpath = "github.com/fapiper/onchain-access-control/core/env",
+    visibility = ["//visibility:public"],
+    deps = [
+        "@com_github_go_playground_validator_v10//:validator",
+        "@com_github_spf13_viper//:viper",
+    ],
+)
