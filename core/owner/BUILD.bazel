@@ -18,7 +18,7 @@ go_library(
         "//core/server/handler",
         "//core/server/middleware",
         "//core/server/router",
-        "//core/service/access",
+        "//core/service/accesscontrol:access",
         "//core/service/auth",
         "//core/service/credential",
         "//core/service/did",
