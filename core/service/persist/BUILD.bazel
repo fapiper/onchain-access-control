@@ -1,0 +1,9 @@
+load("@io_bazel_rules_go//go:def.bzl", "go_library")
+
+go_library(
+    name = "persist",
+    srcs = ["contract.go"],
+    importpath = "github.com/fapiper/onchain-access-control/core/service/persist",
+    visibility = ["//visibility:public"],
+    deps = ["@com_github_ethereum_go_ethereum//common"],
+)
