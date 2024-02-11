@@ -1,9 +1,11 @@
 package util
 
 import (
+	"context"
 	"strings"
 
 	"github.com/pkg/errors"
+	"github.com/sourcegraph/conc/pool"
 )
 
 // FieldError is used to indicate an error with a field in a request payload.
@@ -46,10 +48,19 @@ func (err *SafeError) FieldErrors() string {
 	return strings.Join(fieldErrs, ", ")
 }
 
-// newRequestError wraps a provided error with an HTTP status code. This function should be used
-// when router encounter expected errors.
-func newRequestError(err error, statusCode int, fields ...FieldError) error {
-	return &SafeError{err, statusCode, fields}
+// ErrHTTP represents an error returned from an HTTP request
+type ErrHTTP struct {
+	Err        error
+	StatusCode int
+	URL        string
+}
+
+func (h ErrHTTP) Error() string {
+	return errors.Errorf("HTTP Error Status - %d | URL - %s | Error: %s", h.StatusCode, h.URL, h.Err).Error()
+}
+
+func (h ErrHTTP) Unwrap() error {
+	return h.Err
 }
 
 // shutdown is a type used to help with graceful shutdown of a server.
@@ -73,4 +84,54 @@ func NewShutdownError(message string) error {
 func IsShutdown(err error) bool {
 	var shutdownErr *shutdown
 	return errors.As(errors.Cause(err), &shutdownErr)
+}
+
+func FirstNonErrorWithValue[T any](ctx context.Context, autoCancel bool, returnOnError func(error) bool, runs ...func(context.Context) (T, error)) (T, error) {
+
+	if len(runs) == 0 {
+		return *new(T), nil
+	}
+
+	if returnOnError == nil {
+		returnOnError = func(error) bool { return false }
+	}
+
+	var cancel context.CancelFunc
+	if autoCancel {
+		ctx, cancel = context.WithCancel(ctx)
+		defer cancel()
+	}
+
+	wp := pool.New().WithMaxGoroutines(len(runs)).WithErrors()
+
+	result := make(chan T)
+	errChan := make(chan error)
+	for _, run := range runs {
+		run := run
+		wp.Go(func() error {
+			val, err := run(ctx)
+			if err != nil {
+				if returnOnError(err) {
+					errChan <- err
+					return err
+				}
+				return err
+			}
+			result <- val
+			return nil
+		})
+	}
+
+	go func() {
+		errChan <- wp.Wait()
+	}()
+
+	select {
+	case val := <-result:
+		return val, nil
+	case err := <-errChan:
+		return *new(T), err
+	case <-ctx.Done():
+		return *new(T), ctx.Err()
+	}
 }

@@ -15,6 +15,7 @@ go_library(
         "@com_github_lestrrat_go_jwx//jws",
         "@com_github_lestrrat_go_jwx//jwt",
         "@com_github_pkg_errors//:errors",
+        "@com_github_sourcegraph_conc//pool",
         "@com_github_tbd54566975_ssi_sdk//did",
         "@org_golang_x_crypto//argon2",
         "@org_golang_x_crypto//chacha20poly1305",
