@@ -28,7 +28,7 @@ go_library(
         "//core/server/framework",
         "//core/server/framework:server",
         "//core/server/pagination",
-        "//core/service/access",
+        "//core/service/accesscontrol:access",
         "//core/service/auth",
         "//core/service/common",
         "//core/service/credential",
