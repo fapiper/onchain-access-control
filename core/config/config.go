@@ -1,6 +1,7 @@
 package config
 
 import (
+	"expvar"
 	"fmt"
 	"io/fs"
 	"os"
@@ -202,6 +203,18 @@ func Init() *SSIServiceConfig {
 	if err != nil {
 		logrus.Fatalf("could not instantiate config: %s", err.Error())
 	}
+
+	// make sure to set the api base in our service info
+	SetAPIBase(cfg.Services.ServiceEndpoint)
+
+	expvar.NewString("build").Set(ServiceVersion)
+
+	out, err := conf.String(cfg)
+	if err != nil {
+		logrus.Fatalf("could not serialize config: %s", err.Error())
+	}
+
+	logrus.Infof("Config: \n%v\n", out)
 
 	return cfg
 }
