@@ -1,6 +1,12 @@
 {
   "name": "onchain-access-control",
   "private": true,
+  "license": "MIT",
+  "version": "0.0.1",
+  "author": {
+    "name": "Fabian Piper",
+    "url": "https://github.com/fapiper"
+  },
   "scripts": {
     "clean": "bazel clean",
     "update-repos": "bazel run //:gazelle-update-repos",
