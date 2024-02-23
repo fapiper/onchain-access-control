@@ -39,3 +39,13 @@ func Errors(shutdown chan os.Signal) gin.HandlerFunc {
 		}
 	}
 }
+
+// ErrLogger is a middleware that logs errors
+func ErrLogger() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		c.Next()
+		if len(c.Errors) > 0 {
+			logrus.Errorf("%s %s %s %s %s", c.Request.Method, c.Request.URL, c.ClientIP(), c.Request.Header.Get("User-Agent"), c.Errors.JSON())
+		}
+	}
+}
