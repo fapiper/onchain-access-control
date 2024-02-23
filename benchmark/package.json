@@ -1,0 +1,15 @@
+{
+  "name": "@onchain-access-control/benchmark",
+  "version": "0.0.1",
+  "author": {
+    "name": "Fabian Piper",
+    "url": "https://github.com/fapiper"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "@hyperledger/caliper-cli": "0.5.0",
+    "web3": "^1.2.2"
+  }
+}
