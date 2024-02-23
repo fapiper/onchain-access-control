@@ -50,6 +50,9 @@ importers:
       '@hyperledger/caliper-cli':
         specifier: 0.5.0
         version: 0.5.0(request@2.88.2)
+      '@hyperledger/caliper-core':
+        specifier: ^0.5.0
+        version: 0.5.0
       web3:
         specifier: ^1.2.2
         version: 1.2.6
