@@ -1,0 +1,47 @@
+{
+    "vc": {
+        
+    },
+    "_sd": {
+        "issuer": {
+            "id": "dd4d53c7530306evs636s6...",
+            "name": "o546f6a0354b8eaf824ab6...",
+            "location": {
+              "address": {
+                "streetAddress": "71fe80d6dda3sa95539920...",
+                "addressLocality": "cb1b4119d71fdd70311fe8...",
+                "addressRegion": "9d716dda3d4d59d73sa955...",
+                "postalCode": "71fb09a7e9dc4fd2a85797...",
+                "addressCountry": "a4dd40261fbabe977ab6ff..."
+                }
+            }
+          },
+          "credentialSubject": {
+            "certificateNumber": "86e9f8d6ffffcb26758bed...",
+            "destinationCountry": "8f39d67beb6c4353d74a72...",
+            "price": {
+              "price": "75513ce9adb5bfb93be65c...",
+              "priceCurrency": "107380015871da307ab2b6..."
+            },
+            "verificationBody": {
+              "id": "97eec352a763f4e942f67f...",
+              "name": "7f6b9db612acc2eed23b35...",
+              "location": {
+                "address": {
+                  "streetAddress": "86ed0df39ced02f63a2ee...",
+                  "addressLocality": "5ca581746b3efb5ec8a853...",
+                  "addressRegion": "57abc27a9561c022d9f174...",
+                  "postalCode": "062c06cb677243eb52eca8...",
+                  "addressCountry": "2d8fba1d3ada011a8a960b..."
+                }
+              },
+              "email": "be1037b454cpdd7f829e69...",
+              "phoneNumber": "1088c6a5f6d4668afc2a98..."
+            }
+          }        
+        }
+}
+
+
+
+
