@@ -5,7 +5,10 @@ go_library(
     srcs = ["main.go"],
     importpath = "github.com/fapiper/onchain-access-control/core/cmd/consumer",
     visibility = ["//visibility:private"],
-    deps = ["//core/consumer"],
+    deps = [
+        "//core/resourceuser",
+        "@com_github_sirupsen_logrus//:logrus",
+    ],
 )
 
 go_binary(
