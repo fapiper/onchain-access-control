@@ -9,9 +9,20 @@ import (
 	"time"
 )
 
-// Init configures the logger to logs to the given location and returns a file pointer to a logs
+func Init(level, location string) {
+	// setup logger based on config
+	if logFile := initLogfile(level, location); logFile != nil {
+		defer func(logFile *os.File) {
+			if err := logFile.Close(); err != nil {
+				logrus.WithError(err).Error("failed to close log file")
+			}
+		}(logFile)
+	}
+}
+
+// initLogfile configures the logger to logs to the given location and returns a file pointer to a logs
 // file that should be closed upon server shutdown
-func Init(level, location string) *os.File {
+func initLogfile(level, location string) *os.File {
 	if level != "" {
 		logLevel, err := logrus.ParseLevel(level)
 		if err != nil {
