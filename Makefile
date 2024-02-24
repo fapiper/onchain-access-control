@@ -14,12 +14,7 @@ bench-prepare:
 	jq -r '{name: .contractName, gas: 5000000, abi, bytecode}' ./contracts/artifacts/src/SessionRegistry.sol/SessionRegistry.json > ./benchmark/src/SessionRegistry.json
 
 bench-run:
-	cd ./benchmark && npx caliper launch manager \
-		--caliper-bind-sut ethereum:latest \
-		--caliper-workspace . \
-		--caliper-networkconfig networks/ethereum/1node/ethereum.json \
-		--caliper-benchconfig scenario/simple/config.yaml \
-		--caliper-report-path reports/report.html
+	@pnpm -C benchmark bench-run
 
 bench:
 	bench-prepare bench-run

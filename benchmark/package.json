@@ -6,7 +6,7 @@
     "url": "https://github.com/fapiper"
   },
   "scripts": {
-    "launch": "npx caliper launch manager --caliper-bind-sut ethereum:latest --caliper-workspace . --caliper-networkconfig networks/ethereum/1node/ethereum.json --caliper-benchconfig scenario/simple/config.yaml"
+    "bench-run": "npx caliper launch manager --caliper-bind-sut ethereum:latest --caliper-workspace . --caliper-networkconfig networks/ethereum/1node/ethereum.json --caliper-benchconfig scenario/simple/config.yaml --caliper-report-path reports/report.html"
   },
   "dependencies": {
     "@hyperledger/caliper-cli": "0.5.0",
