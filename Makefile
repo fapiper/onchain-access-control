@@ -7,6 +7,23 @@ devtools:
 	@type "jq" 2> /dev/null || echo 'Please install jq'
 	@type "abigen" 2> /dev/null || echo 'Please install abigen'
 
+# Benchmark
+
+bench-prepare:
+	jq -r '{name: .contractName, gas: 5000000, abi, bytecode}' ./contracts/artifacts/src/AccessContextHandler.sol/AccessContextHandler.json > ./benchmark/src/AccessContextHandler.json
+	jq -r '{name: .contractName, gas: 5000000, abi, bytecode}' ./contracts/artifacts/src/SessionRegistry.sol/SessionRegistry.json > ./benchmark/src/SessionRegistry.json
+
+bench-run:
+	cd ./benchmark && npx caliper launch manager \
+		--caliper-bind-sut ethereum:latest \
+		--caliper-workspace . \
+		--caliper-networkconfig networks/ethereum/1node/ethereum.json \
+		--caliper-benchconfig scenario/simple/config.yaml \
+		--caliper-report-path reports/report.html
+
+bench:
+	bench-prepare bench-run
+
 # Contracts
 
 # TODO prepend contract compilation
