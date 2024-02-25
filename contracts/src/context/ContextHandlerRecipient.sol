@@ -2,6 +2,7 @@
 pragma solidity ^0.8.20;
 
 import "./IContextHandler.sol";
+import "./IContextInstance.sol";
 
 contract ContextHandlerRecipient {
 

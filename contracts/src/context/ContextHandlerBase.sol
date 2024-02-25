@@ -51,8 +51,8 @@ contract ContextHandlerBase is DIDRecipient {
         bytes20 _salt,
         bytes32 _owner,
         bytes32 _id
-    ) internal returns (address _instance) {
-        bytes32 hash = _hashContext(_salt, _owner, _id, address(this), _getRegistry());
+    ) internal returns (address payable _instance) {
+        bytes32 hash = _hashContext(_salt, _owner, _id, address(this), address(_getRegistry()));
         return payable(Clones.cloneDeterministic(_instanceImpl, hash));
     }
 
@@ -75,9 +75,7 @@ contract ContextHandlerBase is DIDRecipient {
         _instanceImpl = _newInstanceImpl;
     }
 
-    function _getInstanceImpl(
-        bytes32 _id
-    ) internal view returns (address) {
+    function _getInstanceImpl() internal view returns (address) {
         return _instanceImpl;
     }
 

@@ -23,7 +23,7 @@ contract DIDRecipient is Context {
     /**
      * @dev Returns the address of the {IDIDRegistry} contract for this recipient.
      */
-    function _getRegistry() private view returns (IDIDRegistry) {
+    function _getRegistry() internal view returns (IDIDRegistry) {
         return _registry;
     }
 
