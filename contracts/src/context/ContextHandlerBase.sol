@@ -14,12 +14,7 @@ contract ContextHandlerBase is DIDRecipient {
     // context -> address
     mapping(bytes32 => IContextInstance) internal _contexts;
 
-    constructor(
-        address instanceImpl,
-        address didRegistry
-    ) DIDRecipient(didRegistry) {
-        _setInstanceImpl(instanceImpl);
-    }
+    constructor(address didRegistry) DIDRecipient(didRegistry) {}
 
     modifier onlyContextAdmin(
         bytes32 _context,

@@ -13,10 +13,9 @@ contract AccessContext is IContextInstance, DIDOwnable, AccessControlListExtensi
 
     constructor(
         bytes32 initialOwner,
-        bytes32 contextId,
-        address contextHandler,
+        bytes32 id,
         address didRegistry
-    ) DIDOwnable(initialOwner, didRegistry) PolicyExtension(contextId, contextHandler) {}
+    ) DIDOwnable(initialOwner, didRegistry) PolicyExtension(id, msg.sender) {}
 
     /**
      *  @notice         Allows only context admin (owner) or role member for `_role`.

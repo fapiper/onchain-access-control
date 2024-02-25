@@ -23,7 +23,7 @@ export function simpleDeploy(name: string, options?: DeployOptionsOrFn) {
       ...deployOptions,
     });
 
-    console.log(`${name} deployed to ${contract.address} on ${network.name} (${chainId})`);
+    console.log(`${name} deployed to ${contract.address} on ${network.name} (${chainId})\n`);
   };
 
   func.id = name;

@@ -4,13 +4,16 @@ pragma solidity ^0.8.20;
 import "./context/IContextHandler.sol";
 import "./context/ContextHandlerBase.sol";
 import "./session/SessionRecipient.sol";
+import "./AccessContext.sol";
 
 contract AccessContextHandler is IContextHandler, SessionRecipient, ContextHandlerBase {
  
     constructor(
-        address instanceImpl,
+        bytes32 initialOwner,
         address didRegistry
-    ) ContextHandlerBase(instanceImpl, didRegistry) SessionRecipient(address(0)) {}
+    ) ContextHandlerBase(didRegistry) SessionRecipient(address(0)) {
+        _setInstanceImpl(address(new AccessContext(initialOwner, bytes32(0), didRegistry)));
+    }
  
     function createContextInstance(
         bytes32 _id,
@@ -19,7 +22,7 @@ contract AccessContextHandler is IContextHandler, SessionRecipient, ContextHandl
     ) onlyContextAdmin(_id, _did) external {
         address payable _instance = _createContextInstance(_salt, _did, _id);
         _setContextInstance(_id, _instance);
-    }
+    } 
 
     function setSessionRegistry(
         address sessionRegistry
