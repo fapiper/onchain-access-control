@@ -7,15 +7,18 @@ import "./session/SessionRecipient.sol";
 
 contract AccessContextHandler is IContextHandler, SessionRecipient, ContextHandlerBase {
  
-    constructor() SessionRecipient(address(0)) {}
+    constructor(
+        address instanceImpl,
+        address didRegistry
+    ) ContextHandlerBase(instanceImpl, didRegistry) SessionRecipient(address(0)) {}
  
     function createContextInstance(
         bytes32 _id,
+        bytes20 _salt,
         bytes32 _did
     ) onlyContextAdmin(_id, _did) external {
-        // TODO deploy access context
-        address _ctx = address(0);
-        _setContextInstance(_id, _ctx);
+        address payable _instance = _createContextInstance(_salt, _did, _id);
+        _setContextInstance(_id, _instance);
     }
 
     function setSessionRegistry(
