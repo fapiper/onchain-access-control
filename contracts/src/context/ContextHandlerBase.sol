@@ -36,6 +36,17 @@ contract ContextHandlerBase is DIDRecipient {
         return _getContextInstance(_context).checkAdmin(_did, _msgSender());
     }
 
+    function _forwardGrantRole(
+        bytes32 _roleContext,
+        bytes32 _role,
+        bytes32 _did,
+        bytes32[] memory _policyContexts,
+        bytes32[] memory _policies,
+        bytes[] memory _args
+    ) internal {
+        _getContextInstance(_roleContext).grantRole(_role, _did, _policyContexts, _policies, _args);
+    }
+
     function _createContextInstance(
         bytes20 _salt,
         bytes32 _owner,

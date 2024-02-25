@@ -37,8 +37,27 @@ contract AccessContextHandler is IContextHandler, SessionRecipient, ContextHandl
         bytes32 _tokenId,
         bytes32 _token
     ) external {
-        _getContextInstance(_roleContext).grantRole(_role, _did, _policyContexts, _policies, _args);
-        _getSessionRegistry().startSession(_tokenId, _token, _did);
+        _forwardGrantRole(_roleContext, _role, _did, _policyContexts, _policies, _args);
+        _forwardStartSession(_tokenId, _token, _did);
+    }
+
+    function startSession(
+        bytes32 _did,
+        bytes32 _tokenId,
+        bytes32 _token
+    ) external {
+        _forwardStartSession(_tokenId, _token, _did);
+    }
+
+    function grantRole(
+        bytes32 _roleContext,
+        bytes32 _role,
+        bytes32 _did,
+        bytes32[] memory _policyContexts,
+        bytes32[] memory _policies,
+        bytes[] memory _args
+    ) external {
+        _forwardGrantRole(_roleContext, _role, _did, _policyContexts, _policies, _args);
     }
 
     function deleteContextInstance(
