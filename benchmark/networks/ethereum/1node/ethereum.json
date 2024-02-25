@@ -2,7 +2,7 @@
     "caliper": {
         "blockchain": "ethereum",
         "command" : {
-            "start": "docker-compose -f networks/ethereum/1node/docker-compose.yml up -d && sleep 60",
+            "start": "docker-compose -f networks/ethereum/1node/docker-compose.yml up -d && sleep 3",
             "end" : "docker-compose -f networks/ethereum/1node/docker-compose.yml down"
           }
     },
@@ -14,11 +14,11 @@
         "fromAddressPassword": "password",
         "transactionConfirmationBlocks": 2,
         "contracts": {
-            "simple": {
-                "path": "./src/simple/simple.json",
+            "AccessContextHandler": {
+                "path": "./src/oac/AccessContextHandler.json",
                 "estimateGas": true,
                 "gas": {
-                    "query": 100000,
+                    "startSession": 100000,
                     "transfer": 70000
                 }
             }
