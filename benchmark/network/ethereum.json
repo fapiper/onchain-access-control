@@ -1,9 +1,9 @@
 {
     "caliper": {
-        "blockchain": "ethereum",
+        "blockchain": "./network/connector/index.js",
         "command" : {
-            "start": "docker-compose -f networks/ethereum/1node/docker-compose.yml up -d && sleep 3",
-            "end" : "docker-compose -f networks/ethereum/1node/docker-compose.yml down"
+            "start": "docker-compose -f network/docker-compose.yml up -d && sleep 3",
+            "end" : "docker-compose -f network/docker-compose.yml down"
           }
     },
     "ethereum": {
@@ -16,6 +16,7 @@
         "contracts": {
             "AccessContextHandler": {
                 "path": "./src/oac/AccessContextHandler.json",
+                "address": "<CONTRACT ADDRESS>",
                 "estimateGas": true,
                 "gas": {
                   "assign-role": 70000,
