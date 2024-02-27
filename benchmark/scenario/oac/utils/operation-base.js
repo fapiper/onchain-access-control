@@ -1,6 +1,7 @@
 'use strict'
 
 const { WorkloadModuleBase } = require('@hyperledger/caliper-core')
+const web3 = require('web3')
 
 const SupportedConnectors = ['ethereum']
 
@@ -29,23 +30,28 @@ class OperationBase extends WorkloadModuleBase {
     await super.initializeWorkloadModule(workerIndex, totalWorkers, roundIndex, roundArguments, sutAdapter, sutContext)
 
     this.assertConnectorType()
-    this.assertSetting('initialMoney')
-    this.assertSetting('moneyToTransfer')
-    this.assertSetting('numberOfAccounts')
+    this.assertSetting('resourceUser')
+    this.assertSetting('role')
+    this.assertSetting('policy')
+    this.assertSetting('numberOfPolicies')
 
-    this.initialMoney = this.roundArguments.initialMoney
-    this.moneyToTransfer = this.roundArguments.moneyToTransfer
-    this.numberOfAccounts = this.roundArguments.numberOfAccounts
-    this.simpleState = this.createSimpleState()
+    this.resourceUser = web3.utils.keccak256(this.roundArguments.resourceUser)
+    this.role = web3.utils.keccak256(this.roundArguments.role)
+    this.policy = web3.utils.keccak256(this.roundArguments.policy)
+    this.numberOfPolicies = this.roundArguments.numberOfPolicies
+    this.tokenId = web3.utils.randomHex(32)
+    this.token = web3.utils.keccak256('EXAMPLE_TOKEN')
+
+    this.acHandlerState = this.createAcHandlerState()
   }
 
   /**
    * Performs the operation mode-specific initialization.
-   * @return {SimpleState} the initialized SimpleState instance.
+   * @return {AcHandlerState} the initialized AcHandlerState instance.
    * @protected
    */
-  createSimpleState() {
-    throw new Error('Simple workload error: "createSimpleState" must be overridden in derived classes')
+  createAcHandlerState() {
+    throw new Error('Simple workload error: "createAcHandlerState" must be overridden in derived classes')
   }
 
   /**
@@ -97,12 +103,11 @@ class OperationBase extends WorkloadModuleBase {
    * @private
    */
   _createEthereumConnectorRequest(operation, args) {
-    const query = operation === 'query'
     return {
       contract: 'AccessContextHandler',
       verb: operation,
       args: Object.keys(args).map((k) => args[k]),
-      readOnly: query,
+      readOnly: false,
     }
   }
 }

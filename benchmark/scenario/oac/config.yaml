@@ -1,47 +1,33 @@
-simpleArgs: &simple-args
-  initialMoney: 10000
-  moneyToTransfer: 100
-  numberOfAccounts: &number-of-accounts 1000
-
+oacArgs: &oac-args
+  resourceUser: 'did:pkh:eip115:0xc0A8e4D217eB85b812aeb1226fAb6F588943C2C2'
+  role: 'VERIFIER_ROLE'
+  policy: 'POLICY_ID'
+  numberOfPolicies: 1
 test:
-  name: onchain-access-control
+  name: oac
   description: >-
-    This is an example benchmark for Caliper, to test the backend DLT's
-    performance with simple account opening & querying transactions.
+    Hyperledger Caliper Benchmark of 'Non-disclosing Blockchain-based Access Control for Data Sharing in Multi-Party Environments', 
+    to test the backend DLT's performance with simple role assignment & session transactions.
   workers:
     number: 1
   rounds:
-    - label: open
-      description: >-
-        Test description for the opening of an account through the deployed
-        contract.
-      txNumber: *number-of-accounts
-      rateControl:
-        type: fixed-rate
-        opts:
-          tps: 50
-      workload:
-        module: scenario/simple/open.js
-        arguments: *simple-args
-    - label: query
-      description: Test description for the query performance of the deployed contract.
-      txNumber: *number-of-accounts
-      rateControl:
-        type: fixed-rate
-        opts:
-          tps: 100
-      workload:
-        module: scenario/simple/query.js
-        arguments: *simple-args
-    - label: transfer
-      description: Test description for transfering money between accounts.
+    - label: assign-role
+      description: Role assignment through the deployed contract.
       txNumber: 50
       rateControl:
         type: fixed-rate
         opts:
           tps: 5
       workload:
-        module: scenario/simple/transfer.js
-        arguments:
-          << : *simple-args
-          money: 100
+        module: scenario/oac/assign-role.js
+        arguments: *oac-args
+    - label: start-session
+      description: Start a session through the deployed contract.
+      txNumber: 50
+      rateControl:
+        type: fixed-rate
+        opts:
+          tps: 5
+      workload:
+        module: scenario/simple/start-session.js
+        arguments: *oac-args

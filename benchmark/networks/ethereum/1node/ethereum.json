@@ -18,8 +18,8 @@
                 "path": "./src/oac/AccessContextHandler.json",
                 "estimateGas": true,
                 "gas": {
-                    "startSession": 100000,
-                    "transfer": 70000
+                  "assign-role": 70000,
+                  "start-session": 100000
                 }
             }
         }
