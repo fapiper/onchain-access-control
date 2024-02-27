@@ -1,22 +1,19 @@
 {
     "caliper": {
-        "blockchain": "./network/connector/index.js",
-        "command" : {
-            "start": "docker-compose -f network/docker-compose.yml up -d && sleep 3",
-            "end" : "docker-compose -f network/docker-compose.yml down"
-          }
+        "blockchain": "ethereum",
+        "command" : {}
     },
     "ethereum": {
-        "url": "ws://localhost:8546",
-        "contractDeployerAddress": "0xc0A8e4D217eB85b812aeb1226fAb6F588943C2C2",
-        "contractDeployerAddressPassword": "password",
-        "fromAddress": "0xc0A8e4D217eB85b812aeb1226fAb6F588943C2C2",
-        "fromAddressPassword": "password",
+        "url": "ws://localhost:8545",
+        "contractDeployerAddress": "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266",
+        "contractDeployerAddressPrivateKey": "0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80",
+        "fromAddress": "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266",
+        "fromAddressPrivateKey": "0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80",
         "transactionConfirmationBlocks": 2,
         "contracts": {
             "AccessContextHandler": {
                 "path": "./src/oac/AccessContextHandler.json",
-                "address": "<CONTRACT ADDRESS>",
+                "address": "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512",
                 "estimateGas": true,
                 "gas": {
                   "assign-role": 70000,
