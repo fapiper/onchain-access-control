@@ -23,6 +23,7 @@ contract AccessContextHandler is IContextHandler, SessionRecipient, ContextHandl
         require(_checkContextIsEmpty(_id), "Access context already exists");
         address _instance = _createContextInstance(_salt, _did, _id);
         _setContextInstance(_id, _instance);
+        emit CreateContextInstance(_instance);
     } 
 
     function setSessionRegistry(
