@@ -4,9 +4,9 @@ import type { Deployment } from "hardhat-deploy/types";
 import { task } from "hardhat/config";
 import type { HardhatRuntimeEnvironment } from "hardhat/types";
 
-import contextHandlerConfig from "../deploy/002_AccessContextHandler";
-import { AccessContextHandler__factory, AccessContext__factory } from "../types";
-import { simpleDeploy } from "./deploy";
+import contextHandlerConfig from "../../deploy/002_AccessContextHandler";
+import { AccessContextHandler__factory, AccessContext__factory } from "../../types";
+import { simpleDeploy } from "../deploy";
 
 async function createContextInstance(address: string, signer: HardhatEthersSigner, options: { user: string }) {
   const contextHandler = AccessContextHandler__factory.connect(address, signer);
