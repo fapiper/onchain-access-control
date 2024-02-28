@@ -69,6 +69,6 @@ task("register-policy", "Register a sample policy", async (_, hre) => {
   const policy = await deployPolicy(hre);
   const event = await contextHandler.queryFilter(contextHandler.filters.CreateContextInstance, -1).then((e) => e[0]);
   console.log("setting up role...");
-  const role = await setupRole(event?.args[0] ?? "", signer, { user, policy });
-  console.log("setup role success", role);
+  await setupRole(event?.args[0] ?? "", signer, { user, policy });
+  console.log("setup role success");
 });
