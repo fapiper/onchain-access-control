@@ -3,8 +3,7 @@ import { ethers } from "ethers";
 import type { Deployment } from "hardhat-deploy/types";
 import { task } from "hardhat/config";
 
-import contextHandlerConfig from "../../deploy/002_AccessContextHandler";
-import { AccessContextHandler__factory, AccessContext__factory } from "../../types";
+import { AccessContext__factory } from "../../types";
 
 async function setupRole(address: string, signer: HardhatEthersSigner, options: { user: string; policy: Deployment }) {
   const instance = AccessContext__factory.connect(address, signer);
@@ -33,19 +32,17 @@ async function setupRole(address: string, signer: HardhatEthersSigner, options: 
   return tx.wait();
 }
 
-task("setup-role", "Setup role with a sample policy", async (taskArgs: { policyName?: string }, hre) => {
-  const { getNamedAccounts, deployments, ethers, getChainId } = hre;
-  const { deployer } = await getNamedAccounts();
-  const chainId = await getChainId();
-  const user = `did:pkh:${chainId}:eip155:${deployer}`;
-  console.log("register policy task for resource owner", user);
-
-  const signer = await ethers.getSigner(deployer ?? "");
-  const contextHandlerAddress = await deployments.get(contextHandlerConfig.id ?? "").then((d) => d.address);
-  const contextHandler = AccessContextHandler__factory.connect(contextHandlerAddress);
-  const event = await contextHandler.queryFilter(contextHandler.filters.CreateContextInstance, -1).then((e) => e[0]);
-  console.log("setting up role...");
-  const policy = await deployments.get(taskArgs.policyName ?? "Verifier");
-  await setupRole(event?.args[0] ?? "", signer, { user, policy });
-  console.log("setup role success");
-});
+task("setup-role", "Setup role with a sample policy")
+  .addParam("policyAddress", "The policy's address")
+  .addOptionalParam("policyName", "The policy's name", "Verifier")
+  .setAction(async (taskArgs: { policyName?: string; policyAddress: string }, hre) => {
+    const { getNamedAccounts, deployments, ethers, getChainId } = hre;
+    const { deployer } = await getNamedAccounts();
+    const chainId = await getChainId();
+    const user = `did:pkh:${chainId}:eip155:${deployer}`;
+    const signer = await ethers.getSigner(deployer ?? "");
+    console.log("setting up role...");
+    const policy = await deployments.get(taskArgs.policyName ?? "Verifier");
+    await setupRole(taskArgs.policyAddress, signer, { user, policy });
+    console.log("setup role success");
+  });
