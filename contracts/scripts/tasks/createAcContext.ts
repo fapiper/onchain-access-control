@@ -19,7 +19,9 @@ task("create-ac-context", "Create an access context", async (_, hre) => {
   console.log("creating instance...");
 
   const tx = await contextHandler.createContextInstance(id, salt, did);
-  const createInstanceReceipt = await tx.wait();
+  await tx.wait();
+  const event = await contextHandler.queryFilter(contextHandler.filters.CreateContextInstance, -1).then((e) => e[0]);
+  const contextAddress = event?.args[0];
 
-  console.log("created instance at", createInstanceReceipt?.contractAddress);
+  console.log("created instance at", contextAddress);
 });
