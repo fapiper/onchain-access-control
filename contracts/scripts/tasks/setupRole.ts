@@ -33,7 +33,7 @@ async function setupRole(address: string, signer: HardhatEthersSigner, options: 
   return tx.wait();
 }
 
-task("register-policy", "Setup role with a sample policy", async (taskArgs: { policyName?: string }, hre) => {
+task("setup-role", "Setup role with a sample policy", async (taskArgs: { policyName?: string }, hre) => {
   const { getNamedAccounts, deployments, ethers, getChainId } = hre;
   const { deployer } = await getNamedAccounts();
   const chainId = await getChainId();
