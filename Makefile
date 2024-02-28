@@ -20,6 +20,14 @@ bench-run:
 bench:
 	bench-prepare bench-run
 
+# Policy
+
+policy-gen-proof:
+	@bash ./dev/zokrates_gen/run.sh /contracts/test/policy/preimage.zok /contracts/test/policy/out 0 0 0 5
+
+policy-prepare:
+	policy-gen-proof
+
 # Contracts
 
 # TODO prepend contract compilation
@@ -39,6 +47,7 @@ abi-gen:
 	abigen --abi=./core/contracts/abi/SimpleDIDRegistry.abi --pkg=contracts --type=SimpleDIDRegistry > ./core/contracts/SimpleDIDRegistry.go
 
 # Miscellaneous stuff
+
 gazelle-update-repos:
 	bazel run //:gazelle-update-repos
 
