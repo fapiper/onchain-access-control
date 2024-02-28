@@ -6,7 +6,8 @@ import type { NetworkUserConfig } from "hardhat/types";
 import { resolve } from "path";
 
 import "./scripts/tasks/createAcContext";
-import "./scripts/tasks/registerPolicy";
+import "./scripts/tasks/deployPolicy";
+import "./scripts/tasks/setupRole";
 
 const dotenvConfigPath: string = process.env["DOTENV_CONFIG_PATH"] || "./.env";
 dotenvConfig({ path: resolve(__dirname, dotenvConfigPath) });
