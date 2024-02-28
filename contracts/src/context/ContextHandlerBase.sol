@@ -31,6 +31,12 @@ contract ContextHandlerBase is DIDRecipient {
         return _getContextInstance(_context).checkAdmin(_did, _msgSender());
     }
 
+    function _checkContextIsEmpty(
+        bytes32 _context
+    ) internal view returns (bool) {
+        return address(_contexts[_context]) == address(0);
+    }
+
     function _forwardGrantRole(
         bytes32 _roleContext,
         bytes32 _role,

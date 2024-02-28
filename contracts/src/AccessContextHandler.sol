@@ -19,8 +19,9 @@ contract AccessContextHandler is IContextHandler, SessionRecipient, ContextHandl
         bytes32 _id,
         bytes20 _salt,
         bytes32 _did
-    ) onlyContextAdmin(_id, _did) external {
-        address payable _instance = _createContextInstance(_salt, _did, _id);
+    ) external {
+        require(_checkContextIsEmpty(_id), "Access context already exists");
+        address _instance = _createContextInstance(_salt, _did, _id);
         _setContextInstance(_id, _instance);
     } 
 
