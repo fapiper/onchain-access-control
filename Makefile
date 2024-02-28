@@ -25,8 +25,11 @@ bench:
 policy-gen-proof:
 	@bash ./dev/zokrates_gen/run.sh /contracts/test/policy/preimage.zok /contracts/test/policy/out 0 0 0 5
 
+policy-cp-src:
+	cp ./contracts/test/policy/out/verifier.sol ./contracts/src/Policy.sol
+
 policy-prepare:
-	policy-gen-proof
+	policy-gen-proof policy-cp-verifier
 
 # Contracts
 
