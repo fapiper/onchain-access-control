@@ -127,14 +127,14 @@
                 <h3>&nbspBasic information</h3>
                 <li>DLT: &nbsp<span style="font-weight: 500;">ethereum</span></li>
                 <li>Name: &nbsp<span style="font-weight: 500;">oac</span></li>
-                <li>Description: &nbsp<span style="font-weight: 500;">Hyperledger Caliper Benchmark of &#39;Non-disclosing Blockchain-based Access Control for Data Sharing in Multi-Party Environments&#39;,  to test the backend DLT&#39;s performance with simple role assignment &amp; session transactions.</span></li>
-                <li>Benchmark Rounds: &nbsp<span style="font-weight: 500;">1</span></li>
+                <li>Description: &nbsp<span style="font-weight: 500;">Hyperledger Caliper Benchmark of a Non-disclosing Blockchain-based Access Control for Data Sharing in Multi-Party Environments,  to test the backend DLT&#39;s performance with simple role assignment &amp; session transactions.</span></li>
+                <li>Benchmark Rounds: &nbsp<span style="font-weight: 500;">2</span></li>
                 <li><a href="#benchmarkInfo">Details</a></li>
             </ul>
             <ul>
                 <h3>&nbspBenchmark results</h3>
                 <li><a href="#benchmarksummary">Summary</a></li>
-                    <li><a href="#grantRole">grantRole</a></li>
+                    <li><a href="#grantRole#1">grantRole#1</a></li>
             </ul>
             <ul>
                 <h3>&nbspSystem under test</h3>
@@ -152,28 +152,28 @@
                     </tr>
 
                     <tr>
-                         <td>grantRole</td> <td>11</td> <td>39</td> <td>5.1</td> <td>3.83</td> <td>1.82</td> <td>2.75</td> <td>1.2</td>
+                         <td>grantRole#1</td> <td>47</td> <td>3</td> <td>5.1</td> <td>51.20</td> <td>29.97</td> <td>37.24</td> <td>0.9</td>
                     </tr>
                 </table>
             </div>
-            <div style="border-bottom: 1px solid #d9d9d9; padding-bottom: 10px;" id="grantRole">
-                <h2>Benchmark round: grantRole</h2>
-                <p>Role assignment through the deployed contract.</p>
+            <div style="border-bottom: 1px solid #d9d9d9; padding-bottom: 10px;" id="grantRole#1">
+                <h2>Benchmark round: grantRole#1</h2>
+                <p>Grant role with one policy</p>
                 <pre style="overflow: visible;white-space: pre-wrap;max-height:100%;">rateControl:
   type: fixed-rate
   opts:
     tps: 5
 </pre>
-                        <h3>Performance metrics for grantRole</h3>
+                        <h3>Performance metrics for grantRole#1</h3>
                             <table style="min-width: 100%;">
                                 <tr>
                                      <th>Name</th> <th>Succ</th> <th>Fail</th> <th>Send Rate (TPS)</th> <th>Max Latency (s)</th> <th>Min Latency (s)</th> <th>Avg Latency (s)</th> <th>Throughput (TPS)</th>
                                 </tr>
                                 <tr>
-                                     <td>grantRole</td> <td>11</td> <td>39</td> <td>5.1</td> <td>3.83</td> <td>1.82</td> <td>2.75</td> <td>1.2</td>
+                                     <td>grantRole#1</td> <td>47</td> <td>3</td> <td>5.1</td> <td>51.20</td> <td>29.97</td> <td>37.24</td> <td>0.9</td>
                                 </tr>
                             </table>
-                        <h3>Resource utilization for grantRole</h3>
+                        <h3>Resource utilization for grantRole#1</h3>
             </div>
 
             <div style="border-bottom: 1px solid #d9d9d9; padding-bottom: 10px;">
@@ -181,19 +181,19 @@
                 <h3>benchmark config</h3>
                 <pre id="benchmarkInfo" style="overflow: visible;white-space: pre-wrap;max-height:100%;">name: oac
 description: &gt;-
-  Hyperledger Caliper Benchmark of &#39;Non-disclosing Blockchain-based Access
-  Control for Data Sharing in Multi-Party Environments&#39;,  to test the backend
+  Hyperledger Caliper Benchmark of a Non-disclosing Blockchain-based Access
+  Control for Data Sharing in Multi-Party Environments,  to test the backend
   DLT&#39;s performance with simple role assignment &amp; session transactions.
 workers:
   number: 1
 rounds:
-  - label: grantRole
-    description: Role assignment through the deployed contract.
-    txNumber: 50
+  - txNumber: 50
     rateControl:
       type: fixed-rate
       opts:
         tps: 5
+    label: grantRole#1
+    description: Grant role with one policy
     workload:
       module: scenario&#x2F;oac&#x2F;assign-role.js
       arguments:
@@ -202,6 +202,21 @@ rounds:
         policy: &#39;0x267b6fc03715988333f5862c460e5f150683d5cb419e18e5a4c2b96039b9724b&#39;
         context: &#39;0xc443a2ce4c67a11d47fb1df69c6a82409ee6ec7f2b1ac7061c7c952455262778&#39;
         numberOfPolicies: 1
+  - txNumber: 50
+    rateControl:
+      type: fixed-rate
+      opts:
+        tps: 5
+    label: grantRole#2
+    description: Grant role with two policies
+    workload:
+      module: scenario&#x2F;oac&#x2F;assign-role.js
+      arguments:
+        resourceUser: &#39;did:pkh:11155111:eip155:0xd231120Eea6201B142b4048cf6C86BaC2A0655D2&#39;
+        role: VERIFIER
+        policy: &#39;0x267b6fc03715988333f5862c460e5f150683d5cb419e18e5a4c2b96039b9724b&#39;
+        context: &#39;0xc443a2ce4c67a11d47fb1df69c6a82409ee6ec7f2b1ac7061c7c952455262778&#39;
+        numberOfPolicies: 2
 </pre>
                 <h3>SUT</h3>
                 <pre id="sutdetails">not provided</pre>

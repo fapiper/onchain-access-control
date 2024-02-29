@@ -4,24 +4,71 @@ oacArgs: &oac-args
   policy: '0x267b6fc03715988333f5862c460e5f150683d5cb419e18e5a4c2b96039b9724b'
   context: '0xc443a2ce4c67a11d47fb1df69c6a82409ee6ec7f2b1ac7061c7c952455262778'
   numberOfPolicies: 1
+
+grWorkload: &gr-workload
+    module: scenario/oac/assign-role.js
+
+grRound: &gr-round
+    txNumber: 50
+    rateControl:
+      type: fixed-rate
+      opts:
+        tps: 5
+
 test:
   name: oac
   description: >-
-    Hyperledger Caliper Benchmark of 'Non-disclosing Blockchain-based Access Control for Data Sharing in Multi-Party Environments', 
+    Hyperledger Caliper Benchmark of a Non-disclosing Blockchain-based Access Control for Data Sharing in Multi-Party Environments, 
     to test the backend DLT's performance with simple role assignment & session transactions.
   workers:
     number: 1
   rounds:
-    - label: grantRole
-      description: Role assignment through the deployed contract.
-      txNumber: 50
-      rateControl:
-        type: fixed-rate
-        opts:
-          tps: 5
+    - <<: *gr-round
+      label: grantRole#1
+      description: Grant role with one policy
       workload:
-        module: scenario/oac/assign-role.js
+        <<: *gr-workload
         arguments: *oac-args
+    - <<: *gr-round
+      label: grantRole#2
+      description: Grant role with two policies
+      workload:
+        <<: *gr-workload
+        arguments:
+          << : *oac-args
+          numberOfPolicies: 2
+    - <<: *gr-round
+      label: grantRole#3
+      description: Grant role with three policies
+      workload:
+        <<: *gr-workload
+        arguments:
+          << : *oac-args
+          numberOfPolicies: 3
+    - <<: *gr-round
+      label: grantRole#5
+      description: Grant role with five policies
+      workload:
+        <<: *gr-workload
+        arguments:
+          << : *oac-args
+          numberOfPolicies: 5
+    - <<: *gr-round
+      label: grantRole#8
+      description: Grant role with eight policies
+      workload:
+        <<: *gr-workload
+        arguments:
+          << : *oac-args
+          numberOfPolicies: 8
+    - <<: *gr-round
+      label: grantRole#13
+      description: Grant role with thirteen policies
+      workload:
+        <<: *gr-workload
+        arguments:
+          << : *oac-args
+          numberOfPolicies: 13
 #    - label: start-session
 #      description: Start a session through the deployed contract.
 #      txNumber: 50
