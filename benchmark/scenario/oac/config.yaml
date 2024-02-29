@@ -1,8 +1,8 @@
 oacArgs: &oac-args
-  resourceUser: 'did:pkh:eip115:0xc0A8e4D217eB85b812aeb1226fAb6F588943C2C2'
+  resourceUser: 'did:pkh:11155111:eip155:0xd231120Eea6201B142b4048cf6C86BaC2A0655D2'
   role: 'VERIFIER'
-  policy: '0x4aa30d04e9866fd3537256ff6e32f0cee6cb85426c9d6cd21b28dad084628c3e'
-  context: '0x4aa30d04e9866fd3537256ff6e32f0cee6cb85426c9d6cd21b28dad084628c3e'
+  policy: '0x267b6fc03715988333f5862c460e5f150683d5cb419e18e5a4c2b96039b9724b'
+  context: '0xc443a2ce4c67a11d47fb1df69c6a82409ee6ec7f2b1ac7061c7c952455262778'
   numberOfPolicies: 1
 test:
   name: oac
@@ -12,7 +12,7 @@ test:
   workers:
     number: 1
   rounds:
-    - label: assign-role
+    - label: grantRole
       description: Role assignment through the deployed contract.
       txNumber: 50
       rateControl:

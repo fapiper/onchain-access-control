@@ -37,7 +37,7 @@ class AssignRoleWorkloadModule extends OperationBase {
    */
   async submitTransaction() {
     const assignRoleArgs = this.acHandlerState.getAssignRoleArguments()
-    await this.sutAdapter.sendRequests(this.createConnectorRequest('assign-role', assignRoleArgs))
+    await this.sutAdapter.sendRequests(this.createConnectorRequest('grantRole', assignRoleArgs))
   }
 }
 

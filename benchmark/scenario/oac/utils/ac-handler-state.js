@@ -10,7 +10,7 @@ class AcHandlerState {
   constructor(workerIndex, resourceUser, context, role, policy, zkVP, numberOfPolicies, tokenId, token) {
     this.context = context
     this.role = role
-    this.policyContexts = Array(numberOfPolicies).fill(resourceUser)
+    this.policyContexts = Array(numberOfPolicies).fill(context)
     this.policies = Array(numberOfPolicies).fill(policy)
     this.zkVPs = Array(numberOfPolicies).fill(zkVP)
     this.resourceUser = resourceUser
