@@ -92,7 +92,7 @@ abstract contract DIDOwnable is DIDRecipient {
         bytes32 did,
         address account
     ) internal virtual returns (bool) {
-        return owner() != did || !(_isDID(did, account));
+        return owner() == did && _isDID(did, account);
     }
 
     /**
