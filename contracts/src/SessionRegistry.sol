@@ -10,7 +10,9 @@ contract SessionRegistry is ISessionRegistry, SessionRegistryBase, ContextHandle
     constructor(
         address contextHandler,
         address didRegistry
-    ) ContextHandlerRecipient(contextHandler) SessionRegistryBase(didRegistry) {}
+    ) SessionRegistryBase(didRegistry) {
+        _initContextHandlerRecipient(contextHandler);
+    }
 
     modifier onlySubjectOrContextHandler(bytes32 id){
         require(_checkSessionSubject(id) || _checkContextHandler());

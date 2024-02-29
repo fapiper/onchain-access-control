@@ -12,11 +12,15 @@ import "./extension/PermissionExtension.sol";
 
 contract AccessContext is IContextInstance, DIDOwnable, AccessControlListExtension, PermissionExtension, PolicyExtension, RoleExtension {
 
-    constructor(
+    function init(
         bytes32 initialOwner,
         bytes32 id,
+        address handler,
         address didRegistry
-    ) DIDOwnable(initialOwner, didRegistry) PolicyExtension(id, msg.sender) {}
+    ) external {
+        _initDIDOwnable(initialOwner, didRegistry);
+        _initPolicyExtension(id, handler);
+    }
 
     /**
      *  @notice         Allows only context admin (owner) or role member for `_role`.

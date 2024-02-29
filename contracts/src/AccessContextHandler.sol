@@ -10,10 +10,9 @@ import "./AccessContext.sol";
 contract AccessContextHandler is IContextHandler, SessionRecipient, ContextHandlerBase {
  
     constructor(
-        bytes32 initialOwner,
         address didRegistry
     ) ContextHandlerBase(didRegistry) SessionRecipient(address(0)) {
-        _setInstanceImpl(address(new AccessContext(initialOwner, bytes32(0), didRegistry)));
+        _setInstanceImpl(address(new AccessContext()));
     }
  
     function createContextInstance(

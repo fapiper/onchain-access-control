@@ -19,7 +19,9 @@ contract SessionRegistryBase is DIDRecipient {
 
     constructor(
         address didRegistry
-    ) DIDRecipient(didRegistry) {}
+    ) {
+        _initDIDRecipient(didRegistry);
+    }
 
     function _setSession(
         bytes32 _id,

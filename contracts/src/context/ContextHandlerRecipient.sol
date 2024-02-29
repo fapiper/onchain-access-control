@@ -8,9 +8,7 @@ contract ContextHandlerRecipient {
 
     IContextHandler private contextHandler_;
 
-    constructor(
-        address contextHandler
-    ) {
+    function _initContextHandlerRecipient(address contextHandler) internal {
         _setContextHandler(contextHandler);
     }
 

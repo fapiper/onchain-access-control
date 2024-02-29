@@ -8,7 +8,7 @@ import "./IDIDRegistry.sol";
 contract DIDRecipient is Context {
     IDIDRegistry private _registry;
 
-    constructor (address registry) {
+    function _initDIDRecipient(address registry) internal {
         _registry = IDIDRegistry(registry);
     }
 

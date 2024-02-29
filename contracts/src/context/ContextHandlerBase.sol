@@ -15,7 +15,9 @@ contract ContextHandlerBase is DIDRecipient {
     // context -> address
     mapping(bytes32 => IContextInstance) internal _contexts;
 
-    constructor(address didRegistry) DIDRecipient(didRegistry) {}
+    constructor(address didRegistry) {
+        _initDIDRecipient(didRegistry);
+    }
 
     modifier onlyContextAdmin(
         bytes32 _context,
@@ -53,9 +55,11 @@ contract ContextHandlerBase is DIDRecipient {
         bytes20 _salt,
         bytes32 _owner,
         bytes32 _id
-    ) internal returns (address payable _instance) {
+    ) internal returns (address _instance) {
         bytes32 hash = _hashContext(_salt, _owner, _id, address(this), address(_getRegistry()));
-        return payable(Clones.cloneDeterministic(_instanceImpl, hash));
+        IContextInstance clone = IContextInstance(Clones.cloneDeterministic(_instanceImpl, hash));
+        clone.init(_owner, _id, address(this), address(_getRegistry()));
+        return address(clone);
     }
 
     function _setContextInstance(

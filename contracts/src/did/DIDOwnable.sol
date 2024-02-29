@@ -33,13 +33,13 @@ abstract contract DIDOwnable is DIDRecipient {
     /**
      * @dev Initializes the contract setting the address provided by the deployer as the initial owner.
      */
-    constructor(bytes32 initialOwner, address didRegistry) DIDRecipient(didRegistry) {
+    function _initDIDOwnable(bytes32 initialOwner, address didRegistry) internal {
+        _initDIDRecipient(didRegistry);
         if (initialOwner == "") {
             revert OwnableInvalidOwner("");
         }
         _transferOwnership(initialOwner);
     }
-
     /**
      * @dev Throws if called by any account other than the owner.
      */

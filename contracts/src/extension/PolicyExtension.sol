@@ -10,10 +10,12 @@ contract PolicyExtension is IPolicyExtension, ContextInstance {
     // context -> id -> policies
     mapping(bytes32 => mapping(bytes32 => Policy)) private policies_;
 
-    constructor(
+    function _initPolicyExtension (
         bytes32 contextId,
         address contextHandler
-    ) ContextInstance(contextId, contextHandler) {}
+    ) internal {
+        _initContextInstance(contextId, contextHandler);
+    }
 
     function _registerPolicy(
         bytes32 _context,

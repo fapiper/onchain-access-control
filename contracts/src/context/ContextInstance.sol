@@ -8,11 +8,12 @@ contract ContextInstance is ContextHandlerRecipient {
  
     bytes32 private _contextId;
 
-    constructor(
+    function _initContextInstance(
         bytes32 contextId,
         address contextHandler
-    ) ContextHandlerRecipient(contextHandler) {
+    ) internal {
         _contextId = contextId;
+        _initContextHandlerRecipient(contextHandler);
     }
 
     function _thisContext() internal view returns (bytes32) {
