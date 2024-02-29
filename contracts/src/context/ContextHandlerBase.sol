@@ -4,6 +4,7 @@ pragma solidity ^0.8.20;
 import "@openzeppelin/contracts/proxy/Clones.sol";
 
 import "./IContextInstance.sol";
+import "../policy/IPolicyVerifier.sol";
 import "../did/DIDRecipient.sol";
 
 contract ContextHandlerBase is DIDRecipient {
@@ -43,9 +44,9 @@ contract ContextHandlerBase is DIDRecipient {
         bytes32 _did,
         bytes32[] memory _policyContexts,
         bytes32[] memory _policies,
-        bytes[] memory _args
+        IPolicyVerifier.Proof[] memory _zkVPs
     ) internal {
-        _getContextInstance(_roleContext).grantRole(_role, _did, _policyContexts, _policies, _args);
+        _getContextInstance(_roleContext).grantRole(_role, _did, _policyContexts, _policies, _zkVPs);
     }
 
     function _createContextInstance(

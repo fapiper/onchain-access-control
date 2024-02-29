@@ -2,6 +2,7 @@
 pragma solidity ^0.8.20;
 
 import "../context/ContextInstance.sol";
+import "../policy/IPolicyVerifier.sol";
 import "./IPolicyExtension.sol";
 
 contract PolicyExtension is IPolicyExtension, ContextInstance {
@@ -17,15 +18,13 @@ contract PolicyExtension is IPolicyExtension, ContextInstance {
     function _registerPolicy(
         bytes32 _context,
         bytes32 _id,
-        address _instance,
-        bytes4 _verify
+        address _verifier
     ) internal {
         require(!policies_[_context][_id].exists, "policy already exists");
         Policy memory policy = Policy(
             _context,
             _id,
-            _instance,
-            _verify,
+            IPolicyVerifier(_verifier),
             true
         );
         policies_[_context][_id] = policy;
@@ -63,27 +62,17 @@ contract PolicyExtension is IPolicyExtension, ContextInstance {
 
     function _verifyPolicy(
         Policy memory _policy,
-        bytes memory _args
-    ) internal returns (bool) {
-        (bool success, bytes memory result) = _policy.instance.delegatecall(
-            abi.encodeWithSelector(
-                _policy.verify,
-                _args
-            )
-        );
-        if(!success){
-            // Just return false instead of a rejection upon delegatecall throwing an error
-            return false;
-        }
-        return abi.decode(result, (bool));
+        IPolicyVerifier.Proof memory _zkVP
+    ) internal view returns (bool) {
+        return _policy.verifier.verifyTx(_zkVP);
     }
 
     function _verifyPolicies (
         Policy[] memory _policies,
-        bytes[] memory _args
-    ) internal returns (bool) {
+        IPolicyVerifier.Proof[] memory _zkVPs
+    ) internal view returns (bool) {
         for (uint256 i = 0; i < _policies.length; i++) {
-            if(!_verifyPolicy(_policies[i], _args[i])) {
+            if(!_verifyPolicy(_policies[i], _zkVPs[i])) {
                 return false;
             }
         }

@@ -4,6 +4,7 @@ pragma solidity ^0.8.20;
 import "./context/IContextHandler.sol";
 import "./context/ContextHandlerBase.sol";
 import "./session/SessionRecipient.sol";
+import "./policy/IPolicyVerifier.sol";
 import "./AccessContext.sol";
 
 contract AccessContextHandler is IContextHandler, SessionRecipient, ContextHandlerBase {
@@ -38,11 +39,11 @@ contract AccessContextHandler is IContextHandler, SessionRecipient, ContextHandl
         bytes32 _did,
         bytes32[] memory _policyContexts,
         bytes32[] memory _policies,
-        bytes[] memory _args,
+        IPolicyVerifier.Proof[] memory _zkVPs,
         bytes32 _tokenId,
         bytes32 _token
     ) external {
-        _forwardGrantRole(_roleContext, _role, _did, _policyContexts, _policies, _args);
+        _forwardGrantRole(_roleContext, _role, _did, _policyContexts, _policies,_zkVPs);
         _forwardStartSession(_tokenId, _token, _did);
     }
 
@@ -60,9 +61,9 @@ contract AccessContextHandler is IContextHandler, SessionRecipient, ContextHandl
         bytes32 _did,
         bytes32[] memory _policyContexts,
         bytes32[] memory _policies,
-        bytes[] memory _args
+        IPolicyVerifier.Proof[] memory _zkVPs
     ) external {
-        _forwardGrantRole(_roleContext, _role, _did, _policyContexts, _policies, _args);
+        _forwardGrantRole(_roleContext, _role, _did, _policyContexts, _policies, _zkVPs);
     }
 
     function deleteContextInstance(

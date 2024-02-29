@@ -4,7 +4,6 @@ pragma solidity ^0.8.0;
 import "./Pairing.sol";
 
 interface IPolicyVerifier {
-    using Pairing for *;
     struct VerifyingKey {
         Pairing.G1Point alpha;
         Pairing.G2Point beta;
@@ -18,5 +17,5 @@ interface IPolicyVerifier {
         Pairing.G1Point c;
     }
 
-    function verifyTx(Proof memory proof) public view returns (bool r);
+    function verifyTx(Proof memory proof) external view returns (bool r);
 }

@@ -4,6 +4,7 @@ pragma solidity ^0.8.20;
 import "./did/DIDOwnable.sol";
 import "./context/ContextInstance.sol";
 import "./context/IContextInstance.sol";
+import "./policy/IPolicyVerifier.sol";
 import "./extension/AccessControlListExtension.sol";
 import "./extension/PolicyExtension.sol";
 import "./extension/RoleExtension.sol";
@@ -39,14 +40,13 @@ contract AccessContext is IContextInstance, DIDOwnable, AccessControlListExtensi
      *  @param _did            DID of the user.
      *  @param _policyContexts Uid of policy contexts.
      *  @param _policies       Uids of the policies of context in `policyContexts` at same index.
-     *  @param _args           Verification function arguments.
      */
     function grantRole(
         bytes32 _role,
         bytes32 _did,
         bytes32[] memory _policyContexts,
         bytes32[] memory _policies,
-        bytes[] memory _args
+        IPolicyVerifier.Proof[] memory _zkVPs
     ) external {
         bytes32 thisContext = _thisContext();
         uint256 policyCount = _policies.length;
@@ -56,7 +56,7 @@ contract AccessContext is IContextInstance, DIDOwnable, AccessControlListExtensi
             // TODO with get policies or only policy context sufficient?
             require(_hasRolePolicy(thisContext, _role, policy_.context, policy_.id), "policy for role not allowed");
             // TODO (possible?): use policy context and bytes32 id sufficient?
-            require(_verifyPolicy(policy_, _args[i]), "policy not satisfied");
+            require(_verifyPolicy(policy_, _zkVPs[i]), "policy not satisfied");
         }
         _grantRole(_role, _did);
     }
@@ -130,8 +130,7 @@ contract AccessContext is IContextInstance, DIDOwnable, AccessControlListExtensi
      *  @param _permission     Uid of the permission.
      *  @param _resource       Uid of the resource for which to assign permissions to.
      *  @param _operations     Permitted operations for the resource. Currently either [READ] or [READ, WRITE].
-     *  @param _instance       Address of the policy contract instance.
-     *  @param _verify         Function identifier of the policy verification function of `_contract`.
+     *  @param _verifier       Address of the policy verifier contract.
      *  @param _did            DID of the admin of this context.
      */
     function setupRole(
@@ -140,12 +139,11 @@ contract AccessContext is IContextInstance, DIDOwnable, AccessControlListExtensi
         bytes32 _permission,
         bytes32 _resource,
         Operation[] memory _operations,
-        address _instance,
-        bytes4 _verify,
+        address _verifier,
         bytes32 _did
     ) external onlyOwner(_did) {
         bytes32 thisContext = _thisContext();
-        _registerPolicy(thisContext, _policy, _instance, _verify);
+        _registerPolicy(thisContext, _policy, _verifier);
         _assignPolicyToRole(thisContext, _role, thisContext, _policy);
         _registerPermissionForResource(_permission, _resource, _operations);
         _assignPermissionToRole(thisContext, _role, _permission);
@@ -157,17 +155,15 @@ contract AccessContext is IContextInstance, DIDOwnable, AccessControlListExtensi
      *                  Emits {PolicyRegistered Event}.
      *
      *  @param _policy         Uid of the policy within this context.
-     *  @param _contract       Address of the policy contract.
-     *  @param _verify         Function identifier of the policy verification function of `_contract`.
+     *  @param _verifier       Address of the policy verifier contract.
      *  @param _did            DID of the admin of this context.
      */
     function registerPolicy(
         bytes32 _policy,
-        address _contract,
-        bytes4 _verify,
+        address _verifier,
         bytes32 _did
     ) external onlyOwner(_did) {
-        _registerPolicy(_thisContext(), _policy, _contract, _verify);
+        _registerPolicy(_thisContext(), _policy, _verifier);
     }
 
     /**
@@ -176,20 +172,18 @@ contract AccessContext is IContextInstance, DIDOwnable, AccessControlListExtensi
      *                  Emits {PolicyRegistered Event}.
      *
      *  @param _policy         Uid of the policy within this context`.
-     *  @param _contract       Address of the policy contract.
-     *  @param _verify         Function identifier of the policy verification function of `_contract`.
+     *  @param _verifier       Address of the policy verifier contract.
      *  @param _role           Uid of the role within `_roleContext`.
      *  @param _did            DID of the admin of this context.
      */
     function registerPolicy(
         bytes32 _policy,
-        address _contract,
-        bytes4 _verify,
+        address _verifier,
         bytes32 _role,
         bytes32 _did
     ) external onlyOwner(_did) {
         bytes32 thisContext = _thisContext();
-        _registerPolicy(thisContext, _policy, _contract, _verify);
+        _registerPolicy(thisContext, _policy, _verifier);
         _assignPolicyToRole(thisContext, _role, thisContext, _policy);
     }
 
