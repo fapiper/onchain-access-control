@@ -35,9 +35,7 @@ function getChainConfig(chain: keyof typeof chainIds): NetworkUserConfig {
 
   return {
     accounts: {
-      count: 10,
       mnemonic: mnemonic!,
-      path: "m/44'/60'/0'/0",
     },
     chainId: chainIds[chain],
     url: jsonRpcUrl,
@@ -47,7 +45,7 @@ function getChainConfig(chain: keyof typeof chainIds): NetworkUserConfig {
 const config: HardhatUserConfig = {
   defaultNetwork: "hardhat",
   namedAccounts: {
-    deployer: 0,
+    deployer: { default: 0, sepolia: "0xd231120Eea6201B142b4048cf6C86BaC2A0655D2" },
   },
   etherscan: {
     apiKey: {
@@ -83,7 +81,7 @@ const config: HardhatUserConfig = {
       // Disable the optimizer when debugging
       // https://hardhat.org/hardhat-network/#solidity-optimizer-support
       optimizer: {
-        enabled: false,
+        enabled: true,
         runs: 800,
       },
     },

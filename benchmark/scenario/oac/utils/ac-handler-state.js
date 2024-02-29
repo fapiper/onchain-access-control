@@ -7,11 +7,12 @@ class AcHandlerState {
   /**
    * Initializes the instance.
    */
-  constructor(workerIndex, resourceUser, role, policy, numberOfPolicies, tokenId, token) {
-    this.context = resourceUser
+  constructor(workerIndex, resourceUser, context, role, policy, zkVP, numberOfPolicies, tokenId, token) {
+    this.context = context
     this.role = role
     this.policyContexts = Array(numberOfPolicies).fill(resourceUser)
     this.policies = Array(numberOfPolicies).fill(policy)
+    this.zkVPs = Array(numberOfPolicies).fill(zkVP)
     this.resourceUser = resourceUser
     this.tokenId = tokenId
     this.token = token
@@ -28,7 +29,7 @@ class AcHandlerState {
       did: this.resourceUser,
       policyContexts: this.policyContexts,
       policies: this.policies,
-      args: [],
+      zkVPs: this.zkVPs,
     }
   }
 

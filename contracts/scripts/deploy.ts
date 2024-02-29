@@ -9,6 +9,7 @@ export function simpleDeploy(name: string, options?: DeployOptionsOrFn) {
 
     const { getNamedAccounts, getChainId, network, deployments } = hre;
     const { deployer } = await getNamedAccounts();
+    console.log("deploying", name, "with account", deployer, "...");
     const chainId = await getChainId();
     const { deploy } = deployments;
 

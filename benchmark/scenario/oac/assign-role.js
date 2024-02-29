@@ -22,8 +22,10 @@ class AssignRoleWorkloadModule extends OperationBase {
     return new AcHandlerState(
       this.workerIndex,
       this.resourceUser,
+      this.context,
       this.role,
       this.policy,
+      this.zkVP,
       this.numberOfPolicies,
       this.tokenId,
       this.token

@@ -24,6 +24,7 @@ class StartSessionWorkloadModule extends OperationBase {
       this.resourceUser,
       this.role,
       this.policy,
+      this.zkVP,
       this.numberOfPolicies,
       this.tokenId,
       this.token

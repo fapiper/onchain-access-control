@@ -1,7 +1,8 @@
 oacArgs: &oac-args
   resourceUser: 'did:pkh:eip115:0xc0A8e4D217eB85b812aeb1226fAb6F588943C2C2'
-  role: 'VERIFIER_ROLE'
-  policy: 'POLICY_ID'
+  role: 'VERIFIER'
+  policy: '0x4aa30d04e9866fd3537256ff6e32f0cee6cb85426c9d6cd21b28dad084628c3e'
+  context: '0x4aa30d04e9866fd3537256ff6e32f0cee6cb85426c9d6cd21b28dad084628c3e'
   numberOfPolicies: 1
 test:
   name: oac
@@ -21,13 +22,13 @@ test:
       workload:
         module: scenario/oac/assign-role.js
         arguments: *oac-args
-    - label: start-session
-      description: Start a session through the deployed contract.
-      txNumber: 50
-      rateControl:
-        type: fixed-rate
-        opts:
-          tps: 5
-      workload:
-        module: scenario/simple/start-session.js
-        arguments: *oac-args
+#    - label: start-session
+#      description: Start a session through the deployed contract.
+#      txNumber: 50
+#      rateControl:
+#        type: fixed-rate
+#        opts:
+#          tps: 5
+#      workload:
+#        module: scenario/simple/start-session.js
+#        arguments: *oac-args
