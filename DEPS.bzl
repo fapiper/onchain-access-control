@@ -580,6 +580,12 @@ def go_dependencies():
         sum = "h1:pFUpOrbxDR6AkioZ1ySsx5yxlDQZ8stG2b88gTPxgJU=",
         version = "v0.0.0-20200604182044-b73af7476f6c",
     )
+    go_repository(
+        name = "com_github_dchest_blake512",
+        importpath = "github.com/dchest/blake512",
+        sum = "h1:oDFEQFIqFSeuA34xLtXZ/rWxCXdSjirjzPhey5EUvmA=",
+        version = "v1.0.0",
+    )
 
     go_repository(
         name = "com_github_deckarep_golang_set",
@@ -1597,6 +1603,13 @@ def go_dependencies():
         sum = "h1:UDMh68UUwekSh5iP2OMhRRZJiiBccgV7axzUG8vi56c=",
         version = "v0.0.0-20181102032728-5e5cf60278f6",
     )
+    go_repository(
+        name = "com_github_iden3_go_iden3_crypto",
+        importpath = "github.com/iden3/go-iden3-crypto",
+        sum = "h1:zN867xiz6HgErXVIV/6WyteGcOukE9gybYTorBMEdsk=",
+        version = "v0.0.16",
+    )
+
     go_repository(
         name = "com_github_imkira_go_interpol",
         importpath = "github.com/imkira/go-interpol",

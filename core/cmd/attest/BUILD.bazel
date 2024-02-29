@@ -1,0 +1,16 @@
+load("@io_bazel_rules_go//go:def.bzl", "go_library")
+
+go_library(
+    name = "zkauth",
+    srcs = ["main.go"],
+    importpath = "github.com/fapiper/onchain-access-control/core/cmd/zkauth",
+    visibility = ["//visibility:private"],
+)
+
+go_library(
+    name = "attest",
+    srcs = ["main.go"],
+    importpath = "github.com/fapiper/onchain-access-control/core/cmd/attest",
+    visibility = ["//visibility:public"],
+    deps = ["@com_github_iden3_go_iden3_crypto//babyjub"],
+)
