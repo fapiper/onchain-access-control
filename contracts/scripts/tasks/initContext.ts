@@ -9,6 +9,5 @@ task("init-context", "Initialize an access context with policy, role and permiss
     const result = await createAccessContext(hre);
     console.log("created access context", result);
     const contextAddress = result.address;
-    await hre.run("deploy-policy", taskArgs);
     await hre.run("setup-role", { ...taskArgs, contextAddress });
   });

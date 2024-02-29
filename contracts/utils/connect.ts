@@ -2,7 +2,7 @@ import type { ethers } from "ethers";
 import type { HardhatRuntimeEnvironment } from "hardhat/types";
 
 import contextHandlerConfig from "../deploy/002_AccessContextHandler";
-import { AccessContextHandler__factory, AccessContext__factory, Verifier__factory } from "../types";
+import { AccessContextHandler__factory, AccessContext__factory, IPolicyVerifier__factory } from "../types";
 
 export async function connectAccessContextHandler(hre: HardhatRuntimeEnvironment, signer: ethers.Signer) {
   const address = await hre.deployments.get(contextHandlerConfig.id ?? "").then((d) => d.address);
@@ -15,5 +15,5 @@ export async function connectAccessContext(_: HardhatRuntimeEnvironment, signer:
 
 export async function connectPolicyVerifier(hre: HardhatRuntimeEnvironment, signer: ethers.Signer, name: string) {
   const address = await hre.deployments.get(name).then((d) => d.address);
-  return Verifier__factory.connect(address, signer);
+  return IPolicyVerifier__factory.connect(address, signer);
 }
