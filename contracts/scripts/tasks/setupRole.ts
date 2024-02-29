@@ -29,20 +29,21 @@ async function setupRole(address: string, signer: HardhatEthersSigner, options: 
     verify,
     did,
   );
-  return tx.wait();
+  await tx.wait();
+  return policyId;
 }
 
 task("setup-role", "Setup role with a sample policy")
-  .addParam("policyAddress", "The policy's address")
+  .addParam("contextAddress", "The access context's address")
   .addOptionalParam("policyName", "The policy's name", "Verifier")
-  .setAction(async (taskArgs: { policyName?: string; policyAddress: string }, hre) => {
+  .setAction(async (taskArgs: { policyName: string; contextAddress: string }, hre) => {
     const { getNamedAccounts, deployments, ethers, getChainId } = hre;
     const { deployer } = await getNamedAccounts();
     const chainId = await getChainId();
     const user = `did:pkh:${chainId}:eip155:${deployer}`;
     const signer = await ethers.getSigner(deployer ?? "");
     console.log("setting up role...");
-    const policy = await deployments.get(taskArgs.policyName ?? "Verifier");
-    await setupRole(taskArgs.policyAddress, signer, { user, policy });
-    console.log("setup role success");
+    const policy = await deployments.get(taskArgs.policyName);
+    const policyId = await setupRole(taskArgs.contextAddress, signer, { user, policy });
+    console.log("setup role success", { policyId });
   });
