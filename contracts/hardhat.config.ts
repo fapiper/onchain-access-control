@@ -7,6 +7,8 @@ import { resolve } from "path";
 
 import "./scripts/tasks/createContext";
 import "./scripts/tasks/deployPolicy";
+import "./scripts/tasks/grantRole";
+import "./scripts/tasks/initContext";
 import "./scripts/tasks/setupRole";
 
 const dotenvConfigPath: string = process.env["DOTENV_CONFIG_PATH"] || "./.env";
