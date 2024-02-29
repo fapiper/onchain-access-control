@@ -14,19 +14,15 @@ async function setupRole(address: string, signer: HardhatEthersSigner, options: 
   const resource = ethers.id(`${user};reports/1`);
   // const operations = new Uint8Array([0, 1]) as unknown as ethers.BigNumberish[];
   const operations: any[] = [ethers.getUint(1)];
-  const policyInstance = options.policy.address;
-  let policyInterface = new ethers.Interface(options.policy.abi);
-  const fragment = policyInterface.getFunction("verifyTx");
-  const verify = fragment?.selector ?? "";
+  const policyVerifier = options.policy.address;
   const did = ethers.id(user);
-  const tx = await instance["setupRole(bytes32,bytes32,bytes32,bytes32,uint8[],address,bytes4,bytes32)"](
+  const tx = await instance["setupRole(bytes32,bytes32,bytes32,bytes32,uint8[],address,bytes32)"](
     role,
     policyId,
     permission,
     resource,
     operations,
-    policyInstance,
-    verify,
+    policyVerifier,
     did,
   );
   await tx.wait();
