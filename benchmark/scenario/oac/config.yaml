@@ -1,19 +1,19 @@
 oacArgs: &oac-args
   resourceUser: 'did:pkh:11155111:eip155:0xd231120Eea6201B142b4048cf6C86BaC2A0655D2'
   role: 'VERIFIER'
-  policy: '0x267b6fc03715988333f5862c460e5f150683d5cb419e18e5a4c2b96039b9724b'
-  context: '0xc443a2ce4c67a11d47fb1df69c6a82409ee6ec7f2b1ac7061c7c952455262778'
+  policy: '0xf36d405f07b0e341501f06690fe4c9757d37b85784141c9f0eb327ad9ac9888a'
+  context: '0x3d947d2e6f92114fd9a0773b11538a6e5ec1890c2a5087b95eac63ad2964a7e2'
   numberOfPolicies: 1
 
 grWorkload: &gr-workload
     module: scenario/oac/assign-role.js
 
 grRound: &gr-round
-    txNumber: 50
+    txNumber: 100
     rateControl:
       type: fixed-rate
       opts:
-        tps: 5
+        tps: 0.5
 
 test:
   name: oac

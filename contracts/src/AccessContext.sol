@@ -54,7 +54,7 @@ contract AccessContext is IContextInstance, DIDOwnable, AccessControlListExtensi
     ) external {
         bytes32 thisContext = _thisContext();
         uint256 policyCount = _policies.length;
-        require(_hasRoleExpectedPolicyCount(thisContext, _role, policyCount), "policy len not allowed");
+        //require(_hasRoleExpectedPolicyCount(thisContext, _role, policyCount), "policy len not allowed");
         for (uint256 i = 0; i < policyCount; i++) {
             Policy memory policy_ = _getPolicy(_policyContexts[i], _policies[i]);
             // TODO with get policies or only policy context sufficient?

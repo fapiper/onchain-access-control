@@ -128,13 +128,18 @@
                 <li>DLT: &nbsp<span style="font-weight: 500;">ethereum</span></li>
                 <li>Name: &nbsp<span style="font-weight: 500;">oac</span></li>
                 <li>Description: &nbsp<span style="font-weight: 500;">Hyperledger Caliper Benchmark of a Non-disclosing Blockchain-based Access Control for Data Sharing in Multi-Party Environments,  to test the backend DLT&#39;s performance with simple role assignment &amp; session transactions.</span></li>
-                <li>Benchmark Rounds: &nbsp<span style="font-weight: 500;">2</span></li>
+                <li>Benchmark Rounds: &nbsp<span style="font-weight: 500;">6</span></li>
                 <li><a href="#benchmarkInfo">Details</a></li>
             </ul>
             <ul>
                 <h3>&nbspBenchmark results</h3>
                 <li><a href="#benchmarksummary">Summary</a></li>
                     <li><a href="#grantRole#1">grantRole#1</a></li>
+                    <li><a href="#grantRole#2">grantRole#2</a></li>
+                    <li><a href="#grantRole#3">grantRole#3</a></li>
+                    <li><a href="#grantRole#5">grantRole#5</a></li>
+                    <li><a href="#grantRole#8">grantRole#8</a></li>
+                    <li><a href="#grantRole#13">grantRole#13</a></li>
             </ul>
             <ul>
                 <h3>&nbspSystem under test</h3>
@@ -152,7 +157,22 @@
                     </tr>
 
                     <tr>
-                         <td>grantRole#1</td> <td>47</td> <td>3</td> <td>5.1</td> <td>51.20</td> <td>29.97</td> <td>37.24</td> <td>0.9</td>
+                         <td>grantRole#1</td> <td>10</td> <td>0</td> <td>1.1</td> <td>27.55</td> <td>18.56</td> <td>23.05</td> <td>0.4</td>
+                    </tr>
+                    <tr>
+                         <td>grantRole#2</td> <td>10</td> <td>0</td> <td>1.1</td> <td>27.91</td> <td>4.20</td> <td>10.11</td> <td>0.3</td>
+                    </tr>
+                    <tr>
+                         <td>grantRole#3</td> <td>10</td> <td>0</td> <td>1.1</td> <td>12.94</td> <td>1.49</td> <td>6.21</td> <td>0.5</td>
+                    </tr>
+                    <tr>
+                         <td>grantRole#5</td> <td>0</td> <td>10</td> <td>1.1</td> <td>-</td> <td>-</td> <td>-</td> <td>0.2</td>
+                    </tr>
+                    <tr>
+                         <td>grantRole#8</td> <td>10</td> <td>0</td> <td>1.1</td> <td>24.62</td> <td>15.78</td> <td>20.29</td> <td>0.4</td>
+                    </tr>
+                    <tr>
+                         <td>grantRole#13</td> <td>10</td> <td>0</td> <td>1.1</td> <td>39.22</td> <td>3.71</td> <td>10.92</td> <td>0.2</td>
                     </tr>
                 </table>
             </div>
@@ -162,7 +182,7 @@
                 <pre style="overflow: visible;white-space: pre-wrap;max-height:100%;">rateControl:
   type: fixed-rate
   opts:
-    tps: 5
+    tps: 1
 </pre>
                         <h3>Performance metrics for grantRole#1</h3>
                             <table style="min-width: 100%;">
@@ -170,10 +190,110 @@
                                      <th>Name</th> <th>Succ</th> <th>Fail</th> <th>Send Rate (TPS)</th> <th>Max Latency (s)</th> <th>Min Latency (s)</th> <th>Avg Latency (s)</th> <th>Throughput (TPS)</th>
                                 </tr>
                                 <tr>
-                                     <td>grantRole#1</td> <td>47</td> <td>3</td> <td>5.1</td> <td>51.20</td> <td>29.97</td> <td>37.24</td> <td>0.9</td>
+                                     <td>grantRole#1</td> <td>10</td> <td>0</td> <td>1.1</td> <td>27.55</td> <td>18.56</td> <td>23.05</td> <td>0.4</td>
                                 </tr>
                             </table>
                         <h3>Resource utilization for grantRole#1</h3>
+            </div>
+
+            <div style="border-bottom: 1px solid #d9d9d9; padding-bottom: 10px;" id="grantRole#2">
+                <h2>Benchmark round: grantRole#2</h2>
+                <p>Grant role with two policies</p>
+                <pre style="overflow: visible;white-space: pre-wrap;max-height:100%;">rateControl:
+  type: fixed-rate
+  opts:
+    tps: 1
+</pre>
+                        <h3>Performance metrics for grantRole#2</h3>
+                            <table style="min-width: 100%;">
+                                <tr>
+                                     <th>Name</th> <th>Succ</th> <th>Fail</th> <th>Send Rate (TPS)</th> <th>Max Latency (s)</th> <th>Min Latency (s)</th> <th>Avg Latency (s)</th> <th>Throughput (TPS)</th>
+                                </tr>
+                                <tr>
+                                     <td>grantRole#2</td> <td>10</td> <td>0</td> <td>1.1</td> <td>27.91</td> <td>4.20</td> <td>10.11</td> <td>0.3</td>
+                                </tr>
+                            </table>
+                        <h3>Resource utilization for grantRole#2</h3>
+            </div>
+
+            <div style="border-bottom: 1px solid #d9d9d9; padding-bottom: 10px;" id="grantRole#3">
+                <h2>Benchmark round: grantRole#3</h2>
+                <p>Grant role with three policies</p>
+                <pre style="overflow: visible;white-space: pre-wrap;max-height:100%;">rateControl:
+  type: fixed-rate
+  opts:
+    tps: 1
+</pre>
+                        <h3>Performance metrics for grantRole#3</h3>
+                            <table style="min-width: 100%;">
+                                <tr>
+                                     <th>Name</th> <th>Succ</th> <th>Fail</th> <th>Send Rate (TPS)</th> <th>Max Latency (s)</th> <th>Min Latency (s)</th> <th>Avg Latency (s)</th> <th>Throughput (TPS)</th>
+                                </tr>
+                                <tr>
+                                     <td>grantRole#3</td> <td>10</td> <td>0</td> <td>1.1</td> <td>12.94</td> <td>1.49</td> <td>6.21</td> <td>0.5</td>
+                                </tr>
+                            </table>
+                        <h3>Resource utilization for grantRole#3</h3>
+            </div>
+
+            <div style="border-bottom: 1px solid #d9d9d9; padding-bottom: 10px;" id="grantRole#5">
+                <h2>Benchmark round: grantRole#5</h2>
+                <p>Grant role with five policies</p>
+                <pre style="overflow: visible;white-space: pre-wrap;max-height:100%;">rateControl:
+  type: fixed-rate
+  opts:
+    tps: 1
+</pre>
+                        <h3>Performance metrics for grantRole#5</h3>
+                            <table style="min-width: 100%;">
+                                <tr>
+                                     <th>Name</th> <th>Succ</th> <th>Fail</th> <th>Send Rate (TPS)</th> <th>Max Latency (s)</th> <th>Min Latency (s)</th> <th>Avg Latency (s)</th> <th>Throughput (TPS)</th>
+                                </tr>
+                                <tr>
+                                     <td>grantRole#5</td> <td>0</td> <td>10</td> <td>1.1</td> <td>-</td> <td>-</td> <td>-</td> <td>0.2</td>
+                                </tr>
+                            </table>
+                        <h3>Resource utilization for grantRole#5</h3>
+            </div>
+
+            <div style="border-bottom: 1px solid #d9d9d9; padding-bottom: 10px;" id="grantRole#8">
+                <h2>Benchmark round: grantRole#8</h2>
+                <p>Grant role with eight policies</p>
+                <pre style="overflow: visible;white-space: pre-wrap;max-height:100%;">rateControl:
+  type: fixed-rate
+  opts:
+    tps: 1
+</pre>
+                        <h3>Performance metrics for grantRole#8</h3>
+                            <table style="min-width: 100%;">
+                                <tr>
+                                     <th>Name</th> <th>Succ</th> <th>Fail</th> <th>Send Rate (TPS)</th> <th>Max Latency (s)</th> <th>Min Latency (s)</th> <th>Avg Latency (s)</th> <th>Throughput (TPS)</th>
+                                </tr>
+                                <tr>
+                                     <td>grantRole#8</td> <td>10</td> <td>0</td> <td>1.1</td> <td>24.62</td> <td>15.78</td> <td>20.29</td> <td>0.4</td>
+                                </tr>
+                            </table>
+                        <h3>Resource utilization for grantRole#8</h3>
+            </div>
+
+            <div style="border-bottom: 1px solid #d9d9d9; padding-bottom: 10px;" id="grantRole#13">
+                <h2>Benchmark round: grantRole#13</h2>
+                <p>Grant role with thirteen policies</p>
+                <pre style="overflow: visible;white-space: pre-wrap;max-height:100%;">rateControl:
+  type: fixed-rate
+  opts:
+    tps: 1
+</pre>
+                        <h3>Performance metrics for grantRole#13</h3>
+                            <table style="min-width: 100%;">
+                                <tr>
+                                     <th>Name</th> <th>Succ</th> <th>Fail</th> <th>Send Rate (TPS)</th> <th>Max Latency (s)</th> <th>Min Latency (s)</th> <th>Avg Latency (s)</th> <th>Throughput (TPS)</th>
+                                </tr>
+                                <tr>
+                                     <td>grantRole#13</td> <td>10</td> <td>0</td> <td>1.1</td> <td>39.22</td> <td>3.71</td> <td>10.92</td> <td>0.2</td>
+                                </tr>
+                            </table>
+                        <h3>Resource utilization for grantRole#13</h3>
             </div>
 
             <div style="border-bottom: 1px solid #d9d9d9; padding-bottom: 10px;">
@@ -187,11 +307,11 @@ description: &gt;-
 workers:
   number: 1
 rounds:
-  - txNumber: 50
+  - txNumber: 10
     rateControl:
       type: fixed-rate
       opts:
-        tps: 5
+        tps: 1
     label: grantRole#1
     description: Grant role with one policy
     workload:
@@ -199,14 +319,14 @@ rounds:
       arguments:
         resourceUser: &#39;did:pkh:11155111:eip155:0xd231120Eea6201B142b4048cf6C86BaC2A0655D2&#39;
         role: VERIFIER
-        policy: &#39;0x267b6fc03715988333f5862c460e5f150683d5cb419e18e5a4c2b96039b9724b&#39;
-        context: &#39;0xc443a2ce4c67a11d47fb1df69c6a82409ee6ec7f2b1ac7061c7c952455262778&#39;
+        policy: &#39;0xf36d405f07b0e341501f06690fe4c9757d37b85784141c9f0eb327ad9ac9888a&#39;
+        context: &#39;0x3d947d2e6f92114fd9a0773b11538a6e5ec1890c2a5087b95eac63ad2964a7e2&#39;
         numberOfPolicies: 1
-  - txNumber: 50
+  - txNumber: 10
     rateControl:
       type: fixed-rate
       opts:
-        tps: 5
+        tps: 1
     label: grantRole#2
     description: Grant role with two policies
     workload:
@@ -214,9 +334,69 @@ rounds:
       arguments:
         resourceUser: &#39;did:pkh:11155111:eip155:0xd231120Eea6201B142b4048cf6C86BaC2A0655D2&#39;
         role: VERIFIER
-        policy: &#39;0x267b6fc03715988333f5862c460e5f150683d5cb419e18e5a4c2b96039b9724b&#39;
-        context: &#39;0xc443a2ce4c67a11d47fb1df69c6a82409ee6ec7f2b1ac7061c7c952455262778&#39;
+        policy: &#39;0xf36d405f07b0e341501f06690fe4c9757d37b85784141c9f0eb327ad9ac9888a&#39;
+        context: &#39;0x3d947d2e6f92114fd9a0773b11538a6e5ec1890c2a5087b95eac63ad2964a7e2&#39;
         numberOfPolicies: 2
+  - txNumber: 10
+    rateControl:
+      type: fixed-rate
+      opts:
+        tps: 1
+    label: grantRole#3
+    description: Grant role with three policies
+    workload:
+      module: scenario&#x2F;oac&#x2F;assign-role.js
+      arguments:
+        resourceUser: &#39;did:pkh:11155111:eip155:0xd231120Eea6201B142b4048cf6C86BaC2A0655D2&#39;
+        role: VERIFIER
+        policy: &#39;0xf36d405f07b0e341501f06690fe4c9757d37b85784141c9f0eb327ad9ac9888a&#39;
+        context: &#39;0x3d947d2e6f92114fd9a0773b11538a6e5ec1890c2a5087b95eac63ad2964a7e2&#39;
+        numberOfPolicies: 3
+  - txNumber: 10
+    rateControl:
+      type: fixed-rate
+      opts:
+        tps: 1
+    label: grantRole#5
+    description: Grant role with five policies
+    workload:
+      module: scenario&#x2F;oac&#x2F;assign-role.js
+      arguments:
+        resourceUser: &#39;did:pkh:11155111:eip155:0xd231120Eea6201B142b4048cf6C86BaC2A0655D2&#39;
+        role: VERIFIER
+        policy: &#39;0xf36d405f07b0e341501f06690fe4c9757d37b85784141c9f0eb327ad9ac9888a&#39;
+        context: &#39;0x3d947d2e6f92114fd9a0773b11538a6e5ec1890c2a5087b95eac63ad2964a7e2&#39;
+        numberOfPolicies: 5
+  - txNumber: 10
+    rateControl:
+      type: fixed-rate
+      opts:
+        tps: 1
+    label: grantRole#8
+    description: Grant role with eight policies
+    workload:
+      module: scenario&#x2F;oac&#x2F;assign-role.js
+      arguments:
+        resourceUser: &#39;did:pkh:11155111:eip155:0xd231120Eea6201B142b4048cf6C86BaC2A0655D2&#39;
+        role: VERIFIER
+        policy: &#39;0xf36d405f07b0e341501f06690fe4c9757d37b85784141c9f0eb327ad9ac9888a&#39;
+        context: &#39;0x3d947d2e6f92114fd9a0773b11538a6e5ec1890c2a5087b95eac63ad2964a7e2&#39;
+        numberOfPolicies: 8
+  - txNumber: 10
+    rateControl:
+      type: fixed-rate
+      opts:
+        tps: 1
+    label: grantRole#13
+    description: Grant role with thirteen policies
+    workload:
+      module: scenario&#x2F;oac&#x2F;assign-role.js
+      arguments:
+        resourceUser: &#39;did:pkh:11155111:eip155:0xd231120Eea6201B142b4048cf6C86BaC2A0655D2&#39;
+        role: VERIFIER
+        policy: &#39;0xf36d405f07b0e341501f06690fe4c9757d37b85784141c9f0eb327ad9ac9888a&#39;
+        context: &#39;0x3d947d2e6f92114fd9a0773b11538a6e5ec1890c2a5087b95eac63ad2964a7e2&#39;
+        numberOfPolicies: 13
 </pre>
                 <h3>SUT</h3>
                 <pre id="sutdetails">not provided</pre>

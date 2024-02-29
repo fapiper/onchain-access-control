@@ -13,7 +13,7 @@
         "contracts": {
             "AccessContextHandler": {
                 "path": "./src/oac/AccessContextHandler.json",
-                "address": "0xb534966614ef998b3D70F082E2f1011Cd8420C10",
+                "address": "0xd231120Eea6201B142b4048cf6C86BaC2A0655D2",
                 "estimateGas": true,
                 "gas": {
                   "assign-role": 70000
