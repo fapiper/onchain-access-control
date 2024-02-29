@@ -24,7 +24,7 @@ bench:
 # Policy
 
 policy-gen-proof:
-	@bash ./dev/zokrates_gen/run.sh /contracts/test/policy/preimage.zok /contracts/test/policy/out 0 0 0 5
+	@bash ./dev/zokrates_gen/run.sh /contracts/test/policy/max.zok /contracts/test/policy/out 315555217 1079953207
 
 policy-cp-src:
 	cp ./contracts/test/policy/out/verifier.sol ./contracts/src/Policy.sol

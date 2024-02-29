@@ -10,7 +10,7 @@ def main(u32 max, private u32[8] name, private u32[8] value, private field[2] R,
     u32[8] h = sha256(name, value);
 
     bool isHash = h == M0;
-    bool isGreater = max < value[7];
+    bool inRange = max > value[7];
 
-    return isVerified && isHash && !isGreater;
+    return isVerified && isHash && inRange;
 }
