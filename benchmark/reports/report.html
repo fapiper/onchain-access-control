@@ -157,22 +157,22 @@
                     </tr>
 
                     <tr>
-                         <td>grantRole#1</td> <td>10</td> <td>0</td> <td>1.1</td> <td>27.55</td> <td>18.56</td> <td>23.05</td> <td>0.4</td>
+                         <td>grantRole#1</td> <td>0</td> <td>50</td> <td>69.7</td> <td>-</td> <td>-</td> <td>-</td> <td>2.5</td>
                     </tr>
                     <tr>
-                         <td>grantRole#2</td> <td>10</td> <td>0</td> <td>1.1</td> <td>27.91</td> <td>4.20</td> <td>10.11</td> <td>0.3</td>
+                         <td>grantRole#2</td> <td>0</td> <td>50</td> <td>77.3</td> <td>-</td> <td>-</td> <td>-</td> <td>4.5</td>
                     </tr>
                     <tr>
-                         <td>grantRole#3</td> <td>10</td> <td>0</td> <td>1.1</td> <td>12.94</td> <td>1.49</td> <td>6.21</td> <td>0.5</td>
+                         <td>grantRole#3</td> <td>50</td> <td>0</td> <td>69.2</td> <td>12.05</td> <td>10.91</td> <td>11.54</td> <td>4.1</td>
                     </tr>
                     <tr>
-                         <td>grantRole#5</td> <td>0</td> <td>10</td> <td>1.1</td> <td>-</td> <td>-</td> <td>-</td> <td>0.2</td>
+                         <td>grantRole#5</td> <td>0</td> <td>50</td> <td>72.6</td> <td>-</td> <td>-</td> <td>-</td> <td>5.2</td>
                     </tr>
                     <tr>
-                         <td>grantRole#8</td> <td>10</td> <td>0</td> <td>1.1</td> <td>24.62</td> <td>15.78</td> <td>20.29</td> <td>0.4</td>
+                         <td>grantRole#8</td> <td>26</td> <td>24</td> <td>61.8</td> <td>35.22</td> <td>34.65</td> <td>34.91</td> <td>1.4</td>
                     </tr>
                     <tr>
-                         <td>grantRole#13</td> <td>10</td> <td>0</td> <td>1.1</td> <td>39.22</td> <td>3.71</td> <td>10.92</td> <td>0.2</td>
+                         <td>grantRole#13</td> <td>50</td> <td>0</td> <td>59.5</td> <td>12.08</td> <td>10.75</td> <td>11.45</td> <td>4.1</td>
                     </tr>
                 </table>
             </div>
@@ -180,9 +180,12 @@
                 <h2>Benchmark round: grantRole#1</h2>
                 <p>Grant role with one policy</p>
                 <pre style="overflow: visible;white-space: pre-wrap;max-height:100%;">rateControl:
-  type: fixed-rate
+  type: maximum-rate
   opts:
-    tps: 1
+    tps: 100
+    step: 5
+    sampleInterval: &#39;20,&#39;
+    includeFailed: true
 </pre>
                         <h3>Performance metrics for grantRole#1</h3>
                             <table style="min-width: 100%;">
@@ -190,7 +193,7 @@
                                      <th>Name</th> <th>Succ</th> <th>Fail</th> <th>Send Rate (TPS)</th> <th>Max Latency (s)</th> <th>Min Latency (s)</th> <th>Avg Latency (s)</th> <th>Throughput (TPS)</th>
                                 </tr>
                                 <tr>
-                                     <td>grantRole#1</td> <td>10</td> <td>0</td> <td>1.1</td> <td>27.55</td> <td>18.56</td> <td>23.05</td> <td>0.4</td>
+                                     <td>grantRole#1</td> <td>0</td> <td>50</td> <td>69.7</td> <td>-</td> <td>-</td> <td>-</td> <td>2.5</td>
                                 </tr>
                             </table>
                         <h3>Resource utilization for grantRole#1</h3>
@@ -200,9 +203,12 @@
                 <h2>Benchmark round: grantRole#2</h2>
                 <p>Grant role with two policies</p>
                 <pre style="overflow: visible;white-space: pre-wrap;max-height:100%;">rateControl:
-  type: fixed-rate
+  type: maximum-rate
   opts:
-    tps: 1
+    tps: 100
+    step: 5
+    sampleInterval: &#39;20,&#39;
+    includeFailed: true
 </pre>
                         <h3>Performance metrics for grantRole#2</h3>
                             <table style="min-width: 100%;">
@@ -210,7 +216,7 @@
                                      <th>Name</th> <th>Succ</th> <th>Fail</th> <th>Send Rate (TPS)</th> <th>Max Latency (s)</th> <th>Min Latency (s)</th> <th>Avg Latency (s)</th> <th>Throughput (TPS)</th>
                                 </tr>
                                 <tr>
-                                     <td>grantRole#2</td> <td>10</td> <td>0</td> <td>1.1</td> <td>27.91</td> <td>4.20</td> <td>10.11</td> <td>0.3</td>
+                                     <td>grantRole#2</td> <td>0</td> <td>50</td> <td>77.3</td> <td>-</td> <td>-</td> <td>-</td> <td>4.5</td>
                                 </tr>
                             </table>
                         <h3>Resource utilization for grantRole#2</h3>
@@ -220,9 +226,12 @@
                 <h2>Benchmark round: grantRole#3</h2>
                 <p>Grant role with three policies</p>
                 <pre style="overflow: visible;white-space: pre-wrap;max-height:100%;">rateControl:
-  type: fixed-rate
+  type: maximum-rate
   opts:
-    tps: 1
+    tps: 100
+    step: 5
+    sampleInterval: &#39;20,&#39;
+    includeFailed: true
 </pre>
                         <h3>Performance metrics for grantRole#3</h3>
                             <table style="min-width: 100%;">
@@ -230,7 +239,7 @@
                                      <th>Name</th> <th>Succ</th> <th>Fail</th> <th>Send Rate (TPS)</th> <th>Max Latency (s)</th> <th>Min Latency (s)</th> <th>Avg Latency (s)</th> <th>Throughput (TPS)</th>
                                 </tr>
                                 <tr>
-                                     <td>grantRole#3</td> <td>10</td> <td>0</td> <td>1.1</td> <td>12.94</td> <td>1.49</td> <td>6.21</td> <td>0.5</td>
+                                     <td>grantRole#3</td> <td>50</td> <td>0</td> <td>69.2</td> <td>12.05</td> <td>10.91</td> <td>11.54</td> <td>4.1</td>
                                 </tr>
                             </table>
                         <h3>Resource utilization for grantRole#3</h3>
@@ -240,9 +249,12 @@
                 <h2>Benchmark round: grantRole#5</h2>
                 <p>Grant role with five policies</p>
                 <pre style="overflow: visible;white-space: pre-wrap;max-height:100%;">rateControl:
-  type: fixed-rate
+  type: maximum-rate
   opts:
-    tps: 1
+    tps: 100
+    step: 5
+    sampleInterval: &#39;20,&#39;
+    includeFailed: true
 </pre>
                         <h3>Performance metrics for grantRole#5</h3>
                             <table style="min-width: 100%;">
@@ -250,7 +262,7 @@
                                      <th>Name</th> <th>Succ</th> <th>Fail</th> <th>Send Rate (TPS)</th> <th>Max Latency (s)</th> <th>Min Latency (s)</th> <th>Avg Latency (s)</th> <th>Throughput (TPS)</th>
                                 </tr>
                                 <tr>
-                                     <td>grantRole#5</td> <td>0</td> <td>10</td> <td>1.1</td> <td>-</td> <td>-</td> <td>-</td> <td>0.2</td>
+                                     <td>grantRole#5</td> <td>0</td> <td>50</td> <td>72.6</td> <td>-</td> <td>-</td> <td>-</td> <td>5.2</td>
                                 </tr>
                             </table>
                         <h3>Resource utilization for grantRole#5</h3>
@@ -260,9 +272,12 @@
                 <h2>Benchmark round: grantRole#8</h2>
                 <p>Grant role with eight policies</p>
                 <pre style="overflow: visible;white-space: pre-wrap;max-height:100%;">rateControl:
-  type: fixed-rate
+  type: maximum-rate
   opts:
-    tps: 1
+    tps: 100
+    step: 5
+    sampleInterval: &#39;20,&#39;
+    includeFailed: true
 </pre>
                         <h3>Performance metrics for grantRole#8</h3>
                             <table style="min-width: 100%;">
@@ -270,7 +285,7 @@
                                      <th>Name</th> <th>Succ</th> <th>Fail</th> <th>Send Rate (TPS)</th> <th>Max Latency (s)</th> <th>Min Latency (s)</th> <th>Avg Latency (s)</th> <th>Throughput (TPS)</th>
                                 </tr>
                                 <tr>
-                                     <td>grantRole#8</td> <td>10</td> <td>0</td> <td>1.1</td> <td>24.62</td> <td>15.78</td> <td>20.29</td> <td>0.4</td>
+                                     <td>grantRole#8</td> <td>26</td> <td>24</td> <td>61.8</td> <td>35.22</td> <td>34.65</td> <td>34.91</td> <td>1.4</td>
                                 </tr>
                             </table>
                         <h3>Resource utilization for grantRole#8</h3>
@@ -280,9 +295,12 @@
                 <h2>Benchmark round: grantRole#13</h2>
                 <p>Grant role with thirteen policies</p>
                 <pre style="overflow: visible;white-space: pre-wrap;max-height:100%;">rateControl:
-  type: fixed-rate
+  type: maximum-rate
   opts:
-    tps: 1
+    tps: 100
+    step: 5
+    sampleInterval: &#39;20,&#39;
+    includeFailed: true
 </pre>
                         <h3>Performance metrics for grantRole#13</h3>
                             <table style="min-width: 100%;">
@@ -290,7 +308,7 @@
                                      <th>Name</th> <th>Succ</th> <th>Fail</th> <th>Send Rate (TPS)</th> <th>Max Latency (s)</th> <th>Min Latency (s)</th> <th>Avg Latency (s)</th> <th>Throughput (TPS)</th>
                                 </tr>
                                 <tr>
-                                     <td>grantRole#13</td> <td>10</td> <td>0</td> <td>1.1</td> <td>39.22</td> <td>3.71</td> <td>10.92</td> <td>0.2</td>
+                                     <td>grantRole#13</td> <td>50</td> <td>0</td> <td>59.5</td> <td>12.08</td> <td>10.75</td> <td>11.45</td> <td>4.1</td>
                                 </tr>
                             </table>
                         <h3>Resource utilization for grantRole#13</h3>
@@ -307,11 +325,14 @@ description: &gt;-
 workers:
   number: 1
 rounds:
-  - txNumber: 10
+  - txNumber: 50
     rateControl:
-      type: fixed-rate
+      type: maximum-rate
       opts:
-        tps: 1
+        tps: 100
+        step: 5
+        sampleInterval: &#39;20,&#39;
+        includeFailed: true
     label: grantRole#1
     description: Grant role with one policy
     workload:
@@ -322,11 +343,14 @@ rounds:
         policy: &#39;0xf36d405f07b0e341501f06690fe4c9757d37b85784141c9f0eb327ad9ac9888a&#39;
         context: &#39;0x3d947d2e6f92114fd9a0773b11538a6e5ec1890c2a5087b95eac63ad2964a7e2&#39;
         numberOfPolicies: 1
-  - txNumber: 10
+  - txNumber: 50
     rateControl:
-      type: fixed-rate
+      type: maximum-rate
       opts:
-        tps: 1
+        tps: 100
+        step: 5
+        sampleInterval: &#39;20,&#39;
+        includeFailed: true
     label: grantRole#2
     description: Grant role with two policies
     workload:
@@ -337,11 +361,14 @@ rounds:
         policy: &#39;0xf36d405f07b0e341501f06690fe4c9757d37b85784141c9f0eb327ad9ac9888a&#39;
         context: &#39;0x3d947d2e6f92114fd9a0773b11538a6e5ec1890c2a5087b95eac63ad2964a7e2&#39;
         numberOfPolicies: 2
-  - txNumber: 10
+  - txNumber: 50
     rateControl:
-      type: fixed-rate
+      type: maximum-rate
       opts:
-        tps: 1
+        tps: 100
+        step: 5
+        sampleInterval: &#39;20,&#39;
+        includeFailed: true
     label: grantRole#3
     description: Grant role with three policies
     workload:
@@ -352,11 +379,14 @@ rounds:
         policy: &#39;0xf36d405f07b0e341501f06690fe4c9757d37b85784141c9f0eb327ad9ac9888a&#39;
         context: &#39;0x3d947d2e6f92114fd9a0773b11538a6e5ec1890c2a5087b95eac63ad2964a7e2&#39;
         numberOfPolicies: 3
-  - txNumber: 10
+  - txNumber: 50
     rateControl:
-      type: fixed-rate
+      type: maximum-rate
       opts:
-        tps: 1
+        tps: 100
+        step: 5
+        sampleInterval: &#39;20,&#39;
+        includeFailed: true
     label: grantRole#5
     description: Grant role with five policies
     workload:
@@ -367,11 +397,14 @@ rounds:
         policy: &#39;0xf36d405f07b0e341501f06690fe4c9757d37b85784141c9f0eb327ad9ac9888a&#39;
         context: &#39;0x3d947d2e6f92114fd9a0773b11538a6e5ec1890c2a5087b95eac63ad2964a7e2&#39;
         numberOfPolicies: 5
-  - txNumber: 10
+  - txNumber: 50
     rateControl:
-      type: fixed-rate
+      type: maximum-rate
       opts:
-        tps: 1
+        tps: 100
+        step: 5
+        sampleInterval: &#39;20,&#39;
+        includeFailed: true
     label: grantRole#8
     description: Grant role with eight policies
     workload:
@@ -382,11 +415,14 @@ rounds:
         policy: &#39;0xf36d405f07b0e341501f06690fe4c9757d37b85784141c9f0eb327ad9ac9888a&#39;
         context: &#39;0x3d947d2e6f92114fd9a0773b11538a6e5ec1890c2a5087b95eac63ad2964a7e2&#39;
         numberOfPolicies: 8
-  - txNumber: 10
+  - txNumber: 50
     rateControl:
-      type: fixed-rate
+      type: maximum-rate
       opts:
-        tps: 1
+        tps: 100
+        step: 5
+        sampleInterval: &#39;20,&#39;
+        includeFailed: true
     label: grantRole#13
     description: Grant role with thirteen policies
     workload:
