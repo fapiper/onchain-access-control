@@ -5,7 +5,7 @@ import type { HardhatUserConfig } from "hardhat/config";
 import type { NetworkUserConfig } from "hardhat/types";
 import { resolve } from "path";
 
-import "./scripts/tasks/createAcContext";
+import "./scripts/tasks/createContext";
 import "./scripts/tasks/deployPolicy";
 import "./scripts/tasks/setupRole";
 

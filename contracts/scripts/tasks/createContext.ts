@@ -3,7 +3,7 @@ import { task } from "hardhat/config";
 import contextHandlerConfig from "../../deploy/002_AccessContextHandler";
 import { AccessContextHandler__factory } from "../../types";
 
-task("create-ac-context", "Create an access context", async (_, hre) => {
+task("create-context", "Create an access context", async (_, hre) => {
   const { getNamedAccounts, deployments, ethers, getChainId } = hre;
   const { deployer } = await getNamedAccounts();
   const chainId = await getChainId();
@@ -15,11 +15,11 @@ task("create-ac-context", "Create an access context", async (_, hre) => {
   const salt = ethers.randomBytes(20);
   const did = ethers.id(user);
 
-  console.log("creating instance...");
+  console.log("creating access context...");
   const tx = await contextHandler.createContextInstance(id, salt, did);
   await tx.wait();
   const event = await contextHandler.queryFilter(contextHandler.filters.CreateContextInstance, -1).then((e) => e[0]);
   const contextAddress = event?.args[0];
 
-  console.log("created context instance", { id, address: contextAddress, did });
+  console.log("created access context", { id, address: contextAddress, did });
 });
