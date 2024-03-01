@@ -1,17 +1,32 @@
 # The devtools target installs tools required for 'go generate'.
 # You need to put $GOBIN (or $GOPATH/bin) in your PATH to use 'go generate'.
 
-devtools:
+# Dev tools
+
+dev-update:
+	@make dev-check dev-update-requirements dev-update-manifest dev-update-repos dev-gazelle
+
+dev-check:
 	@type "bazel" 2> /dev/null || echo 'Please install bazel'
 	@type "docker" 2> /dev/null || echo 'Please install docker'
 	@type "jq" 2> /dev/null || echo 'Please install jq'
 	@type "abigen" 2> /dev/null || echo 'Please install abigen'
 
-python-update-requirements:
-	bazel run //:requirements.update
+dev-update-requirements:
+	@bazel run //:requirements.update
 
-#python-update-gazelle:
-#	bazel run //:gazelle_python_manifest.update
+dev-update-manifest:
+	@bazel run //:gazelle_python_manifest.update
+
+dev-update-repos:
+	@bazel run //:gazelle-update-repos
+
+dev-gazelle:
+	@bazel run //:gazelle
+
+# Attestation
+
+
 
 # Benchmark
 
@@ -55,11 +70,3 @@ abi-gen:
 	abigen --abi=./core/contracts/abi/AccessContextHandler.abi --pkg=contracts --type=AccessContextHandler > ./core/contracts/AccessContextHandler.go
 	abigen --abi=./core/contracts/abi/SessionRegistry.abi --pkg=contracts --type=SessionRegistry > ./core/contracts/SessionRegistry.go
 	abigen --abi=./core/contracts/abi/SimpleDIDRegistry.abi --pkg=contracts --type=SimpleDIDRegistry > ./core/contracts/SimpleDIDRegistry.go
-
-# Miscellaneous stuff
-
-gazelle-update-repos:
-	bazel run //:gazelle-update-repos
-
-gazelle:
-	bazel run //:gazelle
