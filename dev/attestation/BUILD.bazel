@@ -1,0 +1,22 @@
+load("@rules_python//python:defs.bzl", "py_binary", "py_library")
+
+py_library(
+    name = "attestation",
+    srcs = [
+        "__init__.py",
+        "zokrates.py",
+    ],
+    visibility = ["//:__subpackages__"],
+    deps = [
+        "@pip//argparse",
+        "@pip//zokrates_pycrypto",
+    ],
+)
+
+py_binary(
+    name = "attestation_bin",
+    srcs = ["__main__.py"],
+    main = "__main__.py",
+    visibility = ["//:__subpackages__"],
+    deps = [":attestation"],
+)

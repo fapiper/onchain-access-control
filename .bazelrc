@@ -1,2 +1,2 @@
 # Disable Bzlmod for every Bazel command
-build --enable_bzlmod=false
+common --noenable_bzlmod

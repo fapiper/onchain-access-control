@@ -2,7 +2,7 @@ workspace(name = "com_github_fapiper_onchain_access_control")
 
 load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
 
-# Load setup and toolchain from rules_python first to avoid compatibility issues with gazelle.
+# Load setup and toolchain from rules_python first to avoid compatibility issues with gazelle?
 http_archive(
     name = "rules_python",
     sha256 = "c68bdc4fbec25de5b5493b8819cfc877c4ea299c0dcb15c244c5a00208cde311",
