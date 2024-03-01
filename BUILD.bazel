@@ -41,7 +41,7 @@ gazelle_python_manifest(
 )
 
 gazelle_binary(
-    name = "gazelle-bin",
+    name = "gazelle_bin",
     languages = [
         "@rules_python_gazelle_plugin//python:python",
         "@bazel_gazelle//language/go",  # Built-in rule from gazelle for Golang.
@@ -51,7 +51,7 @@ gazelle_binary(
 
 gazelle(
     name = "gazelle",
-    gazelle = ":gazelle-bin",
+    gazelle = ":gazelle_bin",
 )
 
 gazelle(
@@ -68,6 +68,8 @@ gazelle(
 #
 # gazelle:resolve go github.com/google/cel-go/cel @com_github_google_cel_go//cel:go_default_library
 # gazelle:resolve go github.com/google/cel-go/common/types/ref @com_github_google_cel_go//common/types/ref:go_default_library
+# gazelle:python_library_naming_convention $package_name$_lib
+# gazelle:python_binary_naming_convention $package_name$
 
 exports_files([
     "DEPS.bzl",

@@ -715,7 +715,6 @@ manifest:
     websockets.legacy.protocol: websockets
     websockets.legacy.server: websockets
     websockets.server: websockets
-    websockets.speedups: websockets
     websockets.streams: websockets
     websockets.typing: websockets
     websockets.uri: websockets
@@ -735,4 +734,4 @@ manifest:
     zokrates_pycrypto.utils: zokrates_pycrypto
   pip_repository:
     name: pip
-integrity: c61516762df548ed23ffc758edec1f377322f3d415a9c7a29753567ffbbf3497
+integrity: ece04f24409e695df8fc47cd3e9433be15b25667464fc17272abf6c4f838e5a5

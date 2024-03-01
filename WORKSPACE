@@ -2,7 +2,10 @@ workspace(name = "com_github_fapiper_onchain_access_control")
 
 load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
 
-# Load setup and toolchain from rules_python first to avoid compatibility issues with gazelle?
+######################
+# PYTHON SUPPORT
+######################
+
 http_archive(
     name = "rules_python",
     sha256 = "c68bdc4fbec25de5b5493b8819cfc877c4ea299c0dcb15c244c5a00208cde311",
@@ -11,6 +14,57 @@ http_archive(
 )
 
 load("@rules_python//python:repositories.bzl", "py_repositories", "python_register_toolchains")
+
+# Perform general setup
+py_repositories()
+
+# We now register a hermetic Python interpreter rather than relying on a system-installed interpreter.
+# This toolchain will allow bazel to download a specific python version, and use that version
+# for compilation.
+python_register_toolchains(
+    name = "python310",
+    python_version = "3.10",
+)
+
+load("@rules_python//python:pip.bzl", "pip_parse")
+
+# This macro wraps the `pip_repository` rule that invokes `pip`, with `incremental` set.
+# Accepts a locked/compiled requirements file and installs the dependencies listed within.
+# Those dependencies become available in a generated `requirements.bzl` file.
+# You can instead check this `requirements.bzl` file into your repo.
+pip_parse(
+    name = "pip",
+
+    # Requirement groups allow Bazel to tolerate PyPi cycles by putting dependencies
+    # which are known to form cycles into groups together.
+    experimental_requirement_cycles = {
+        "sphinx": [
+            "sphinx",
+            "sphinxcontrib-qthelp",
+            "sphinxcontrib-htmlhelp",
+            "sphinxcontrib-devhelp",
+            "sphinxcontrib-applehelp",
+            "sphinxcontrib-serializinghtml",
+        ],
+    },
+    # (Optional) You can provide a python_interpreter (path) or a python_interpreter_target (a Bazel target, that
+    # acts as an executable). The latter can be anything that could be used as Python interpreter. E.g.:
+    # 1. Python interpreter that you compile in the build file.
+    # 2. Pre-compiled python interpreter included with http_archive.
+    # 3. Wrapper script, like in the autodetecting python toolchain.
+    #
+    # Here, we use the interpreter constant that resolves to the host interpreter from the default Python toolchain.
+    python_interpreter_target = "@python310_host//:python",
+    # Set the location of the lock file.
+    requirements_lock = "//:requirements_lock.txt",
+    requirements_windows = "//:requirements_windows.txt",
+)
+
+# Load the install_deps macro.
+load("@pip//:requirements.bzl", "install_deps")
+
+# Initialize repositories for all packages in requirements_lock.txt.
+install_deps()
 
 ######################
 # GOLANG SUPPORT
@@ -66,66 +120,16 @@ go_register_toolchains(version = "1.20.5")
 gazelle_dependencies()
 
 ######################
-# PYTHON SUPPORT
+# PYTHON GAZELLE SUPPORT
 ######################
 
+# Execute after GOLANG SUPPORT
 http_archive(
     name = "rules_python_gazelle_plugin",
     sha256 = "c68bdc4fbec25de5b5493b8819cfc877c4ea299c0dcb15c244c5a00208cde311",
     strip_prefix = "rules_python-0.31.0/gazelle",
     url = "https://github.com/bazelbuild/rules_python/releases/download/0.31.0/rules_python-0.31.0.tar.gz",
 )
-
-# Perform general setup
-py_repositories()
-
-# We now register a hermetic Python interpreter rather than relying on a system-installed interpreter.
-# This toolchain will allow bazel to download a specific python version, and use that version
-# for compilation.
-python_register_toolchains(
-    name = "python39",
-    python_version = "3.9",
-)
-
-load("@rules_python//python:pip.bzl", "pip_parse")
-
-# This macro wraps the `pip_repository` rule that invokes `pip`, with `incremental` set.
-# Accepts a locked/compiled requirements file and installs the dependencies listed within.
-# Those dependencies become available in a generated `requirements.bzl` file.
-# You can instead check this `requirements.bzl` file into your repo.
-pip_parse(
-    name = "pip",
-
-    # Requirement groups allow Bazel to tolerate PyPi cycles by putting dependencies
-    # which are known to form cycles into groups together.
-    experimental_requirement_cycles = {
-        "sphinx": [
-            "sphinx",
-            "sphinxcontrib-qthelp",
-            "sphinxcontrib-htmlhelp",
-            "sphinxcontrib-devhelp",
-            "sphinxcontrib-applehelp",
-            "sphinxcontrib-serializinghtml",
-        ],
-    },
-    # (Optional) You can provide a python_interpreter (path) or a python_interpreter_target (a Bazel target, that
-    # acts as an executable). The latter can be anything that could be used as Python interpreter. E.g.:
-    # 1. Python interpreter that you compile in the build file.
-    # 2. Pre-compiled python interpreter included with http_archive.
-    # 3. Wrapper script, like in the autodetecting python toolchain.
-    #
-    # Here, we use the interpreter constant that resolves to the host interpreter from the default Python toolchain.
-    python_interpreter_target = "@python39_host//:python",
-    # Set the location of the lock file.
-    requirements_lock = "//:requirements_lock.txt",
-    requirements_windows = "//:requirements_windows.txt",
-)
-
-# Load the install_deps macro.
-load("@pip//:requirements.bzl", "install_deps")
-
-# Initialize repositories for all packages in requirements_lock.txt.
-install_deps()
 
 # The rules_python gazelle extension has some third-party go dependencies
 # which we need to fetch in order to compile it.
@@ -136,9 +140,9 @@ load("@rules_python_gazelle_plugin//:deps.bzl", _py_gazelle_deps = "gazelle_deps
 # for python requirements.
 _py_gazelle_deps()
 
-######################
-# OCI SUPPORT
-######################
+#######################
+## OCI SUPPORT
+#######################
 
 http_archive(
     name = "rules_oci",

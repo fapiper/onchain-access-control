@@ -1,7 +1,7 @@
 load("@rules_python//python:defs.bzl", "py_binary", "py_library")
 
 py_library(
-    name = "attestation",
+    name = "attestation_lib",
     srcs = [
         "__init__.py",
         "zokrates.py",
@@ -14,9 +14,9 @@ py_library(
 )
 
 py_binary(
-    name = "attestation_bin",
+    name = "attestation",
     srcs = ["__main__.py"],
     main = "__main__.py",
     visibility = ["//:__subpackages__"],
-    deps = [":attestation"],
+    deps = [":attestation_lib"],
 )
