@@ -1,4 +1,4 @@
-load("@bazel_gazelle//:def.bzl", "DEFAULT_LANGUAGES", "gazelle", "gazelle_binary")
+load("@bazel_gazelle//:def.bzl", "gazelle")
 load("@pip//:requirements.bzl", "all_whl_requirements")
 load("@rules_python//python:defs.bzl", "py_binary", "py_library", "py_test")
 load("@rules_python//python:pip.bzl", "compile_pip_requirements")
@@ -49,20 +49,9 @@ gazelle_python_manifest(
     requirements = "//:requirements_lock.txt",
 )
 
-gazelle_binary(
-    name = "oac_gazelle",
-    languages = [
-        "@rules_python//gazelle",  # Use gazelle from rules_python.
-        "@bazel_gazelle//language/go",  # Built-in rule from gazelle for Golang.
-        "@bazel_gazelle//language/proto",  # Built-in rule from gazelle for Protos.
-        # Any languages that depend on Gazelle's proto plugin must come after it.
-    ],
-    visibility = ["//visibility:public"],
-)
-
 gazelle(
     name = "gazelle",
-    gazelle = "//:oac_gazelle",
+    gazelle = "//dev/gazelle:oac_gazelle",
 )
 
 gazelle(
