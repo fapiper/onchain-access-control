@@ -1,7 +1,6 @@
 node_modules
 benchmark/node_modules
-pkg/ui/node_modules
-pkg/contracts/node_modules
+contracts/node_modules
 .bazelrc.user
 .bazelrc
 bazel-bin

@@ -50,7 +50,7 @@ gazelle_python_manifest(
 )
 
 gazelle_binary(
-    name = "gazelle",
+    name = "oac_gazelle",
     languages = [
         "@rules_python//gazelle",  # Use gazelle from rules_python.
         "@bazel_gazelle//language/go",  # Built-in rule from gazelle for Golang.
@@ -62,7 +62,7 @@ gazelle_binary(
 
 gazelle(
     name = "gazelle",
-    gazelle = "//:gazelle",
+    gazelle = "//:oac_gazelle",
 )
 
 gazelle(
