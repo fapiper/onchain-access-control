@@ -7,6 +7,12 @@ devtools:
 	@type "jq" 2> /dev/null || echo 'Please install jq'
 	@type "abigen" 2> /dev/null || echo 'Please install abigen'
 
+python-update-requirements:
+	bazel run //:requirements.update
+
+#python-update-gazelle:
+#	bazel run //:gazelle_python_manifest.update
+
 # Benchmark
 
 bench-prepare:

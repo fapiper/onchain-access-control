@@ -1,0 +1,20 @@
+load("@py_deps//:requirements.bzl", "requirement")
+
+MAIN_SRCS = glob(["*.py"])
+
+MAIN_DEPS = [
+    requirement("argparse"),
+    requirement("hashlib"),
+    requirement("struct"),
+    requirement("zokrates_pycrypto"),
+]
+
+py_binary(
+    name = "main",
+    srcs = ["main.py"],
+    imports = [""],
+    main = "main.py",
+    python_version = "PY3",
+    srcs_version = "PY3",
+    deps = MAIN_DEPS,
+)

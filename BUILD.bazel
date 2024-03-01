@@ -1,11 +1,22 @@
 load("@bazel_gazelle//:def.bzl", "gazelle")
+load("@rules_python//python/pip_install:requirements.bzl", "compile_pip_requirements")
 
 exports_files([
     "DEPS.bzl",
+    "requirements.txt",
     "WORKSPACE",
     "go.mod",
     "go.sum",
 ])
+
+# Update dependencies with:
+# bazel run //:requirements.update
+compile_pip_requirements(
+    name = "requirements",
+    extra_args = [
+        "--allow-unsafe",
+    ],
+)
 
 gazelle(
     name = "gazelle",

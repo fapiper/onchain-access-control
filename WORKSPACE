@@ -2,6 +2,40 @@ workspace(name = "com_github_fapiper_onchain_access_control")
 
 load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
 
+######################
+# PYTHON SUPPORT
+######################
+
+rules_python_version = "0.7.0"
+
+http_archive(
+    name = "rules_python",
+    sha256 = "15f84594af9da06750ceb878abbf129241421e3abbd6e36893041188db67f2fb",
+    strip_prefix = "rules_python-0.7.0",
+    url = "https://github.com/bazelbuild/rules_python/archive/refs/tags/0.7.0.tar.gz",
+)
+
+load("@rules_python//python:repositories.bzl", "python_register_toolchains")
+
+python_register_toolchains(
+    name = "python39",
+    # Available versions are listed in @rules_python//python:versions.bzl.
+    python_version = "3.9",
+)
+
+load("@python39_resolved_interpreter//:defs.bzl", python_interpreter = "interpreter")
+load("@rules_python//python:pip.bzl", "pip_install")
+
+pip_install(
+    name = "py_deps",
+    python_interpreter_target = python_interpreter,
+    requirements = "//:requirements.txt",
+)
+
+######################
+# GOLANG SUPPORT
+######################
+
 http_archive(
     name = "io_bazel_rules_go",
     sha256 = "6dc2da7ab4cf5d7bfc7c949776b1b7c733f05e56edc4bcd9022bb249d2e2a996",
@@ -29,7 +63,30 @@ http_archive(
     ],
 )
 
-# Oci setup
+# Go toolchain setup
+load("@rules_proto//proto:repositories.bzl", "rules_proto_dependencies", "rules_proto_toolchains")
+
+rules_proto_dependencies()
+
+rules_proto_toolchains()
+
+load("@io_bazel_rules_go//go:deps.bzl", "go_register_toolchains", "go_rules_dependencies")
+
+go_rules_dependencies()
+
+load("@bazel_gazelle//:deps.bzl", "gazelle_dependencies")
+load("//:DEPS.bzl", "go_dependencies")
+
+# gazelle:repository_macro DEPS.bzl%go_dependencies
+go_dependencies()
+
+go_register_toolchains(version = "1.20.5")
+
+gazelle_dependencies()
+
+######################
+# OCI SUPPORT
+######################
 
 http_archive(
     name = "rules_oci",
@@ -64,24 +121,3 @@ oci_pull(
         "linux/arm64",
     ],
 )
-
-# Go toolchain setup
-load("@rules_proto//proto:repositories.bzl", "rules_proto_dependencies", "rules_proto_toolchains")
-
-rules_proto_dependencies()
-
-rules_proto_toolchains()
-
-load("@io_bazel_rules_go//go:deps.bzl", "go_register_toolchains", "go_rules_dependencies")
-
-go_rules_dependencies()
-
-load("@bazel_gazelle//:deps.bzl", "gazelle_dependencies")
-load("//:DEPS.bzl", "go_dependencies")
-
-# gazelle:repository_macro DEPS.bzl%go_dependencies
-go_dependencies()
-
-go_register_toolchains(version = "1.20.5")
-
-gazelle_dependencies()
