@@ -64,17 +64,19 @@ contract PolicyExtension is IPolicyExtension, ContextInstance {
 
     function _verifyPolicy(
         Policy memory _policy,
-        IPolicyVerifier.Proof memory _zkVP
+        IPolicyVerifier.Proof memory _proof,
+        uint[20] memory _input
     ) internal view returns (bool) {
-        return _policy.verifier.verifyTx(_zkVP);
+        return _policy.verifier.verifyTx(_proof, _input);
     }
 
     function _verifyPolicies (
         Policy[] memory _policies,
-        IPolicyVerifier.Proof[] memory _zkVPs
+        IPolicyVerifier.Proof[] memory _proofs,
+        uint[20][] memory _inputs
     ) internal view returns (bool) {
         for (uint256 i = 0; i < _policies.length; i++) {
-            if(!_verifyPolicy(_policies[i], _zkVPs[i])) {
+            if(!_verifyPolicy(_policies[i], _proofs[i], _inputs[i])) {
                 return false;
             }
         }

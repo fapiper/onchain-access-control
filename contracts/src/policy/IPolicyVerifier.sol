@@ -17,5 +17,5 @@ interface IPolicyVerifier {
         Pairing.G1Point c;
     }
 
-    function verifyTx(Proof memory proof) external view returns (bool r);
+    function verifyTx(Proof memory proof, uint[20] memory input) external view returns (bool r);
 }
