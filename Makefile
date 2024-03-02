@@ -3,25 +3,31 @@
 
 # Dev tools
 
-dev-update:
-	@make dev-check dev-update-requirements dev-update-manifest dev-update-repos dev-gazelle
-
-dev-check:
+check:
 	@type "bazel" 2> /dev/null || echo 'Please install bazel'
 	@type "docker" 2> /dev/null || echo 'Please install docker'
 	@type "jq" 2> /dev/null || echo 'Please install jq'
 	@type "abigen" 2> /dev/null || echo 'Please install abigen'
 
-dev-update-requirements:
+clean:
+	@bazel clean
+
+build:
+	@bazel build //...
+
+update:
+	@make check update-requirements update-manifest update-repos gazelle
+
+update-requirements:
 	@bazel run //:requirements.update
 
-dev-update-manifest:
+update-manifest:
 	@bazel run //:gazelle_python_manifest.update
 
-dev-update-repos:
+update-repos:
 	@bazel run //:gazelle-update-repos
 
-dev-gazelle:
+gazelle:
 	@bazel run //:gazelle
 
 # Attestation
