@@ -9,11 +9,12 @@ grWorkload: &gr-workload
     module: scenario/oac/assign-role.js
 
 grRound: &gr-round
-    txNumber: 2
+    txNumber: 20
     rateControl:
-      type: fixed-rate
+      type: fixed-load
       opts:
-        tps: 0.1
+        transactionLoad: 1,
+        startingTps: 1
 
 test:
   name: oac
@@ -46,6 +47,14 @@ test:
           << : *oac-args
           numberOfPolicies: 3
     - <<: *gr-round
+      label: grantRole#4
+      description: Grant role with four policies
+      workload:
+        <<: *gr-workload
+        arguments:
+          << : *oac-args
+          numberOfPolicies: 4
+    - <<: *gr-round
       label: grantRole#5
       description: Grant role with five policies
       workload:
@@ -54,6 +63,22 @@ test:
           << : *oac-args
           numberOfPolicies: 5
     - <<: *gr-round
+      label: grantRole#6
+      description: Grant role with six policies
+      workload:
+        <<: *gr-workload
+        arguments:
+          << : *oac-args
+          numberOfPolicies: 6
+    - <<: *gr-round
+      label: grantRole#7
+      description: Grant role with seven policies
+      workload:
+        <<: *gr-workload
+        arguments:
+          << : *oac-args
+          numberOfPolicies: 7
+    - <<: *gr-round
       label: grantRole#8
       description: Grant role with eight policies
       workload:
@@ -61,6 +86,38 @@ test:
         arguments:
           << : *oac-args
           numberOfPolicies: 8
+    - <<: *gr-round
+      label: grantRole#9
+      description: Grant role with nine policies
+      workload:
+        <<: *gr-workload
+        arguments:
+          << : *oac-args
+          numberOfPolicies: 9
+    - <<: *gr-round
+      label: grantRole#10
+      description: Grant role with ten policies
+      workload:
+        <<: *gr-workload
+        arguments:
+          << : *oac-args
+          numberOfPolicies: 10
+    - <<: *gr-round
+      label: grantRole#11
+      description: Grant role with eleven policies
+      workload:
+        <<: *gr-workload
+        arguments:
+          << : *oac-args
+          numberOfPolicies: 11
+    - <<: *gr-round
+      label: grantRole#12
+      description: Grant role with twelve policies
+      workload:
+        <<: *gr-workload
+        arguments:
+          << : *oac-args
+          numberOfPolicies: 12
     - <<: *gr-round
       label: grantRole#13
       description: Grant role with thirteen policies
