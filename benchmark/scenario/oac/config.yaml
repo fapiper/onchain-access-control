@@ -9,14 +9,11 @@ grWorkload: &gr-workload
     module: scenario/oac/assign-role.js
 
 grRound: &gr-round
-    txNumber: 20
+    txNumber: 2
     rateControl:
-      type: maximum-rate
+      type: fixed-rate
       opts:
-        tps: 100
-        step: 5
-        sampleInterval: 20,
-        includeFailed: true
+        tps: 0.1
 
 test:
   name: oac
