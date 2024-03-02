@@ -18,6 +18,9 @@ bench-prepare:
 bench-run:
 	@pnpm -C benchmark bench-run
 
+bench-run-zokrates:
+	@bash ./benchmark/zokrates/run.sh /contracts/test/policy/min.zok /benchmark/zokrates/min /dev/attestation/witness/min.txt
+
 bench:
 	bench-prepare bench-run
 
