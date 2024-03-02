@@ -1,8 +1,8 @@
 oacArgs: &oac-args
   resourceUser: 'did:pkh:11155111:eip155:0xd231120Eea6201B142b4048cf6C86BaC2A0655D2'
   role: 'VERIFIER'
-  policy: '0xf36d405f07b0e341501f06690fe4c9757d37b85784141c9f0eb327ad9ac9888a'
-  context: '0x3d947d2e6f92114fd9a0773b11538a6e5ec1890c2a5087b95eac63ad2964a7e2'
+  policy: '0x4a99c3ee483ab2168992d7bb443539c77b520e2d0030a3ce32e95387e14b1ebc'
+  context: '0xb847a0ab3c84cfd0e0d826306fdd832d83b712583d6c2659850a2f7a866c96ce'
   numberOfPolicies: 1
 
 grWorkload: &gr-workload
