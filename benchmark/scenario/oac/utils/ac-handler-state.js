@@ -7,12 +7,13 @@ class AcHandlerState {
   /**
    * Initializes the instance.
    */
-  constructor(workerIndex, resourceUser, context, role, policy, zkVP, numberOfPolicies, tokenId, token) {
+  constructor(workerIndex, resourceUser, context, role, policy, proof, input, numberOfPolicies, tokenId, token) {
     this.context = context
     this.role = role
     this.policyContexts = Array(numberOfPolicies).fill(context)
     this.policies = Array(numberOfPolicies).fill(policy)
-    this.zkVPs = Array(numberOfPolicies).fill(zkVP)
+    this.proofs = Array(numberOfPolicies).fill(proof)
+    this.inputs = Array(numberOfPolicies).fill(input)
     this.resourceUser = resourceUser
     this.tokenId = tokenId
     this.token = token
@@ -29,7 +30,8 @@ class AcHandlerState {
       did: this.resourceUser,
       policyContexts: this.policyContexts,
       policies: this.policies,
-      zkVPs: this.zkVPs,
+      proofs: this.proofs,
+      inputs: this.inputs,
     }
   }
 

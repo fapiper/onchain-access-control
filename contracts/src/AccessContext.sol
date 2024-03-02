@@ -50,7 +50,8 @@ contract AccessContext is IContextInstance, DIDOwnable, AccessControlListExtensi
         bytes32 _did,
         bytes32[] memory _policyContexts,
         bytes32[] memory _policies,
-        IPolicyVerifier.Proof[] memory _zkVPs
+        IPolicyVerifier.Proof[] memory _proofs,
+        uint[20][] memory _inputs
     ) external {
         bytes32 thisContext = _thisContext();
         uint256 policyCount = _policies.length;
@@ -60,7 +61,7 @@ contract AccessContext is IContextInstance, DIDOwnable, AccessControlListExtensi
             // TODO with get policies or only policy context sufficient?
             require(_hasRolePolicy(thisContext, _role, policy_.context, policy_.id), "policy for role not allowed");
             // TODO (possible?): use policy context and bytes32 id sufficient?
-            require(_verifyPolicy(policy_, _zkVPs[i]), "policy not satisfied");
+            require(_verifyPolicy(policy_, _proofs[i], _inputs[i]), "policy not satisfied");
         }
         _grantRole(_role, _did);
     }

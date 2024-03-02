@@ -1,8 +1,8 @@
 oacArgs: &oac-args
   resourceUser: 'did:pkh:11155111:eip155:0xd231120Eea6201B142b4048cf6C86BaC2A0655D2'
   role: 'VERIFIER'
-  policy: '0xf36d405f07b0e341501f06690fe4c9757d37b85784141c9f0eb327ad9ac9888a'
-  context: '0x3d947d2e6f92114fd9a0773b11538a6e5ec1890c2a5087b95eac63ad2964a7e2'
+  policy: '0x4a99c3ee483ab2168992d7bb443539c77b520e2d0030a3ce32e95387e14b1ebc'
+  context: '0xb847a0ab3c84cfd0e0d826306fdd832d83b712583d6c2659850a2f7a866c96ce'
   numberOfPolicies: 1
 
 grWorkload: &gr-workload
@@ -11,12 +11,10 @@ grWorkload: &gr-workload
 grRound: &gr-round
     txNumber: 20
     rateControl:
-      type: maximum-rate
+      type: fixed-load
       opts:
-        tps: 100
-        step: 5
-        sampleInterval: 20,
-        includeFailed: true
+        transactionLoad: 1,
+        startingTps: 1
 
 test:
   name: oac
@@ -49,6 +47,14 @@ test:
           << : *oac-args
           numberOfPolicies: 3
     - <<: *gr-round
+      label: grantRole#4
+      description: Grant role with four policies
+      workload:
+        <<: *gr-workload
+        arguments:
+          << : *oac-args
+          numberOfPolicies: 4
+    - <<: *gr-round
       label: grantRole#5
       description: Grant role with five policies
       workload:
@@ -57,6 +63,22 @@ test:
           << : *oac-args
           numberOfPolicies: 5
     - <<: *gr-round
+      label: grantRole#6
+      description: Grant role with six policies
+      workload:
+        <<: *gr-workload
+        arguments:
+          << : *oac-args
+          numberOfPolicies: 6
+    - <<: *gr-round
+      label: grantRole#7
+      description: Grant role with seven policies
+      workload:
+        <<: *gr-workload
+        arguments:
+          << : *oac-args
+          numberOfPolicies: 7
+    - <<: *gr-round
       label: grantRole#8
       description: Grant role with eight policies
       workload:
@@ -64,6 +86,38 @@ test:
         arguments:
           << : *oac-args
           numberOfPolicies: 8
+    - <<: *gr-round
+      label: grantRole#9
+      description: Grant role with nine policies
+      workload:
+        <<: *gr-workload
+        arguments:
+          << : *oac-args
+          numberOfPolicies: 9
+    - <<: *gr-round
+      label: grantRole#10
+      description: Grant role with ten policies
+      workload:
+        <<: *gr-workload
+        arguments:
+          << : *oac-args
+          numberOfPolicies: 10
+    - <<: *gr-round
+      label: grantRole#11
+      description: Grant role with eleven policies
+      workload:
+        <<: *gr-workload
+        arguments:
+          << : *oac-args
+          numberOfPolicies: 11
+    - <<: *gr-round
+      label: grantRole#12
+      description: Grant role with twelve policies
+      workload:
+        <<: *gr-workload
+        arguments:
+          << : *oac-args
+          numberOfPolicies: 12
     - <<: *gr-round
       label: grantRole#13
       description: Grant role with thirteen policies

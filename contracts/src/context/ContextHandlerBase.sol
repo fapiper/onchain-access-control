@@ -46,9 +46,10 @@ contract ContextHandlerBase is DIDRecipient {
         bytes32 _did,
         bytes32[] memory _policyContexts,
         bytes32[] memory _policies,
-        IPolicyVerifier.Proof[] memory _zkVPs
+        IPolicyVerifier.Proof[] memory _proofs,
+        uint[20][] memory _inputs
     ) internal {
-        _getContextInstance(_roleContext).grantRole(_role, _did, _policyContexts, _policies, _zkVPs);
+        _getContextInstance(_roleContext).grantRole(_role, _did, _policyContexts, _policies, _proofs, _inputs);
     }
 
     function _createContextInstance(

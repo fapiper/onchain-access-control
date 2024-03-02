@@ -25,7 +25,8 @@ class AssignRoleWorkloadModule extends OperationBase {
       this.context,
       this.role,
       this.policy,
-      this.zkVP,
+      this.proof,
+      this.input,
       this.numberOfPolicies,
       this.tokenId,
       this.token
