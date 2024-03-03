@@ -1,6 +1,6 @@
 "Bazel go dependencies"
 
-load("@bazel_gazelle//:deps.bzl", "go_repository")
+load("@com_github_fapiper_onchain_access_control//dev/tools/go:def.bzl", "go_repository", "maybe")  # gazelle:keep
 
 def go_dependencies():
     """
@@ -738,7 +738,14 @@ def go_dependencies():
     )
     go_repository(
         name = "com_github_ethereum_go_ethereum",
+        build_directives = [
+            "gazelle:resolve go github.com/karalabe/usb @com_github_fapiper_onchain_access_control//third_party/usb:go_default_library",
+        ],
         importpath = "github.com/ethereum/go-ethereum",
+        patch_args = ["-p1"],
+        patches = [
+            "//third_party/patches:com_github_ethereum_go_ethereum_secp256k1.patch",
+        ],
         sum = "h1:mMiw/zOOtCLdGLWfcekua0qPrJTe7FVIiHJ4IKNTfR0=",
         version = "v1.9.25",
     )
