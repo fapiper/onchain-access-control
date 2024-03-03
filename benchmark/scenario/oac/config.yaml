@@ -1,20 +1,46 @@
-oacArgs: &oac-args
+args: &args
   resourceUser: 'did:pkh:11155111:eip155:0xd231120Eea6201B142b4048cf6C86BaC2A0655D2'
   role: 'VERIFIER'
   policy: '0x4a99c3ee483ab2168992d7bb443539c77b520e2d0030a3ce32e95387e14b1ebc'
   context: '0xb847a0ab3c84cfd0e0d826306fdd832d83b712583d6c2659850a2f7a866c96ce'
   numberOfPolicies: 1
 
-grWorkload: &gr-workload
-    module: scenario/oac/assign-role.js
+workload: &workload
+  module: scenario/oac/assign-role.js
 
-grRound: &gr-round
-    txNumber: 20
-    rateControl:
-      type: fixed-load
-      opts:
-        transactionLoad: 1,
-        startingTps: 1
+recordRate: &record-rate
+  type: "record-rate"
+
+recordOpts: &record-opts
+  pathTemplate: "reports/records/tx<C>_round<R>.txt"
+  outputFormat: "TEXT"
+  logEnd: true
+
+roundFixed: &round-fixed
+  txNumber: 30
+  rateControl:
+    <<: *record-rate
+    opts:
+      <<: *record-opts
+      rateController:
+        type: "fixed-feedback-rate"
+        opts:
+          transactionLoad: 1
+          startingTps: 1
+
+roundMax: &round-max
+  txDuration: 60
+  rateControl:
+    <<: *record-rate
+    opts:
+      <<: *record-opts
+      rateController:
+        type: "maximum-rate"
+        opts:
+          tps: 1
+          step: 1
+          sampleInterval: 10
+          includeFailed: false
 
 test:
   name: oac
@@ -24,108 +50,68 @@ test:
   workers:
     number: 1
   rounds:
-    - <<: *gr-round
-      label: grantRole#1
-      description: Grant role with one policy
+    - <<: *round-fixed
+      label: AssignRole#20
+      description: Grant role with twenty policies
       workload:
-        <<: *gr-workload
-        arguments: *oac-args
-    - <<: *gr-round
-      label: grantRole#2
-      description: Grant role with two policies
-      workload:
-        <<: *gr-workload
+        <<: *workload
         arguments:
-          << : *oac-args
-          numberOfPolicies: 2
-    - <<: *gr-round
-      label: grantRole#3
-      description: Grant role with three policies
+          << : *args
+          numberOfPolicies: 20
+    - <<: *round-fixed
+      label: AssignRole#16
+      description: Grant role with sixteen policies
       workload:
-        <<: *gr-workload
+        <<: *workload
         arguments:
-          << : *oac-args
-          numberOfPolicies: 3
-    - <<: *gr-round
-      label: grantRole#4
-      description: Grant role with four policies
-      workload:
-        <<: *gr-workload
-        arguments:
-          << : *oac-args
-          numberOfPolicies: 4
-    - <<: *gr-round
-      label: grantRole#5
-      description: Grant role with five policies
-      workload:
-        <<: *gr-workload
-        arguments:
-          << : *oac-args
-          numberOfPolicies: 5
-    - <<: *gr-round
-      label: grantRole#6
-      description: Grant role with six policies
-      workload:
-        <<: *gr-workload
-        arguments:
-          << : *oac-args
-          numberOfPolicies: 6
-    - <<: *gr-round
-      label: grantRole#7
-      description: Grant role with seven policies
-      workload:
-        <<: *gr-workload
-        arguments:
-          << : *oac-args
-          numberOfPolicies: 7
-    - <<: *gr-round
-      label: grantRole#8
-      description: Grant role with eight policies
-      workload:
-        <<: *gr-workload
-        arguments:
-          << : *oac-args
-          numberOfPolicies: 8
-    - <<: *gr-round
-      label: grantRole#9
-      description: Grant role with nine policies
-      workload:
-        <<: *gr-workload
-        arguments:
-          << : *oac-args
-          numberOfPolicies: 9
-    - <<: *gr-round
-      label: grantRole#10
-      description: Grant role with ten policies
-      workload:
-        <<: *gr-workload
-        arguments:
-          << : *oac-args
-          numberOfPolicies: 10
-    - <<: *gr-round
-      label: grantRole#11
-      description: Grant role with eleven policies
-      workload:
-        <<: *gr-workload
-        arguments:
-          << : *oac-args
-          numberOfPolicies: 11
-    - <<: *gr-round
-      label: grantRole#12
+          << : *args
+          numberOfPolicies: 16
+    - <<: *round-fixed
+      label: AssignRole#12
       description: Grant role with twelve policies
       workload:
-        <<: *gr-workload
+        <<: *workload
         arguments:
-          << : *oac-args
+          << : *args
           numberOfPolicies: 12
-    - <<: *gr-round
-      label: grantRole#13
-      description: Grant role with thirteen policies
+    - <<: *round-fixed
+      label: AssignRole#8
+      description: Grant role with eight policies
       workload:
-        <<: *gr-workload
+        <<: *workload
         arguments:
-          << : *oac-args
-          numberOfPolicies: 13
+          << : *args
+          numberOfPolicies: 8
+    - <<: *round-fixed
+      label: AssignRole#4
+      description: Grant role with four policies
+      workload:
+        <<: *workload
+        arguments:
+          << : *args
+          numberOfPolicies: 4
+    - <<: *round-fixed
+      label: AssignRole#1
+      description: Grant role with one policy
+      workload:
+        <<: *workload
+        arguments: *args
+    - <<: *round-max
+      label: AssignRoleMax#20
+      description: Grant role for max rate with twenty policy
+      workload:
+        <<: *workload
+        arguments:
+          << : *args
+          numberOfPolicies: 20
+    - <<: *round-max
+      label: AssignRoleMax#1
+      description: Grant role for max rate with one policy
+      workload:
+        <<: *workload
+        arguments:
+          << : *args
+          numberOfPolicies: 1
 #    - label: start-session
 #      description: Start a session through the deployed contract.
 #      txNumber: 50
@@ -135,4 +121,4 @@ test:
 #          tps: 5
 #      workload:
 #        module: scenario/simple/start-session.js
-#        arguments: *oac-args
+#        arguments: *args
