@@ -17,19 +17,19 @@ recordOpts: &record-opts
   logEnd: true
 
 roundFixed: &round-fixed
-  txNumber: 30
+  txNumber: 20
   rateControl:
     <<: *record-rate
     opts:
       <<: *record-opts
       rateController:
-        type: "fixed-feedback-rate"
+        type: "fixed-load"
         opts:
           transactionLoad: 1
           startingTps: 1
 
 roundMax: &round-max
-  txDuration: 60
+  txDuration: 30
   rateControl:
     <<: *record-rate
     opts:
@@ -50,22 +50,6 @@ test:
   workers:
     number: 1
   rounds:
-    - <<: *round-fixed
-      label: AssignRole#20
-      description: Grant role with twenty policies
-      workload:
-        <<: *workload
-        arguments:
-          << : *args
-          numberOfPolicies: 20
-    - <<: *round-fixed
-      label: AssignRole#16
-      description: Grant role with sixteen policies
-      workload:
-        <<: *workload
-        arguments:
-          << : *args
-          numberOfPolicies: 16
     - <<: *round-fixed
       label: AssignRole#12
       description: Grant role with twelve policies
@@ -91,19 +75,27 @@ test:
           << : *args
           numberOfPolicies: 4
     - <<: *round-fixed
+      label: AssignRole#4
+      description: Grant role with four policies
+      workload:
+        <<: *workload
+        arguments:
+          << : *args
+          numberOfPolicies: 4
+    - <<: *round-fixed
       label: AssignRole#1
       description: Grant role with one policy
       workload:
         <<: *workload
         arguments: *args
     - <<: *round-max
-      label: AssignRoleMax#20
-      description: Grant role for max rate with twenty policy
+      label: AssignRoleMax#12
+      description: Grant role for max rate with twelve policies
       workload:
         <<: *workload
         arguments:
           << : *args
-          numberOfPolicies: 20
+          numberOfPolicies: 12
     - <<: *round-max
       label: AssignRoleMax#1
       description: Grant role for max rate with one policy
