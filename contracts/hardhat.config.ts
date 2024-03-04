@@ -25,6 +25,12 @@ if (!infuraApiKey) {
   throw new Error("Please set your INFURA_API_KEY in a .env file");
 }
 
+const coinmarketcapApiKey = process.env["COINMARKETCAP_API_KEY"] ?? "";
+const enableReportGas = !!process.env["REPORT_GAS"];
+if (enableReportGas && coinmarketcapApiKey == "") {
+  throw new Error("REPORT_GAS is enabled. Please also set your COINMARKETCAP_API_KEY in a .env file");
+}
+
 const chainIds = {
   hardhat: 31337,
   sepolia: 11155111,
@@ -49,13 +55,15 @@ const config: HardhatUserConfig = {
   },
   etherscan: {
     apiKey: {
-      sepolia: process.env["ETHERSCAN_API_KEY"] || "",
+      sepolia: process.env["ETHERSCAN_API_KEY"] ?? "",
     },
   },
   gasReporter: {
+    enabled: enableReportGas,
+    token: "ETH",
     currency: "EUR",
-    enabled: !!process.env["REPORT_GAS"],
-    excludeContracts: [],
+    gasPrice: 20,
+    coinmarketcap: coinmarketcapApiKey,
     src: "./src",
   },
   networks: {
