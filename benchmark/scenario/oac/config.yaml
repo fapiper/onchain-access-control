@@ -17,7 +17,7 @@ recordOpts: &record-opts
   logEnd: true
 
 roundFixed: &round-fixed
-  txNumber: 20
+  txNumber: 100
   rateControl:
     <<: *record-rate
     opts:
@@ -25,11 +25,11 @@ roundFixed: &round-fixed
       rateController:
         type: "fixed-load"
         opts:
-          transactionLoad: 1
-          startingTps: 1
+          transactionLoad: 0.1 # 1 or 0.1?
+          startingTps: 0.1
 
 roundMax: &round-max
-  txDuration: 30
+  txDuration: 20
   rateControl:
     <<: *record-rate
     opts:
@@ -51,13 +51,13 @@ test:
     number: 1
   rounds:
     - <<: *round-fixed
-      label: AssignRole#12
-      description: Grant role with twelve policies
+      label: AssignRole#10
+      description: Grant role with ten policies
       workload:
         <<: *workload
         arguments:
           << : *args
-          numberOfPolicies: 12
+          numberOfPolicies: 10
     - <<: *round-fixed
       label: AssignRole#8
       description: Grant role with eight policies
@@ -67,43 +67,75 @@ test:
           << : *args
           numberOfPolicies: 8
     - <<: *round-fixed
-      label: AssignRole#4
-      description: Grant role with four policies
-      workload:
-        <<: *workload
-        arguments:
-          << : *args
-          numberOfPolicies: 4
-    - <<: *round-fixed
-      label: AssignRole#4
-      description: Grant role with four policies
-      workload:
-        <<: *workload
-        arguments:
-          << : *args
-          numberOfPolicies: 4
-    - <<: *round-fixed
-      label: AssignRole#1
-      description: Grant role with one policy
+      label: AssignRole#6
+      description: Grant role with six policies
       workload:
         <<: *workload
         arguments: *args
-    - <<: *round-max
-      label: AssignRoleMax#12
-      description: Grant role for max rate with twelve policies
+        numberOfPolicies: 6
+    - <<: *round-fixed
+      label: AssignRole#4
+      description: Grant role with four policies
       workload:
         <<: *workload
         arguments:
           << : *args
-          numberOfPolicies: 12
-    - <<: *round-max
-      label: AssignRoleMax#1
-      description: Grant role for max rate with one policy
+          numberOfPolicies: 4
+    - <<: *round-fixed
+      label: AssignRole#2
+      description: Grant role with two policies
       workload:
         <<: *workload
         arguments:
           << : *args
-          numberOfPolicies: 1
+          numberOfPolicies: 2
+    - <<: *round-fixed
+      label: AssignRole#0
+      description: Grant role with no policy
+      workload:
+        <<: *workload
+        arguments: *args
+        numberOfPolicies: 0
+#    - <<: *round-max
+#      label: AssignRoleMax#12
+#      description: Grant role for max rate with twelve policies
+#      workload:
+#        <<: *workload
+#        arguments:
+#          << : *args
+#          numberOfPolicies: 12
+#    - <<: *round-max
+#      label: AssignRoleMax#8
+#      description: Grant role for max rate with eight policies
+#      workload:
+#        <<: *workload
+#        arguments:
+#          << : *args
+#          numberOfPolicies: 8
+#    - <<: *round-max
+#      label: AssignRoleMax#4
+#      description: Grant role for max rate with four policies
+#      workload:
+#        <<: *workload
+#        arguments:
+#          << : *args
+#          numberOfPolicies: 4
+#    - <<: *round-max
+#      label: AssignRoleMax#2
+#      description: Grant role for max rate with two policies
+#      workload:
+#        <<: *workload
+#        arguments:
+#          << : *args
+#          numberOfPolicies: 2
+#    - <<: *round-max
+#      label: AssignRoleMax#1
+#      description: Grant role for max rate with one policy
+#      workload:
+#        <<: *workload
+#        arguments:
+#          << : *args
+#          numberOfPolicies: 1
 #    - label: start-session
 #      description: Start a session through the deployed contract.
 #      txNumber: 50
