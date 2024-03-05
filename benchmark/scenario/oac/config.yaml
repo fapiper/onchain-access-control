@@ -8,39 +8,19 @@ args: &args
 workload: &workload
   module: scenario/oac/assign-role.js
 
-recordRate: &record-rate
-  type: "record-rate"
-
-recordOpts: &record-opts
-  pathTemplate: "reports/records/tx<C>_round<R>.txt"
-  outputFormat: "TEXT"
-  logEnd: true
-
-roundFixed: &round-fixed
+round: &round
   txNumber: 100
   rateControl:
-    <<: *record-rate
+    type: "record-rate"
     opts:
-      <<: *record-opts
+      pathTemplate: "reports/records/tx<C>_round<R>.txt"
+      outputFormat: "TEXT"
+      logEnd: true
       rateController:
         type: "fixed-load"
         opts:
           transactionLoad: 0.1 # 1 or 0.1?
           startingTps: 0.1
-
-roundMax: &round-max
-  txDuration: 20
-  rateControl:
-    <<: *record-rate
-    opts:
-      <<: *record-opts
-      rateController:
-        type: "maximum-rate"
-        opts:
-          tps: 1
-          step: 1
-          sampleInterval: 10
-          includeFailed: false
 
 test:
   name: oac
@@ -50,99 +30,49 @@ test:
   workers:
     number: 1
   rounds:
-    - <<: *round-fixed
-      label: AssignRole#10
+    - <<: *round
+      label: Grant Role (#10)
       description: Grant role with ten policies
       workload:
         <<: *workload
         arguments:
           << : *args
           numberOfPolicies: 10
-    - <<: *round-fixed
-      label: AssignRole#8
+    - <<: *round
+      label: GrantRole#8
       description: Grant role with eight policies
       workload:
         <<: *workload
         arguments:
           << : *args
           numberOfPolicies: 8
-    - <<: *round-fixed
-      label: AssignRole#6
+    - <<: *round
+      label: Grant Role (#6)
       description: Grant role with six policies
       workload:
         <<: *workload
         arguments: *args
         numberOfPolicies: 6
-    - <<: *round-fixed
-      label: AssignRole#4
+    - <<: *round
+      label: Grant Role (#4)
       description: Grant role with four policies
       workload:
         <<: *workload
         arguments:
           << : *args
           numberOfPolicies: 4
-    - <<: *round-fixed
-      label: AssignRole#2
+    - <<: *round
+      label: Grant Role (#2)
       description: Grant role with two policies
       workload:
         <<: *workload
         arguments:
           << : *args
           numberOfPolicies: 2
-    - <<: *round-fixed
-      label: AssignRole#0
+    - <<: *round
+      label: Grant Role (#0)
       description: Grant role with no policy
       workload:
         <<: *workload
         arguments: *args
         numberOfPolicies: 0
-#    - <<: *round-max
-#      label: AssignRoleMax#12
-#      description: Grant role for max rate with twelve policies
-#      workload:
-#        <<: *workload
-#        arguments:
-#          << : *args
-#          numberOfPolicies: 12
-#    - <<: *round-max
-#      label: AssignRoleMax#8
-#      description: Grant role for max rate with eight policies
-#      workload:
-#        <<: *workload
-#        arguments:
-#          << : *args
-#          numberOfPolicies: 8
-#    - <<: *round-max
-#      label: AssignRoleMax#4
-#      description: Grant role for max rate with four policies
-#      workload:
-#        <<: *workload
-#        arguments:
-#          << : *args
-#          numberOfPolicies: 4
-#    - <<: *round-max
-#      label: AssignRoleMax#2
-#      description: Grant role for max rate with two policies
-#      workload:
-#        <<: *workload
-#        arguments:
-#          << : *args
-#          numberOfPolicies: 2
-#    - <<: *round-max
-#      label: AssignRoleMax#1
-#      description: Grant role for max rate with one policy
-#      workload:
-#        <<: *workload
-#        arguments:
-#          << : *args
-#          numberOfPolicies: 1
-#    - label: start-session
-#      description: Start a session through the deployed contract.
-#      txNumber: 50
-#      rateControl:
-#        type: fixed-rate
-#        opts:
-#          tps: 5
-#      workload:
-#        module: scenario/simple/start-session.js
-#        arguments: *args
