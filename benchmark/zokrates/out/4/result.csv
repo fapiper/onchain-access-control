@@ -1,0 +1,2 @@
+time_witness (s),time_setup (s),time_proof (s),size_compiled,size_proving_key,size_verification_key
+13320432008,21318564683,20523707539,1.6G,238M,16K
