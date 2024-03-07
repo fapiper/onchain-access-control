@@ -12,7 +12,7 @@
         "transactionConfirmationBlocks": 13,
         "contracts": {
             "AccessContextHandler": {
-                "path": "./src/oac/AccessContextHandler.json",
+                "path": "./src/AccessContextHandler.json",
                 "address": "0x424B7637A40E105889B592155Ab721c347a845D3",
                 "estimateGas": true,
                 "gas": {

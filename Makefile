@@ -8,6 +8,7 @@ devtools:
 	@type "abigen" 2> /dev/null || echo 'Please install abigen'
 
 # Benchmark
+
 bench-run:
 	bench-zokrates-run bench-caliper-run
 
@@ -18,21 +19,16 @@ bench-zokrates-run:
 	@bash ./benchmark/zokrates/run.sh
 
 bench-zokrates-cp:
-	cp ./benchmark/zokrates/min/Verifier.sol ./contracts/src/Policy.sol
+	cp ./benchmark/zokrates/in/1/Verifier.sol ./contracts/src/Policy.sol
 
 bench-zokrates-prepare:
 	bench-zokrates-run bench-zokrates-cp
 
 bench-caliper-prepare:
-	jq -r '{name: .contractName, gas: 5000000, abi, bytecode}' ./contracts/artifacts/src/SimpleDIDRegistry.sol/SimpleDIDRegistry.json > ./benchmark/src/oac/SimpleDIDRegistry.json
-	jq -r '{name: .contractName, gas: 5000000, abi, bytecode}' ./contracts/artifacts/src/AccessContextHandler.sol/AccessContextHandler.json > ./benchmark/src/oac/AccessContextHandler.json
-	jq -r '{name: .contractName, gas: 5000000, abi, bytecode}' ./contracts/artifacts/src/SessionRegistry.sol/SessionRegistry.json > ./benchmark/src/oac/SessionRegistry.json
-	jq -r '{name: .contractName, gas: 5000000, abi, bytecode}' ./contracts/artifacts/src/Policy.sol/Verifier.json > ./benchmark/src/oac/PolicyVerifier.json
+	jq -r '{name: .contractName, gas: 5000000, abi, bytecode}' ./contracts/artifacts/src/AccessContextHandler.sol/AccessContextHandler.json > ./benchmark/src/AccessContextHandler.json
 
 bench-caliper-run:
 	@pnpm -C benchmark bench-run
-
-# Policy
 
 # Contracts
 

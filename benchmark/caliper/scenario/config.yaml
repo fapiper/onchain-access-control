@@ -6,7 +6,7 @@ args: &args
   numberOfPolicies: 1
 
 workload: &workload
-  module: scenario/oac/assign-role.js
+  module: scenario/assign-role.js
 
 round: &round
   txNumber: 100
