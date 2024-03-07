@@ -1,3 +1,4 @@
+import { deployAccessContextHandlerFixture } from "./AccessContextHandler.fixture";
 
 describe("AccessContextHandler Unit Tests", async () => {
   before(async function () {
@@ -10,8 +11,8 @@ describe("AccessContextHandler Unit Tests", async () => {
   });
 
   beforeEach(async function () {
-    const { AccessContextHandlerInstance } = await this.loadFixture(deployAccessContextHandlerFixture);
-    this.AccessContextHandlerInstance = AccessContextHandlerInstance;
+    const { instances } = await this.loadFixture(deployAccessContextHandlerFixture);
+    this.instances = instances;
   });
 
   it("Owner creates an access context", async () => {

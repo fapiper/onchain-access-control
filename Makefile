@@ -9,23 +9,19 @@ devtools:
 
 # Benchmark
 bench-run:
-	bench-policy-run bench-caliper-run
+	bench-zokrates-run bench-caliper-run
 
 bench-prepare:
-	bench-policy-prepare bench-caliper-prepare
+	bench-zokrates-prepare bench-caliper-prepare
 
-bench-policy-run:
-	@bash ./benchmark/zokrates/run.sh /benchmark/zokrates/in/1/policy.zok /benchmark/zokrates/out/1 /benchmark/zokrates/in/1/input.txt
-	@bash ./benchmark/zokrates/run.sh /benchmark/zokrates/in/2/policy.zok /benchmark/zokrates/out/2 /benchmark/zokrates/in/2/input.txt
-	@bash ./benchmark/zokrates/run.sh /benchmark/zokrates/in/3/policy.zok /benchmark/zokrates/out/3 /benchmark/zokrates/in/3/input.txt
-	@bash ./benchmark/zokrates/run.sh /benchmark/zokrates/in/4/policy.zok /benchmark/zokrates/out/4 /benchmark/zokrates/in/4/input.txt
-	@bash ./benchmark/zokrates/run.sh /benchmark/zokrates/in/5/policy.zok /benchmark/zokrates/out/5 /benchmark/zokrates/in/5/input.txt
+bench-zokrates-run:
+	@bash ./benchmark/zokrates/run.sh
 
-bench-policy-cp:
+bench-zokrates-cp:
 	cp ./benchmark/zokrates/min/Verifier.sol ./contracts/src/Policy.sol
 
-bench-policy-prepare:
-	bench-policy-run bench-policy-cp
+bench-zokrates-prepare:
+	bench-zokrates-run bench-zokrates-cp
 
 bench-caliper-prepare:
 	jq -r '{name: .contractName, gas: 5000000, abi, bytecode}' ./contracts/artifacts/src/SimpleDIDRegistry.sol/SimpleDIDRegistry.json > ./benchmark/src/oac/SimpleDIDRegistry.json

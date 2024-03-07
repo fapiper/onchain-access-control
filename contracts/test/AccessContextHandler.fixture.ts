@@ -1,12 +1,10 @@
-import type { AccessContextHandler } from "../types";
+import hre from "hardhat"
+import { getPropsFromHre } from "../utils/props";
+import { connectAccessContextHandler, connectPolicyVerifier } from "../utils/connect";
+export async function deployAccessContextHandlerFixture() {
+  const { user, signer } = await getPropsFromHre(hre);
+  const AccessContextHandler = await connectAccessContextHandler(hre, signer);
+  const PolicyVerifier = await connectPolicyVerifier(hre, signer, "Verifier");
 
-export async function deployAccessContextHandlerFixture(hre): Promise<{ AccessContextHandlerInstance: AccessContextHandler }> {
-  const signers = await hre.ethers.getSigners();
-  const admin = signers[0];
-
-  const AccessContextHandlerFactory = await hre.ethers.getContractFactory("AccessContextHandler");
-  const AccessContextHandlerInstance = await AccessContextHandlerFactory.connect(admin).deploy();
-  await AccessContextHandlerInstance.waitForDeployment();
-
-  return { AccessContextHandlerInstance };
+  return { user, instances:{PolicyVerifier, AccessContextHandler}, };
 }
