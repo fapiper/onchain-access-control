@@ -7,6 +7,7 @@ import (
 	"github.com/fapiper/onchain-access-control/core/service/rpc"
 	"github.com/fapiper/onchain-access-control/core/service/rpc/ipfs"
 	shell "github.com/ipfs/go-ipfs-api"
+	"net/http"
 
 	sdkutil "github.com/TBD54566975/ssi-sdk/util"
 	"github.com/pkg/errors"
@@ -36,13 +37,14 @@ type Service struct {
 	storage          storage.ServiceStorage
 	BatchDID         *did.BatchService
 	DIDConfiguration *wellknown.DIDConfigurationService
+	HTTPClient       *http.Client
 	EthClient        *ethclient.Client
 	IPFSClient       *shell.Shell
 }
 
 // ServicesInit creates a new instance of the resource user which instantiates all services and their
 // dependencies independent of transport.
-func servicesInit(ctx context.Context, config config.ServicesConfig) (*Service, error) {
+func ServicesInit(ctx context.Context, config config.ServicesConfig) (*Service, error) {
 	if err := validateServiceConfig(config); err != nil {
 		return nil, sdkutil.LoggingErrorMsg(err, "could not instantiate SSI Service, invalid config")
 	}
@@ -143,6 +145,7 @@ func servicesInitUnsafe(config config.ServicesConfig) (*Service, error) {
 		Operation:        operationService,
 		Webhook:          webhookService,
 		DIDConfiguration: didConfigurationService,
+		HTTPClient:       &http.Client{Timeout: 0},
 		EthClient:        rpc.NewEthClient(),
 		IPFSClient:       ipfs.NewShell(),
 		storage:          storageProvider,

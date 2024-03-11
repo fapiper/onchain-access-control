@@ -21,7 +21,7 @@ func Init() {
 	log.Init(config.Server.LogLevel, config.Server.LogLocation)
 
 	ctx := context.Background()
-	instance, _ := servicesInit(ctx, config.Services)
+	instance, _ := ServicesInit(ctx, config.Services)
 	engine, _ := CoreInit(ctx, *config, instance)
 
 	http.Handle("/", engine)
