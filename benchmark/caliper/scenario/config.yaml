@@ -1,0 +1,78 @@
+args: &args
+  resourceUser: 'did:pkh:11155111:eip155:0xd231120Eea6201B142b4048cf6C86BaC2A0655D2'
+  role: 'VERIFIER'
+  policy: '0x4a99c3ee483ab2168992d7bb443539c77b520e2d0030a3ce32e95387e14b1ebc'
+  context: '0xb847a0ab3c84cfd0e0d826306fdd832d83b712583d6c2659850a2f7a866c96ce'
+  numberOfPolicies: 1
+
+workload: &workload
+  module: scenario/assign-role.js
+
+round: &round
+  txNumber: 100
+  rateControl:
+    type: "record-rate"
+    opts:
+      pathTemplate: "reports/records/tx<C>_round<R>.txt"
+      outputFormat: "TEXT"
+      logEnd: true
+      rateController:
+        type: "fixed-load"
+        opts:
+          transactionLoad: 0.1 # 1 or 0.1?
+          startingTps: 0.1
+
+test:
+  name: oac
+  description: >-
+    Hyperledger Caliper Benchmark of a Non-disclosing Blockchain-based Access Control for Data Sharing in Multi-Party Environments, 
+    to test the backend DLT's performance with simple role assignment & session transactions.
+  workers:
+    number: 1
+  rounds:
+    - <<: *round
+      label: Grant Role (#10)
+      description: Grant role with ten policies
+      workload:
+        <<: *workload
+        arguments:
+          << : *args
+          numberOfPolicies: 10
+    - <<: *round
+      label: GrantRole#8
+      description: Grant role with eight policies
+      workload:
+        <<: *workload
+        arguments:
+          << : *args
+          numberOfPolicies: 8
+    - <<: *round
+      label: Grant Role (#6)
+      description: Grant role with six policies
+      workload:
+        <<: *workload
+        arguments: *args
+        numberOfPolicies: 6
+    - <<: *round
+      label: Grant Role (#4)
+      description: Grant role with four policies
+      workload:
+        <<: *workload
+        arguments:
+          << : *args
+          numberOfPolicies: 4
+    - <<: *round
+      label: Grant Role (#2)
+      description: Grant role with two policies
+      workload:
+        <<: *workload
+        arguments:
+          << : *args
+          numberOfPolicies: 2
+    - <<: *round
+      label: Grant Role (#0)
+      description: Grant role with no policy
+      workload:
+        <<: *workload
+        arguments: *args
+        numberOfPolicies: 0

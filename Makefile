@@ -36,28 +36,26 @@ gazelle:
 
 # Benchmark
 
-bench-prepare:
-	jq -r '{name: .contractName, gas: 5000000, abi, bytecode}' ./contracts/artifacts/src/SimpleDIDRegistry.sol/SimpleDIDRegistry.json > ./benchmark/src/oac/SimpleDIDRegistry.json
-	jq -r '{name: .contractName, gas: 5000000, abi, bytecode}' ./contracts/artifacts/src/AccessContextHandler.sol/AccessContextHandler.json > ./benchmark/src/oac/AccessContextHandler.json
-	jq -r '{name: .contractName, gas: 5000000, abi, bytecode}' ./contracts/artifacts/src/SessionRegistry.sol/SessionRegistry.json > ./benchmark/src/oac/SessionRegistry.json
-	jq -r '{name: .contractName, gas: 5000000, abi, bytecode}' ./contracts/artifacts/src/Policy.sol/Verifier.json > ./benchmark/src/oac/PolicyVerifier.json
-
 bench-run:
+	bench-zokrates-run bench-caliper-run
+
+bench-prepare:
+	bench-zokrates-prepare bench-caliper-prepare
+
+bench-zokrates-run:
+	@bash ./benchmark/zokrates/run.sh
+
+bench-zokrates-cp:
+	cp ./benchmark/zokrates/in/1/Verifier.sol ./contracts/src/Policy.sol
+
+bench-zokrates-prepare:
+	bench-zokrates-run bench-zokrates-cp
+
+bench-caliper-prepare:
+	jq -r '{name: .contractName, gas: 5000000, abi, bytecode}' ./contracts/artifacts/src/AccessContextHandler.sol/AccessContextHandler.json > ./benchmark/src/AccessContextHandler.json
+
+bench-caliper-run:
 	@pnpm -C benchmark bench-run
-
-bench:
-	policy-prepare bench-prepare bench-run
-
-# Policy
-
-policy-gen-proof:
-	@bash ./benchmark/zokrates/run.sh /contracts/test/policy/min.zok /benchmark/zokrates/min /dev/attestation/witness/min.txt
-
-policy-cp-src:
-	cp ./benchmark/zokrates/min/Verifier.sol ./contracts/src/Policy.sol
-
-policy-prepare:
-	policy-gen-proof policy-cp-verifier
 
 # Contracts
 
