@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"github.com/TBD54566975/ssi-sdk/did/resolution"
 	sdkutil "github.com/TBD54566975/ssi-sdk/util"
+	"github.com/ethereum/go-ethereum/ethclient"
 	"github.com/fapiper/onchain-access-control/core/config"
 	didint "github.com/fapiper/onchain-access-control/core/internal/did"
 	"github.com/fapiper/onchain-access-control/core/internal/encryption"
@@ -12,7 +13,11 @@ import (
 	"github.com/fapiper/onchain-access-control/core/internal/util"
 	"github.com/fapiper/onchain-access-control/core/service/framework"
 	"github.com/fapiper/onchain-access-control/core/service/keystore"
+	"github.com/fapiper/onchain-access-control/core/service/persist"
+	"github.com/fapiper/onchain-access-control/core/service/rpc"
 	"github.com/fapiper/onchain-access-control/core/storage"
+	"github.com/fapiper/onchain-access-control/core/tx"
+	shell "github.com/ipfs/go-ipfs-api"
 	"github.com/lestrrat-go/jwx/v2/jwe"
 	"github.com/pkg/errors"
 	"github.com/sirupsen/logrus"
@@ -20,9 +25,11 @@ import (
 
 type ServiceFactory func(storage.Tx) (*Service, error)
 type Service struct {
-	storage  *Storage
-	keystore *keystore.Service
-	resolver resolution.Resolver
+	storageClient *Storage
+	ipfsClient    *shell.Shell
+	ethClient     *ethclient.Client
+	keystore      *keystore.Service
+	resolver      resolution.Resolver
 }
 
 func (s Service) Type() framework.Type {
@@ -30,42 +37,50 @@ func (s Service) Type() framework.Type {
 }
 
 func (s Service) Status() framework.Status {
-	ae := sdkutil.NewAppendError()
-	if s.storage == nil {
-		ae.AppendString("no storage configured")
+	e := sdkutil.NewAppendError()
+	if s.storageClient == nil {
+		e.AppendString("no storage configured")
 	}
-	if !ae.IsEmpty() {
+	if s.ipfsClient == nil {
+		e.AppendString("no ipfs client configured")
+	}
+	if s.ethClient == nil {
+		e.AppendString("no eth client configured")
+	}
+	if !e.IsEmpty() {
 		return framework.Status{
 			Status:  framework.StatusNotReady,
-			Message: fmt.Sprintf("auth service is not ready: %s", ae.Error().Error()),
+			Message: fmt.Sprintf("auth service is not ready: %s", e.Error().Error()),
 		}
 	}
 	return framework.Status{Status: framework.StatusReady}
 }
 
-func NewAuthService(config config.AuthServiceConfig, s storage.ServiceStorage, r resolution.Resolver, k *keystore.Service) (*Service, error) {
+func NewAuthService(config config.AuthServiceConfig, s storage.ServiceStorage, r resolution.Resolver, k *keystore.Service, ethClient *ethclient.Client, ipfsClient *shell.Shell) (*Service, error) {
 	encrypter, decrypter, err := keystore.NewServiceEncryption(s, config.EncryptionConfig, keystore.ServiceKeyEncryptionKey)
 	if err != nil {
 		return nil, errors.Wrap(err, "creating new encryption")
 	}
 
-	factory := NewAuthServiceFactory(s, r, k, encrypter, decrypter)
+	factory := NewAuthServiceFactory(s, r, k, encrypter, decrypter, ethClient, ipfsClient)
 	return factory(s)
 }
 
-func NewAuthServiceFactory(s storage.ServiceStorage, r resolution.Resolver, k *keystore.Service, encrypter encryption.Encrypter, decrypter encryption.Decrypter) ServiceFactory {
+func NewAuthServiceFactory(s storage.ServiceStorage, r resolution.Resolver, k *keystore.Service, encrypter encryption.Encrypter, decrypter encryption.Decrypter, ethClient *ethclient.Client, ipfsClient *shell.Shell) ServiceFactory {
 	return func(tx storage.Tx) (*Service, error) {
 		// Next, instantiate the key storage
-		authStorage, err := NewAuthStorage(s, encrypter, decrypter, tx)
+		sc, err := NewAuthStorage(s, encrypter, decrypter, tx)
 
 		if err != nil {
 			return nil, sdkutil.LoggingErrorMsg(err, "instantiating storage for the auth service")
 		}
 
 		service := Service{
-			storage:  authStorage,
-			keystore: k,
-			resolver: r,
+			storageClient: sc,
+			keystore:      k,
+			resolver:      r,
+			ipfsClient:    ipfsClient,
+			ethClient:     ethClient,
 		}
 		if !service.Status().IsReady() {
 			return nil, errors.New(service.Status().Message)
@@ -77,7 +92,7 @@ func NewAuthServiceFactory(s storage.ServiceStorage, r resolution.Resolver, k *k
 // CreateSession houses the main service logic for session token storage.
 // It accepts only requests from trusted parties that are indexing the blockchain state, validates the input, and
 // stores a session entry.
-func (s Service) CreateSession(ctx context.Context, request CreateSessionRequest) (*StoredSession, error) {
+func (s Service) CreateSession(ctx context.Context, request CreateSessionInput) (*StoredSession, error) {
 	if !request.IsValid() {
 		return nil, errors.Errorf("invalid create session request: %+v", request)
 	}
@@ -115,7 +130,7 @@ func (s Service) CreateSession(ctx context.Context, request CreateSessionRequest
 		Expired:    false,
 	}
 
-	if s.storage.StoreSession(ctx, storedSession) != nil {
+	if s.storageClient.InsertSession(ctx, storedSession) != nil {
 		return nil, errors.Wrap(err, "storing session token")
 	}
 
@@ -137,17 +152,17 @@ func (s Service) decryptJWE(ctx context.Context, jweBytes []byte, kid string) (k
 	return keyaccess.JWT(jwtBytes), nil
 }
 
-func (s Service) VerifySession(ctx context.Context, request VerifySessionRequest) (*VerifySessionResponse, error) {
+func (s Service) VerifySession(ctx context.Context, request VerifySessionInput) (*VerifySessionOutput, error) {
 	logrus.Debugf("verifying session: %+v", request)
 
 	_, session, err := util.ParseJWT(request.SessionJWT)
 	if err != nil {
-		return &VerifySessionResponse{Verified: false, Reason: err.Error()}, nil
+		return &VerifySessionOutput{Verified: false, Reason: err.Error()}, nil
 	}
 
-	_, err = s.storage.GetSession(ctx, session.JwtID())
+	_, err = s.storageClient.GetSession(ctx, session.JwtID())
 	if err != nil {
-		return &VerifySessionResponse{Verified: false, Reason: err.Error()}, nil
+		return &VerifySessionOutput{Verified: false, Reason: err.Error()}, nil
 	}
 	// TODO
 	//	err := s.verifier.VerifyJWTSession(ctx, session)
@@ -155,5 +170,35 @@ func (s Service) VerifySession(ctx context.Context, request VerifySessionRequest
 	//		return &VerifySessionResponse{Verified: false, Reason: err.Error()}, nil
 	//	}
 
-	return &VerifySessionResponse{Verified: true}, nil
+	return &VerifySessionOutput{Verified: true}, nil
+}
+
+// GrantRole verifies a policy and assign the role.
+func (s Service) GrantRole(ctx context.Context, input GrantRoleInput, password string, chainID uint64) (*Role, error) {
+	if !input.IsValid() {
+		return nil, errors.Errorf("invalid grant role input: %+v", input)
+	}
+
+	txOpts := tx.SendTxArgs{}.ToTransactOpts("key", password, chainID)
+
+	params := rpc.GrantRoleParams{
+		RoleId:        [32]byte{}, // input.RoleId
+		DID:           [32]byte{}, // DID
+		PolicyId:      [32]byte{},
+		PolicyContext: [32]byte{},
+	}
+
+	_, err := rpc.GrantRole(ctx, txOpts, s.ethClient, persist.Address(input.RoleContext), params)
+	if err != nil {
+		return nil, errors.Wrap(err, "unable to execute grant role transaction")
+	}
+
+	stored := Role{Id: input.RoleId, Context: input.RoleContext}
+
+	err = s.storageClient.InsertRole(ctx, stored)
+	if err != nil {
+		return nil, errors.Wrap(err, "could not store role for user")
+	}
+
+	return &stored, nil
 }

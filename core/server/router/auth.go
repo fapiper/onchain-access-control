@@ -11,6 +11,11 @@ import (
 	"net/http"
 )
 
+const (
+	RoleIDParam    = "id"
+	SessionIDParam = "id"
+)
+
 type AuthRouter struct {
 	service *auth.Service
 }
@@ -47,7 +52,7 @@ type CreateSessionResponse struct {
 //	@Failure		400		{string}	string	"Bad request"
 //	@Failure		500		{string}	string	"Internal server error"
 //	@Router			/auth/session [put]
-func (ar AuthRouter) CreateSession(c *gin.Context) {
+func (r AuthRouter) CreateSession(c *gin.Context) {
 	var request CreateSessionRequest
 	if err := framework.Decode(c.Request, &request); err != nil {
 		framework.LoggingRespondErrWithMsg(c, err, "invalid create session request", http.StatusBadRequest)
@@ -59,15 +64,67 @@ func (ar AuthRouter) CreateSession(c *gin.Context) {
 		return
 	}
 
-	storedSession, err := ar.service.CreateSession(c, auth.CreateSessionRequest{
+	stored, err := r.service.CreateSession(c, auth.CreateSessionInput{
 		SessionJWE: request.SessionJWE,
 	})
-
 	if err != nil {
 		framework.LoggingRespondErrWithMsg(c, err, "could not create session", http.StatusInternalServerError)
 		return
 	}
 
-	resp := CreateSessionResponse{Session: *storedSession}
+	resp := CreateSessionResponse{Session: *stored}
 	framework.Respond(c, resp, http.StatusOK)
+}
+
+type GrantRoleRequest struct {
+	// A Role identifier
+	Password string `json:"password"`
+	ChainID  uint64 `json:"chainID"`
+}
+
+type GrantRoleResponse struct {
+	// The created role
+	Role auth.Role `json:"role"`
+}
+
+// GrantRole godoc
+//
+//	@Summary		Grants a role to this resourceuser instance
+//	@Tags			Auth
+//	@Accept			json
+//	@Produce		json
+//	@Param			id		path		string				true	"ID"
+//	@Param			request	body		GrantRoleRequest	true	"request body"
+//	@Success		200		{object}	GrantRoleResponse
+//	@Failure		400		{string}	string	"Bad request"
+//	@Failure		500		{string}	string	"Internal server error"
+//	@Router			/auth/session [put]
+func (r AuthRouter) GrantRole(ctx *gin.Context) {
+	id := framework.GetParam(ctx, RoleIDParam)
+	if id == nil {
+		errMsg := fmt.Sprintf("grant role request missing id parameter")
+		framework.LoggingRespondErrMsg(ctx, errMsg, http.StatusBadRequest)
+		return
+	}
+
+	var request GrantRoleRequest
+	if err := framework.Decode(ctx.Request, &request); err != nil {
+		framework.LoggingRespondErrWithMsg(ctx, err, "invalid grant role request", http.StatusBadRequest)
+		return
+	}
+
+	if err := util.IsValidStruct(request); err != nil {
+		framework.LoggingRespondError(ctx, err, http.StatusBadRequest)
+		return
+	}
+
+	stored, err := r.service.GrantRole(ctx, auth.GrantRoleInput{RoleId: *id}, request.Password, request.ChainID)
+
+	if err != nil {
+		framework.LoggingRespondErrWithMsg(ctx, err, "could not create session", http.StatusInternalServerError)
+		return
+	}
+
+	response := GrantRoleResponse{Role: *stored}
+	framework.Respond(ctx, response, http.StatusOK)
 }

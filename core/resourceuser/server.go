@@ -4,11 +4,15 @@ package resourceuser
 import (
 	"context"
 	"github.com/TBD54566975/ssi-sdk/schema"
+	"github.com/ethereum/go-ethereum/ethclient"
 	configpkg "github.com/fapiper/onchain-access-control/core/config"
 	"github.com/fapiper/onchain-access-control/core/log"
 	"github.com/fapiper/onchain-access-control/core/server/framework"
 	"github.com/fapiper/onchain-access-control/core/server/middleware"
+	"github.com/fapiper/onchain-access-control/core/service/rpc"
+	"github.com/fapiper/onchain-access-control/core/service/rpc/ipfs"
 	"github.com/gin-gonic/gin"
+	shell "github.com/ipfs/go-ipfs-api"
 	"github.com/sirupsen/logrus"
 	"go.opentelemetry.io/contrib/instrumentation/github.com/gin-gonic/gin/otelgin"
 	"net/http"
@@ -21,10 +25,25 @@ func Init() {
 	log.Init(config.Server.LogLevel, config.Server.LogLocation)
 
 	ctx := context.Background()
-	instance, _ := ServicesInit(ctx, config.Services)
-	engine, _ := CoreInit(ctx, *config, instance)
+	c := ClientInit(ctx)
+	i, _ := ServicesInit(ctx, c, config.Services)
+	e, _ := CoreInit(ctx, *config, i)
 
-	http.Handle("/", engine)
+	http.Handle("/", e)
+}
+
+type Clients struct {
+	HTTPClient *http.Client
+	EthClient  *ethclient.Client
+	IPFSClient *shell.Shell
+}
+
+func ClientInit(ctx context.Context) *Clients {
+	return &Clients{
+		HTTPClient: &http.Client{Timeout: 0},
+		EthClient:  rpc.NewEthClient(),
+		IPFSClient: ipfs.NewShell(),
+	}
 }
 
 // CoreInit initializes core server functionality. This is abstracted

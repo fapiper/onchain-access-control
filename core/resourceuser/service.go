@@ -3,11 +3,7 @@ package resourceuser
 import (
 	"context"
 	"fmt"
-	"github.com/ethereum/go-ethereum/ethclient"
-	"github.com/fapiper/onchain-access-control/core/service/rpc"
-	"github.com/fapiper/onchain-access-control/core/service/rpc/ipfs"
-	shell "github.com/ipfs/go-ipfs-api"
-	"net/http"
+	"github.com/fapiper/onchain-access-control/core/service/auth"
 
 	sdkutil "github.com/TBD54566975/ssi-sdk/util"
 	"github.com/pkg/errors"
@@ -15,7 +11,7 @@ import (
 	"github.com/fapiper/onchain-access-control/core/config"
 	"github.com/fapiper/onchain-access-control/core/service/credential"
 	"github.com/fapiper/onchain-access-control/core/service/did"
-	"github.com/fapiper/onchain-access-control/core/service/framework"
+	frameworksvc "github.com/fapiper/onchain-access-control/core/service/framework"
 	"github.com/fapiper/onchain-access-control/core/service/keystore"
 	"github.com/fapiper/onchain-access-control/core/service/operation"
 	"github.com/fapiper/onchain-access-control/core/service/presentation"
@@ -36,19 +32,17 @@ type Service struct {
 	Webhook          *webhook.Service
 	storage          storage.ServiceStorage
 	BatchDID         *did.BatchService
+	Auth             *auth.Service
 	DIDConfiguration *wellknown.DIDConfigurationService
-	HTTPClient       *http.Client
-	EthClient        *ethclient.Client
-	IPFSClient       *shell.Shell
 }
 
 // ServicesInit creates a new instance of the resource user which instantiates all services and their
 // dependencies independent of transport.
-func ServicesInit(ctx context.Context, config config.ServicesConfig) (*Service, error) {
+func ServicesInit(ctx context.Context, clients *Clients, config config.ServicesConfig) (*Service, error) {
 	if err := validateServiceConfig(config); err != nil {
 		return nil, sdkutil.LoggingErrorMsg(err, "could not instantiate SSI Service, invalid config")
 	}
-	return servicesInitUnsafe(config)
+	return servicesInitUnsafe(clients, config)
 }
 
 func validateServiceConfig(config config.ServicesConfig) error {
@@ -56,19 +50,19 @@ func validateServiceConfig(config config.ServicesConfig) error {
 		return fmt.Errorf("%s storage provider configured, but not available", config.StorageProvider)
 	}
 	if config.KeyStoreConfig.IsEmpty() {
-		return fmt.Errorf("%s no config provided", framework.KeyStore)
+		return fmt.Errorf("%s no config provided", frameworksvc.KeyStore)
 	}
 	if config.DIDConfig.IsEmpty() {
-		return fmt.Errorf("%s no config provided", framework.DID)
+		return fmt.Errorf("%s no config provided", frameworksvc.DID)
 	}
 	if config.WebhookConfig.IsEmpty() {
-		return fmt.Errorf("%s no config provided", framework.Webhook)
+		return fmt.Errorf("%s no config provided", frameworksvc.Webhook)
 	}
 	return nil
 }
 
 // servicesInitUnsafe starts all instantiates and their dependencies without validation
-func servicesInitUnsafe(config config.ServicesConfig) (*Service, error) {
+func servicesInitUnsafe(c *Clients, config config.ServicesConfig) (*Service, error) {
 	unencryptedStorageProvider, err := storage.NewStorage(storage.Type(config.StorageProvider), config.StorageOptions...)
 	if err != nil {
 		return nil, sdkutil.LoggingErrorMsgf(err, "could not instantiate storage provider: %s", config.StorageProvider)
@@ -133,7 +127,15 @@ func servicesInitUnsafe(config config.ServicesConfig) (*Service, error) {
 		return nil, sdkutil.LoggingErrorMsg(err, "could not instantiate the operation service")
 	}
 
-	didConfigurationService, _ := wellknown.NewDIDConfigurationService(keyStoreService, didResolver, schemaService)
+	didConfigurationService, err := wellknown.NewDIDConfigurationService(keyStoreService, didResolver, schemaService)
+	if err != nil {
+		return nil, sdkutil.LoggingErrorMsg(err, "could not instantiate the did configuration service")
+	}
+
+	authService, err := auth.NewAuthService(config.AuthConfig, storageProvider, didResolver, keyStoreService, c.EthClient, c.IPFSClient)
+	if err != nil {
+		return nil, sdkutil.LoggingErrorMsg(err, "could not instantiate the auth service")
+	}
 
 	return &Service{
 		KeyStore:         keyStoreService,
@@ -144,23 +146,22 @@ func servicesInitUnsafe(config config.ServicesConfig) (*Service, error) {
 		Presentation:     presentationService,
 		Operation:        operationService,
 		Webhook:          webhookService,
+		Auth:             authService,
 		DIDConfiguration: didConfigurationService,
-		HTTPClient:       &http.Client{Timeout: 0},
-		EthClient:        rpc.NewEthClient(),
-		IPFSClient:       ipfs.NewShell(),
 		storage:          storageProvider,
 	}, nil
 }
 
 // GetServices returns all services
-func (s *Service) GetServices() []framework.Service {
-	return []framework.Service{
+func (s *Service) GetServices() []frameworksvc.Service {
+	return []frameworksvc.Service{
 		s.KeyStore,
 		s.DID,
 		s.Schema,
 		s.Credential,
 		s.Presentation,
 		s.Operation,
+		s.Auth,
 		s.Webhook,
 	}
 }

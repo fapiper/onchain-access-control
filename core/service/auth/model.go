@@ -5,19 +5,19 @@ import (
 	"github.com/fapiper/onchain-access-control/core/internal/keyaccess"
 )
 
-type CreateSessionRequest struct {
+type CreateSessionInput struct {
 	SessionJWE []byte `json:"jwe,omitempty" validate:"required"`
 }
 
-func (csr CreateSessionRequest) IsValid() bool {
-	return util.IsValidStruct(csr) == nil
+func (in CreateSessionInput) IsValid() bool {
+	return util.IsValidStruct(in) == nil
 }
 
-type VerifySessionRequest struct {
+type VerifySessionInput struct {
 	SessionJWT keyaccess.JWT `json:"jwt,omitempty" validate:"required"`
 }
 
-type VerifySessionResponse struct {
+type VerifySessionOutput struct {
 	// Whether the Session was verified.
 	Verified bool `json:"verified"`
 
@@ -26,4 +26,13 @@ type VerifySessionResponse struct {
 
 	// When Verified == false, the reason why it wasn't verified.
 	Reason string `json:"reason,omitempty"`
+}
+
+type GrantRoleInput struct {
+	RoleContext string `json:"roleContext"`
+	RoleId      string `json:"roleId"`
+}
+
+func (in GrantRoleInput) IsValid() bool {
+	return util.IsValidStruct(in) == nil
 }

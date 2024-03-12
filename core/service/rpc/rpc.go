@@ -2,9 +2,6 @@ package rpc
 
 import (
 	"context"
-	"crypto/tls"
-	"crypto/x509"
-	"fmt"
 	"github.com/ethereum/go-ethereum/accounts/abi/bind"
 	"github.com/ethereum/go-ethereum/core/types"
 	"github.com/ethereum/go-ethereum/ethclient"
@@ -12,11 +9,8 @@ import (
 	"github.com/fapiper/onchain-access-control/core/contracts"
 	"github.com/fapiper/onchain-access-control/core/env"
 	"github.com/fapiper/onchain-access-control/core/service/persist"
-	"io/fs"
 	"net"
 	"net/http"
-	"os"
-	"path/filepath"
 	"strings"
 	"time"
 )
@@ -72,11 +66,11 @@ func NewEthClient() *ethclient.Client {
 }
 
 type GrantRoleParams struct {
-	roleId        [32]byte
-	did           [32]byte
-	policyContext [32]byte
-	policyId      [32]byte
-	args          []byte
+	RoleId        [32]byte
+	DID           [32]byte
+	PolicyContext [32]byte
+	PolicyId      [32]byte
+	Args          []byte
 }
 
 // GrantRole grants a role to a user
@@ -88,7 +82,7 @@ func GrantRole(ctx context.Context, txOpts *bind.TransactOpts, ethClient *ethcli
 		return nil, err
 	}
 
-	tx, err := instance.GrantRole(txOpts, params.roleId, params.did, [][32]byte{params.policyContext}, [][32]byte{params.policyContext}, [][]byte{params.args})
+	tx, err := instance.GrantRole(txOpts, params.RoleId, params.DID, [][32]byte{params.PolicyId}, [][32]byte{params.PolicyContext}, [][]byte{params.Args})
 	if err != nil {
 		return nil, err
 	}
@@ -98,39 +92,9 @@ func GrantRole(ctx context.Context, txOpts *bind.TransactOpts, ethClient *ethcli
 
 // newHTTPClientForRPC returns a http.Client configured with default settings intended for RPC calls.
 func newHTTPClientForRPC() *http.Client {
-	// get x509 cert pool
-	pool, err := x509.SystemCertPool()
-	if err != nil {
-		panic(err)
-	}
-
-	// walk every file in the tls directory and add them to the cert pool
-	filepath.WalkDir("root-certs", func(path string, d fs.DirEntry, err error) error {
-		if err != nil {
-			return err
-		}
-		if d.IsDir() {
-			return nil
-		}
-		bs, err := os.ReadFile(path)
-		if err != nil {
-			return err
-		}
-
-		// append cert to pool
-		ok := pool.AppendCertsFromPEM(bs)
-		if !ok {
-			return fmt.Errorf("failed to append cert to pool")
-		}
-		return nil
-	})
-
 	return &http.Client{
 		Timeout: 0,
 		Transport: &http.Transport{
-			TLSClientConfig: &tls.Config{
-				RootCAs: pool,
-			},
 			Dial:                (&net.Dialer{KeepAlive: defaultHTTPKeepAlive * time.Second}).Dial,
 			MaxIdleConns:        defaultHTTPMaxIdleConns,
 			MaxIdleConnsPerHost: defaultHTTPMaxIdleConnsPerHost,

@@ -33,6 +33,7 @@ const (
 	KeyStorePrefix          = "/keys"
 	VerificationPath        = "/verification"
 	WebhookPrefix           = "/webhooks"
+	AuthorizePrefix         = "/authorize"
 	DIDConfigurationsPrefix = "/did-configurations"
 
 	batchSuffix = "/batch"
@@ -56,28 +57,16 @@ func KeyStoreAPI(rg *gin.RouterGroup, service svcframework.Service) (err error) 
 
 // AuthAPI registers all HTTP handlers for the Auth Service
 func AuthAPI(rg *gin.RouterGroup, service svcframework.Service) (err error) {
-	// TODO move auth api to separate file as its not corresponding to any ssi handler
-	authRouter, err := router.NewAuthRouter(service)
+	r, err := router.NewAuthRouter(service)
 	if err != nil {
 		return sdkutil.LoggingErrorMsg(err, "creating auth router")
 	}
-	authAPI := rg.Group(AuthPrefix)
-	authAPI.PUT("/session", authRouter.CreateSession)
-	//authAPI.GET("/session/:id", authRouter.VerifySession)
+	api := rg.Group(AuthPrefix)
+	api.PUT("/role/:id", r.GrantRole)
+	// api.DELETE("/role/:id", r.RevokeRole)
 
-	return
-}
+	api.PUT("/session", r.CreateSession)
 
-// AccessAPI registers all HTTP handlers for the Access Service
-func AccessAPI(rg *gin.RouterGroup, service svcframework.Service) (err error) {
-	accessRouter, err := router.NewAccessRouter(service)
-	if err != nil {
-		return sdkutil.LoggingErrorMsg(err, "creating key store router")
-	}
-	// make sure the access service is configured to use the correct path
-	config.SetServicePath(svcframework.Access, AccessPrefix)
-	accessAPI := rg.Group(AccessPrefix)
-	accessAPI.PUT("/policy", accessRouter.CreatePolicy)
 	return
 }
 

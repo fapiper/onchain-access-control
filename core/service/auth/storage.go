@@ -7,8 +7,25 @@ import (
 	"github.com/fapiper/onchain-access-control/core/internal/encryption"
 	"github.com/fapiper/onchain-access-control/core/internal/keyaccess"
 	"github.com/fapiper/onchain-access-control/core/storage"
+	"github.com/pkg/errors"
 	"time"
 )
+
+type Roles struct {
+	Roles         []Role
+	NextPageToken string
+}
+
+type Role struct {
+	// Id of the role that identifies it within the context.
+	Id string `json:"id"`
+	// Context of the role.
+	Context string `json:"context"`
+}
+
+func (r *Role) IsValid() bool {
+	return r.Id != "" && r.Context != ""
+}
 
 type StoredSession struct {
 	ID         string        `json:"id"`
@@ -54,7 +71,7 @@ func NewAuthStorage(db storage.ServiceStorage, e encryption.Encrypter, d encrypt
 	return s, nil
 }
 
-func (as *Storage) StoreSession(ctx context.Context, session StoredSession) error {
+func (s *Storage) InsertSession(ctx context.Context, session StoredSession) error {
 	id := session.ID
 	if id == "" {
 		return sdkutil.LoggingNewError("could not store session without an ID")
@@ -66,16 +83,16 @@ func (as *Storage) StoreSession(ctx context.Context, session StoredSession) erro
 	}
 
 	// encrypt session before storing
-	encryptedSession, err := as.encrypter.Encrypt(ctx, sessionBytes, nil)
+	encryptedSession, err := s.encrypter.Encrypt(ctx, sessionBytes, nil)
 	if err != nil {
 		return sdkutil.LoggingErrorMsgf(err, "could not encrypt session: %s", session.ID)
 	}
 
-	return as.tx.Write(ctx, namespace, id, encryptedSession)
+	return s.tx.Write(ctx, namespace, id, encryptedSession)
 }
 
-func (as *Storage) GetSession(ctx context.Context, id string) (*StoredSession, error) {
-	storedSessionBytes, err := as.db.Read(ctx, namespace, id)
+func (s *Storage) GetSession(ctx context.Context, id string) (*StoredSession, error) {
+	storedSessionBytes, err := s.db.Read(ctx, namespace, id)
 	if err != nil {
 		return nil, sdkutil.LoggingErrorMsgf(err, "getting session details for session <%s>", id)
 	}
@@ -84,7 +101,7 @@ func (as *Storage) GetSession(ctx context.Context, id string) (*StoredSession, e
 	}
 
 	// decrypt session before unmarshalling
-	decryptedSession, err := as.decrypter.Decrypt(ctx, storedSessionBytes, nil)
+	decryptedSession, err := s.decrypter.Decrypt(ctx, storedSessionBytes, nil)
 	if err != nil {
 		return nil, sdkutil.LoggingErrorMsgf(err, "could not decrypt session: %s", id)
 	}
@@ -94,4 +111,34 @@ func (as *Storage) GetSession(ctx context.Context, id string) (*StoredSession, e
 		return nil, sdkutil.LoggingErrorMsgf(err, "unmarshalling stored session: %s", id)
 	}
 	return &stored, nil
+}
+
+func (s *Storage) InsertRole(ctx context.Context, role Role) error {
+	if !role.IsValid() {
+		return sdkutil.LoggingNewError("could not store role")
+	}
+	data, err := json.Marshal(role)
+	if err != nil {
+		return errors.Wrap(err, "marshalling role")
+	}
+
+	return s.db.Write(ctx, namespace, role.Id, data)
+}
+
+func (s *Storage) GetRole(ctx context.Context, id string) (*Role, error) {
+	if id == "" {
+		return nil, errors.New("cannot fetch issuance template without an ID")
+	}
+	data, err := s.db.Read(ctx, namespace, id)
+	if err != nil {
+		return nil, errors.Wrap(err, "reading from db")
+	}
+	if len(data) == 0 {
+		return nil, errors.Errorf("role not found with id: %s", id)
+	}
+	var r Role
+	if err = json.Unmarshal(data, &r); err != nil {
+		return nil, errors.Wrap(err, "unmarshalling role")
+	}
+	return &r, nil
 }

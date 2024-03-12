@@ -23,10 +23,10 @@ func handlersInit(ctx context.Context, config configpkg.SSIServiceConfig, instan
 	engine.StaticFile("swagger.yaml", "./doc/swagger.yaml")
 	engine.GET(SwaggerPrefix, ginswagger.WrapHandler(swaggerfiles.Handler, ginswagger.URL("/swagger.yaml")))
 
-	return apiHandlersInit(ctx, config, instance, engine)
+	return apiInit(ctx, config, instance, engine)
 }
 
-func apiHandlersInit(ctx context.Context, config configpkg.SSIServiceConfig, instance *Service, engine *gin.Engine) (*gin.Engine, error) {
+func apiInit(ctx context.Context, config configpkg.SSIServiceConfig, instance *Service, engine *gin.Engine) (*gin.Engine, error) {
 	// register all v1 routers
 	v1 := engine.Group(V1Prefix)
 	if err := KeyStoreAPI(v1, instance.KeyStore); err != nil {
@@ -46,6 +46,9 @@ func apiHandlersInit(ctx context.Context, config configpkg.SSIServiceConfig, ins
 	}
 	if err := WebhookAPI(v1, instance.Webhook); err != nil {
 		return nil, sdkutil.LoggingErrorMsg(err, "unable to instantiate Webhook API")
+	}
+	if err := AuthAPI(v1, instance.Auth); err != nil {
+		return nil, sdkutil.LoggingErrorMsg(err, "unable to instantiate Auth API")
 	}
 	if err := DIDConfigurationAPI(v1, instance.DIDConfiguration); err != nil {
 		return nil, sdkutil.LoggingErrorMsg(err, "unable to instantiate DIDConfiguration API")
