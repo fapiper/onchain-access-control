@@ -33,7 +33,6 @@ const (
 	KeyStorePrefix          = "/keys"
 	VerificationPath        = "/verification"
 	WebhookPrefix           = "/webhooks"
-	AuthorizePrefix         = "/authorize"
 	DIDConfigurationsPrefix = "/did-configurations"
 
 	batchSuffix = "/batch"

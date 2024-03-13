@@ -2,12 +2,8 @@ package framework
 
 import (
 	"context"
-	"github.com/ethereum/go-ethereum/ethclient"
 	"github.com/fapiper/onchain-access-control/core/config"
-	"github.com/fapiper/onchain-access-control/core/service/rpc"
-	"github.com/fapiper/onchain-access-control/core/service/rpc/ipfs"
 	"github.com/gin-gonic/gin"
-	shell "github.com/ipfs/go-ipfs-api"
 	"github.com/sirupsen/logrus"
 	"go.opentelemetry.io/otel/trace"
 	"net/http"
@@ -42,20 +38,6 @@ func (s *Server) PreShutdownHooks(ctx context.Context) error {
 		}
 	}
 	return nil
-}
-
-type Clients struct {
-	HTTPClient *http.Client
-	EthClient  *ethclient.Client
-	IPFSClient *shell.Shell
-}
-
-func ClientInit(ctx context.Context) *Clients {
-	return &Clients{
-		HTTPClient: &http.Client{Timeout: 0},
-		EthClient:  rpc.NewEthClient(),
-		IPFSClient: ipfs.NewShell(),
-	}
 }
 
 func SetupEngine(ctx context.Context, c config.ServerConfig) *gin.Engine {

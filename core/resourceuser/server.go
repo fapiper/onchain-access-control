@@ -1,4 +1,3 @@
-// Package resourceuser contains handler functions and routes for a data consumer
 package resourceuser
 
 import (
@@ -14,12 +13,14 @@ import (
 	"github.com/gin-gonic/gin"
 	shell "github.com/ipfs/go-ipfs-api"
 	"github.com/sirupsen/logrus"
+	"github.com/spf13/viper"
 	"go.opentelemetry.io/contrib/instrumentation/github.com/gin-gonic/gin/otelgin"
 	"net/http"
 )
 
-// Init does two things: instantiates all service and registers their HTTP bindings
+// Init does two things: instantiate all services and register their HTTP bindings
 func Init() {
+	SetDefaults()
 
 	config := configpkg.Init()
 	log.Init(config.Server.LogLevel, config.Server.LogLocation)
@@ -81,4 +82,23 @@ func CoreInit(ctx context.Context, config configpkg.SSIServiceConfig, instance *
 	}
 
 	return handlersInit(ctx, config, instance, engine)
+}
+
+func SetDefaults() {
+	viper.SetDefault("ENV_PATH", "")
+	viper.SetDefault("CONFIG_PATH", "")
+	viper.SetDefault("ENV", "dev")
+	viper.SetDefault("PORT", 4000)
+	viper.SetDefault("IPFS_URL", "https://cloudflare-ipfs.com/ipfs")
+	viper.SetDefault("REDIS_URL", "localhost:6379")
+	viper.SetDefault("RPC_URL", "https://eth-sepolia.g.alchemy.com/v2/demo")
+	viper.SetDefault("MNEMONIC", "")
+	viper.SetDefault("INFURA_API_KEY", "")
+	viper.SetDefault("INFURA_API_SECRET", "")
+	viper.SetDefault("KEYSTORE_PASSWORD", "default-keystore-password")
+	viper.SetDefault("DB_PASSWORD", "default-db-password")
+	viper.SetDefault("USE_AUTH_TOKEN", false)
+	viper.SetDefault("FILESTORE_PATH", "./static")
+
+	viper.AutomaticEnv()
 }

@@ -34,6 +34,7 @@ go_library(
         "@com_github_ipfs_go_ipfs_api//:go-ipfs-api",
         "@com_github_pkg_errors//:errors",
         "@com_github_sirupsen_logrus//:logrus",
+        "@com_github_spf13_viper//:viper",
         "@com_github_swaggo_files//:files",
         "@com_github_swaggo_gin_swagger//:gin-swagger",
         "@com_github_tbd54566975_ssi_sdk//schema",

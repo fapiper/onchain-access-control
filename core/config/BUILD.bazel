@@ -4,7 +4,9 @@ go_library(
     name = "config",
     srcs = [
         "config.go",
+        "env.go",
         "info.go",
+        "types.go",
     ],
     data = [
         "dev.toml",
@@ -15,13 +17,14 @@ go_library(
     importpath = "github.com/fapiper/onchain-access-control/core/config",
     visibility = ["//visibility:public"],
     deps = [
+        "//core/env",
         "//core/service/framework",
         "//core/storage",
         "@com_github_ardanlabs_conf//:conf",
         "@com_github_burntsushi_toml//:toml",
-        "@com_github_joho_godotenv//:godotenv",
         "@com_github_pkg_errors//:errors",
         "@com_github_sirupsen_logrus//:logrus",
+        "@com_github_spf13_viper//:viper",
     ],
 )
 

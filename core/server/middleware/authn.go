@@ -61,7 +61,7 @@ func AuthMiddleware(authService *auth.Service) gin.HandlerFunc {
 			token = header.Token[7:]
 		}
 
-		result, err := authService.VerifySession(c, auth.VerifySessionRequest{SessionJWT: keyaccess.JWT(token)})
+		result, err := authService.VerifySession(c, auth.VerifySessionInput{SessionJWT: keyaccess.JWT(token)})
 
 		if !result.Verified || err != nil {
 			c.JSON(http.StatusUnauthorized, gin.H{"error": result.Reason})

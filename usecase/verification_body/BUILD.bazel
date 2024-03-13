@@ -1,0 +1,23 @@
+load("@io_bazel_rules_go//go:def.bzl", "go_binary", "go_library")
+
+filegroup(
+    name = "env",
+    srcs = glob([".env.*"]),
+)
+
+go_library(
+    name = "verification_body_lib",
+    srcs = ["main.go"],
+    data = [
+        "//usecase/verification_body:env",
+    ],
+    importpath = "github.com/fapiper/onchain-access-control/usecase/verification_body",
+    visibility = ["//visibility:private"],
+    deps = ["//core/resourceuser"],
+)
+
+go_binary(
+    name = "verification_body",
+    embed = [":verification_body_lib"],
+    visibility = ["//visibility:public"],
+)

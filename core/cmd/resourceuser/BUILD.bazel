@@ -1,9 +1,9 @@
 load("@io_bazel_rules_go//go:def.bzl", "go_binary", "go_library")
 
 go_library(
-    name = "consumer_lib",
+    name = "resourceuser_lib",
     srcs = ["main.go"],
-    importpath = "github.com/fapiper/onchain-access-control/core/cmd/consumer",
+    importpath = "github.com/fapiper/onchain-access-control/core/cmd/resourceuser",
     visibility = ["//visibility:private"],
     deps = [
         "//core/resourceuser",
@@ -12,7 +12,7 @@ go_library(
 )
 
 go_binary(
-    name = "consumer",
-    embed = [":consumer_lib"],
+    name = "resourceuser",
+    embed = [":resourceuser_lib"],
     visibility = ["//visibility:public"],
 )

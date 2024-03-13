@@ -132,9 +132,14 @@ func servicesInitUnsafe(c *Clients, config config.ServicesConfig) (*Service, err
 		return nil, sdkutil.LoggingErrorMsg(err, "could not instantiate the did configuration service")
 	}
 
-	authService, err := auth.NewAuthService(config.AuthConfig, storageProvider, didResolver, keyStoreService, c.EthClient, c.IPFSClient)
+	authServiceFactory := auth.NewAuthServiceFactory(storageProvider, didResolver, keyStoreService, keyEncrypter, keyDecrypter, c.EthClient, c.IPFSClient)
 	if err != nil {
-		return nil, sdkutil.LoggingErrorMsg(err, "could not instantiate the auth service")
+		return nil, sdkutil.LoggingErrorMsg(err, "could not instantiate the auth service factory")
+	}
+
+	authService, err := authServiceFactory(storageProvider)
+	if err != nil {
+		return nil, sdkutil.LoggingErrorMsg(err, "could not instantiate Auth service")
 	}
 
 	return &Service{

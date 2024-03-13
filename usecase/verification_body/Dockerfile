@@ -11,9 +11,9 @@ RUN go mod download
 # Copy code /to the container image.
 COPY . ./
 
-# Build the binary and call it "docker-original-equipment-manufacturer"
-RUN go build -tags jwx_es256k -o /docker-original-equipment-manufacturer ./
+# Build the binary and call it "docker-verification-body"
+RUN go build -tags jwx_es256k -o /docker-verification-body ./
 
 EXPOSE 3000
 
-CMD [ "/docker-original-equipment-manufacturer" ]
+CMD [ "/docker-verification-body" ]
