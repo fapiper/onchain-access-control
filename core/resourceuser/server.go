@@ -2,9 +2,11 @@ package resourceuser
 
 import (
 	"context"
+	"fmt"
 	"github.com/TBD54566975/ssi-sdk/schema"
 	"github.com/ethereum/go-ethereum/ethclient"
 	configpkg "github.com/fapiper/onchain-access-control/core/config"
+	"github.com/fapiper/onchain-access-control/core/env"
 	"github.com/fapiper/onchain-access-control/core/log"
 	"github.com/fapiper/onchain-access-control/core/server/framework"
 	"github.com/fapiper/onchain-access-control/core/server/middleware"
@@ -18,19 +20,35 @@ import (
 	"net/http"
 )
 
+func Run() {
+	engine := Init()
+	addr := fmt.Sprintf(":%s", env.GetString("PORT"))
+	err := http.ListenAndServe(addr, engine)
+	if err != nil {
+		logrus.WithError(err).Errorf(err.Error())
+	}
+}
+
 // Init does two things: instantiate all services and register their HTTP bindings
-func Init() {
+func Init() *gin.Engine {
 	SetDefaults()
 
 	config := configpkg.Init()
 	log.Init(config.Server.LogLevel, config.Server.LogLocation)
 
 	ctx := context.Background()
-	c := ClientInit(ctx)
-	i, _ := ServicesInit(ctx, c, config.Services)
-	e, _ := CoreInit(ctx, *config, i)
+	clients := ClientInit(ctx)
+	i, err := ServicesInit(ctx, clients, config.Services)
+	if err != nil {
+		logrus.WithError(err).Error(err.Error())
+	}
 
-	http.Handle("/", e)
+	engine, err := CoreInit(ctx, *config, i)
+	if err != nil {
+		logrus.WithError(err).Error(err.Error())
+	}
+
+	return engine
 }
 
 type Clients struct {

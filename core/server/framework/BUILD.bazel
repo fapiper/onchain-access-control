@@ -49,6 +49,5 @@ go_library(
         "@com_github_pkg_errors//:errors",
         "@com_github_sirupsen_logrus//:logrus",
         "@com_github_tbd54566975_ssi_sdk//util",
-        "@io_opentelemetry_go_otel_trace//:trace",
     ],
 )
