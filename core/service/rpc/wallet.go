@@ -30,6 +30,7 @@ func NewWallet(privateKey string, chainID uint64) (*Wallet, error) {
 	}
 
 	publicKey := privateKeyECDSA.Public()
+
 	publicKeyECDSA, ok := publicKey.(*ecdsa.PublicKey)
 	if !ok {
 		return nil, errors.Wrap(err, "unable to derive public key")

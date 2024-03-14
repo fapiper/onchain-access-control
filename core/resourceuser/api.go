@@ -63,8 +63,7 @@ func AuthAPI(rg *gin.RouterGroup, service svcframework.Service) (err error) {
 	api := rg.Group(AuthPrefix)
 	api.PUT("/role/:id", r.GrantRole)
 	// api.DELETE("/role/:id", r.RevokeRole)
-
-	api.PUT("/session", r.CreateSession)
+	api.PUT("/session", r.StartSession)
 
 	return
 }

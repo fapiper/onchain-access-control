@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"github.com/TBD54566975/ssi-sdk/did/resolution"
 	sdkutil "github.com/TBD54566975/ssi-sdk/util"
+	"github.com/ethereum/go-ethereum/crypto"
 	"github.com/fapiper/onchain-access-control/core/config"
 	"github.com/fapiper/onchain-access-control/core/contracts"
 	didint "github.com/fapiper/onchain-access-control/core/internal/did"
@@ -16,8 +17,11 @@ import (
 	"github.com/fapiper/onchain-access-control/core/service/persist"
 	"github.com/fapiper/onchain-access-control/core/service/rpc"
 	"github.com/fapiper/onchain-access-control/core/storage"
+	"github.com/google/uuid"
 	shell "github.com/ipfs/go-ipfs-api"
+	"github.com/lestrrat-go/jwx/v2/jwa"
 	"github.com/lestrrat-go/jwx/v2/jwe"
+	"github.com/lestrrat-go/jwx/v2/jwt"
 	"github.com/pkg/errors"
 	"github.com/sirupsen/logrus"
 	"math/big"
@@ -87,6 +91,60 @@ func NewAuthServiceFactory(s storage.ServiceStorage, r resolution.Resolver, k *k
 		}
 		return &service, nil
 	}
+}
+
+// StartSession starts a session by registering the session token on-chain.
+func (s Service) StartSession(ctx context.Context, request StartSessionInput) (*jwt.Token, *[]byte, error) {
+	if !request.IsValid() {
+		return nil, nil, errors.Errorf("invalid create session request: %+v", request)
+	}
+	tid := uuid.NewString()
+
+	builder := jwt.NewBuilder().
+		Audience(request.Audience).
+		Subject(s.rpcService.Wallet.GetDID()).
+		Issuer(s.rpcService.Wallet.GetDID()).
+		JwtID(tid)
+
+	token, err := builder.Build()
+
+	signedToken, err := jwt.Sign(token, jwt.WithKey(jwa.ES256K, s.rpcService.Wallet.PrivateKey))
+	if err != nil {
+		return nil, nil, errors.Wrap(err, "failed to sign token")
+	}
+
+	_, err = s.rpcService.StartSession(ctx, rpc.StartSessionParams{
+		DID:        s.rpcService.Wallet.GetDIDHash(),
+		TokenID:    crypto.Keccak256Hash([]byte(tid)),
+		SessionJWE: crypto.Keccak256Hash(signedToken).Bytes(),
+	})
+
+	if err != nil {
+		return nil, nil, errors.Wrap(err, "unable to start session transaction")
+	}
+
+	//stored := Role{Id: role.RoleID, Context: role.ContextID, Identifier: params.RoleIdentifier.String()}
+	//
+	//if err = s.storageClient.InsertRole(ctx, stored); err != nil {
+	//	return nil, errors.Wrap(err, "could not store role for user")
+	//}
+
+	return &token, &signedToken, nil
+}
+
+func (s Service) encryptJWE(ctx context.Context, signedToken []byte, audience string) ([]byte, error) {
+	did, err := s.resolver.Resolve(ctx, audience)
+	if err != nil {
+		return nil, errors.Wrap(err, "resolve doc for did")
+	}
+
+	if len(did.Document.VerificationMethod) < 1 {
+		return nil, errors.Wrap(err, "no verification method for did")
+	}
+	verificationMethod := did.Document.VerificationMethod[0]
+
+	return jwe.Encrypt(signedToken, jwe.WithKey(verificationMethod.Type, verificationMethod.PublicKeyJWK))
+
 }
 
 // CreateSession houses the main service logic for session token storage.

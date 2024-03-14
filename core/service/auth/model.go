@@ -7,6 +7,14 @@ import (
 	"math/big"
 )
 
+type StartSessionInput struct {
+	Audience []string `json:"aud"`
+}
+
+func (in StartSessionInput) IsValid() bool {
+	return util.IsValidStruct(in) == nil
+}
+
 type CreateSessionInput struct {
 	SessionJWE []byte `json:"jwe,omitempty" validate:"required"`
 }

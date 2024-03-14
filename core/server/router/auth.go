@@ -7,6 +7,7 @@ import (
 	"github.com/fapiper/onchain-access-control/core/service/auth"
 	svcframework "github.com/fapiper/onchain-access-control/core/service/framework"
 	"github.com/gin-gonic/gin"
+	"github.com/lestrrat-go/jwx/v2/jwt"
 	"github.com/pkg/errors"
 	"net/http"
 )
@@ -29,6 +30,52 @@ func NewAuthRouter(s svcframework.Service) (*AuthRouter, error) {
 		return nil, fmt.Errorf("casting service: %s", s.Type())
 	}
 	return &AuthRouter{service: service}, nil
+}
+
+type StartSessionRequest struct {
+	Audience []string `json:"audience,omitempty"`
+}
+
+type StartSessionResponse struct {
+	// The created session
+	Session jwt.Token `json:"session"`
+	// The created session
+	SignedToken []byte `json:"signed_token"`
+}
+
+// StartSession godoc
+//
+//	@Summary		Starts a Session
+//	@Tags			Auth
+//	@Accept			json
+//	@Produce		json
+//	@Param			request	body		StartSessionRequest	true	"request body"
+//	@Success		200		{object}	StartSessionResponse
+//	@Failure		400		{string}	string	"Bad request"
+//	@Failure		500		{string}	string	"Internal server error"
+//	@Router			/auth/session [put]
+func (r AuthRouter) StartSession(c *gin.Context) {
+	var request StartSessionRequest
+	if err := framework.Decode(c.Request, &request); err != nil {
+		framework.LoggingRespondErrWithMsg(c, err, "invalid start session request", http.StatusBadRequest)
+		return
+	}
+
+	if err := util.IsValidStruct(request); err != nil {
+		framework.LoggingRespondError(c, err, http.StatusBadRequest)
+		return
+	}
+
+	token, signedToken, err := r.service.StartSession(c, auth.StartSessionInput{
+		Audience: request.Audience,
+	})
+	if err != nil {
+		framework.LoggingRespondErrWithMsg(c, err, "could not start session", http.StatusInternalServerError)
+		return
+	}
+
+	resp := StartSessionResponse{Session: *token, SignedToken: *signedToken}
+	framework.Respond(c, resp, http.StatusOK)
 }
 
 type CreateSessionRequest struct {
