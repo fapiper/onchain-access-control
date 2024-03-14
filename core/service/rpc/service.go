@@ -11,14 +11,14 @@ import (
 	"github.com/fapiper/onchain-access-control/core/env"
 	"github.com/fapiper/onchain-access-control/core/service/framework"
 	"github.com/fapiper/onchain-access-control/core/service/persist"
-	"github.com/goccy/go-json"
 	"github.com/pkg/errors"
 	"github.com/sirupsen/logrus"
 	"math/big"
 )
 
 type Service struct {
-	Wallet *Wallet
+	Wallet                      *Wallet
+	AccessContextHandlerAddress persist.Address
 }
 
 func (s Service) Type() framework.Type {
@@ -46,7 +46,8 @@ func NewRPCService() (*Service, error) {
 	}
 
 	service := Service{
-		Wallet: wallet,
+		Wallet:                      wallet,
+		AccessContextHandlerAddress: persist.Address("0x424B7637A40E105889B592155Ab721c347a845D3"),
 	}
 
 	if !service.Status().IsReady() {
@@ -65,8 +66,7 @@ type GrantRoleParams struct {
 
 // GrantRole grants a role to a user
 func (s Service) GrantRole(ctx context.Context, params GrantRoleParams) (*types.Receipt, error) {
-	address := persist.Address("0x424B7637A40E105889B592155Ab721c347a845D3")
-	instance, err := contracts.NewAccessContextHandler(address.Address(), s.Wallet.Client)
+	instance, err := contracts.NewAccessContextHandler(s.AccessContextHandlerAddress.Address(), s.Wallet.Client)
 	if err != nil {
 		return nil, err
 	}
@@ -76,7 +76,7 @@ func (s Service) GrantRole(ctx context.Context, params GrantRoleParams) (*types.
 		return nil, err
 	}
 
-	tx, err := instance.GrantRole(
+	return s.waitMined(instance.GrantRole(
 		txOpts,
 		params.RoleIdentifier.ContextID,
 		params.RoleIdentifier.RoleID,
@@ -85,20 +85,50 @@ func (s Service) GrantRole(ctx context.Context, params GrantRoleParams) (*types.
 		[][32]byte{params.PolicyIdentifier.PolicyID},
 		[]contracts.IPolicyVerifierProof{params.Proof},
 		[][20]*big.Int{params.Inputs},
-	)
+	))
+}
+
+type StartSessionParams struct {
+	DID        common.Hash
+	TokenID    common.Hash
+	SessionJWE []byte
+}
+
+// StartSession starts a session
+func (s Service) StartSession(ctx context.Context, params StartSessionParams) (*types.Receipt, error) {
+	instance, err := contracts.NewAccessContextHandler(s.AccessContextHandlerAddress.Address(), s.Wallet.Client)
 	if err != nil {
 		return nil, err
 	}
 
-	txJson, _ := json.MarshalIndent(tx, "", "\t")
-	logrus.Infof("Sent transaction\n%s\nWaiting for confirmation...", string(txJson))
+	txOpts, err := s.Wallet.ToTransactOpts()
+	if err != nil {
+		return nil, err
+	}
+
+	return s.waitMined(instance.StartSession(
+		txOpts,
+		params.DID,
+		params.TokenID,
+		params.SessionJWE,
+	))
+}
+
+func (s Service) waitMined(tx *types.Transaction, err error) (*types.Receipt, error) {
+	if err != nil {
+		return nil, err
+	}
+
+	logrus.Infof("Sent transaction %s. Waiting for confirmation...", tx.Hash())
 
 	receipt, err := bind.WaitMined(context.Background(), s.Wallet.Client, tx)
-	receiptJson, _ := json.MarshalIndent(*receipt, "", "	")
-	logrus.Infof("Mined transaction\n%s", string(receiptJson))
+	if receipt.Status == types.ReceiptStatusFailed {
+		return nil, fmt.Errorf("Transaction status failed\n%s", receipt.TxHash)
+	}
 	if err != nil {
 		return nil, err
 	}
 
 	return receipt, nil
+
 }
