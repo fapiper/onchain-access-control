@@ -21,6 +21,30 @@
         "internalType": "bytes32",
         "name": "_id",
         "type": "bytes32"
+      },
+      {
+        "internalType": "bytes32",
+        "name": "_user",
+        "type": "bytes32"
+      }
+    ],
+    "name": "isSession",
+    "outputs": [
+      {
+        "internalType": "bool",
+        "name": "",
+        "type": "bool"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "bytes32",
+        "name": "_id",
+        "type": "bytes32"
       }
     ],
     "name": "isSessionValid",
@@ -68,13 +92,13 @@
         "type": "bytes32"
       },
       {
-        "internalType": "bytes32",
+        "internalType": "bytes",
         "name": "_token",
-        "type": "bytes32"
+        "type": "bytes"
       },
       {
         "internalType": "bytes32",
-        "name": "_subject",
+        "name": "_user",
         "type": "bytes32"
       }
     ],

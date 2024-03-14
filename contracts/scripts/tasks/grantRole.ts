@@ -11,7 +11,7 @@ task("grant-role", "Grant a role")
     const { getNamedAccounts, deployments, ethers, getChainId } = hre;
     const { deployer } = await getNamedAccounts();
     const chainId = await getChainId();
-    const user = `did:pkh:${chainId}:eip155:${deployer}`;
+    const user = `did:pkh:eip155:${chainId}:${deployer}`;
     const signer = await ethers.getSigner(deployer ?? "");
     const address = await deployments.get(contextHandlerConfig.id ?? "").then((d) => d.address);
     const contextHandler = AccessContextHandler__factory.connect(address, signer);

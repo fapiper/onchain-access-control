@@ -187,6 +187,64 @@
   {
     "inputs": [
       {
+        "internalType": "bytes32",
+        "name": "_id",
+        "type": "bytes32"
+      },
+      {
+        "internalType": "bytes32",
+        "name": "_did",
+        "type": "bytes32"
+      }
+    ],
+    "name": "isSession",
+    "outputs": [
+      {
+        "internalType": "bool",
+        "name": "",
+        "type": "bool"
+      }
+    ],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "bytes32",
+        "name": "_id",
+        "type": "bytes32"
+      },
+      {
+        "internalType": "bytes32",
+        "name": "_did",
+        "type": "bytes32"
+      },
+      {
+        "internalType": "bytes32",
+        "name": "_roleContext",
+        "type": "bytes32"
+      },
+      {
+        "internalType": "bytes32",
+        "name": "_role",
+        "type": "bytes32"
+      }
+    ],
+    "name": "isSession",
+    "outputs": [
+      {
+        "internalType": "bool",
+        "name": "",
+        "type": "bool"
+      }
+    ],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
         "internalType": "address",
         "name": "sessionRegistry",
         "type": "address"
@@ -210,9 +268,9 @@
         "type": "bytes32"
       },
       {
-        "internalType": "bytes32",
+        "internalType": "bytes",
         "name": "_token",
-        "type": "bytes32"
+        "type": "bytes"
       }
     ],
     "name": "startSession",
@@ -316,9 +374,9 @@
         "type": "bytes32"
       },
       {
-        "internalType": "bytes32",
+        "internalType": "bytes",
         "name": "_token",
-        "type": "bytes32"
+        "type": "bytes"
       }
     ],
     "name": "startSession",

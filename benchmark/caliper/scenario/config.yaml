@@ -1,8 +1,8 @@
 args: &args
   resourceUser: 'did:pkh:eip155:11155111:0xd231120Eea6201B142b4048cf6C86BaC2A0655D2'
-  role: 'VERIFIER'
-  policy: '0x4a99c3ee483ab2168992d7bb443539c77b520e2d0030a3ce32e95387e14b1ebc'
-  context: '0xb847a0ab3c84cfd0e0d826306fdd832d83b712583d6c2659850a2f7a866c96ce'
+  role: 'ROLE_VERIFICATION_BODY'
+  policy: '0x44cc95fcac4cdc6a7c4b6d1f14643ba6ce89542b47dcba98b79ed3173efc13e6'
+  context: '0x88aad075184d882a4a54fcbbb497807d2c2d84463aed96df087138385c615d04' // did:pkh:eip155:11155111:0xd231120Eea6201B142b4048cf6C86BaC2A0655D2
   numberOfPolicies: 1
 
 workload: &workload

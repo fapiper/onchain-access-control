@@ -31,7 +31,7 @@ var (
 
 // SessionRegistryMetaData contains all meta data concerning the SessionRegistry contract.
 var SessionRegistryMetaData = &bind.MetaData{
-	ABI: "[{\"inputs\":[{\"internalType\":\"address\",\"name\":\"contextHandler\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"didRegistry\",\"type\":\"address\"}],\"stateMutability\":\"nonpayable\",\"type\":\"constructor\"},{\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"_id\",\"type\":\"bytes32\"}],\"name\":\"isSessionValid\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"_id\",\"type\":\"bytes32\"}],\"name\":\"revokeSession\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"contextHandler\",\"type\":\"address\"}],\"name\":\"setContextHandler\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"_id\",\"type\":\"bytes32\"},{\"internalType\":\"bytes32\",\"name\":\"_token\",\"type\":\"bytes32\"},{\"internalType\":\"bytes32\",\"name\":\"_subject\",\"type\":\"bytes32\"}],\"name\":\"startSession\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"}]",
+	ABI: "[{\"inputs\":[{\"internalType\":\"address\",\"name\":\"contextHandler\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"didRegistry\",\"type\":\"address\"}],\"stateMutability\":\"nonpayable\",\"type\":\"constructor\"},{\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"_id\",\"type\":\"bytes32\"},{\"internalType\":\"bytes32\",\"name\":\"_user\",\"type\":\"bytes32\"}],\"name\":\"isSession\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"_id\",\"type\":\"bytes32\"}],\"name\":\"isSessionValid\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"_id\",\"type\":\"bytes32\"}],\"name\":\"revokeSession\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"contextHandler\",\"type\":\"address\"}],\"name\":\"setContextHandler\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"_id\",\"type\":\"bytes32\"},{\"internalType\":\"bytes\",\"name\":\"_token\",\"type\":\"bytes\"},{\"internalType\":\"bytes32\",\"name\":\"_user\",\"type\":\"bytes32\"}],\"name\":\"startSession\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"}]",
 }
 
 // SessionRegistryABI is the input ABI used to generate the binding from.
@@ -180,6 +180,37 @@ func (_SessionRegistry *SessionRegistryTransactorRaw) Transact(opts *bind.Transa
 	return _SessionRegistry.Contract.contract.Transact(opts, method, params...)
 }
 
+// IsSession is a free data retrieval call binding the contract method 0x011255b5.
+//
+// Solidity: function isSession(bytes32 _id, bytes32 _user) view returns(bool)
+func (_SessionRegistry *SessionRegistryCaller) IsSession(opts *bind.CallOpts, _id [32]byte, _user [32]byte) (bool, error) {
+	var out []interface{}
+	err := _SessionRegistry.contract.Call(opts, &out, "isSession", _id, _user)
+
+	if err != nil {
+		return *new(bool), err
+	}
+
+	out0 := *abi.ConvertType(out[0], new(bool)).(*bool)
+
+	return out0, err
+
+}
+
+// IsSession is a free data retrieval call binding the contract method 0x011255b5.
+//
+// Solidity: function isSession(bytes32 _id, bytes32 _user) view returns(bool)
+func (_SessionRegistry *SessionRegistrySession) IsSession(_id [32]byte, _user [32]byte) (bool, error) {
+	return _SessionRegistry.Contract.IsSession(&_SessionRegistry.CallOpts, _id, _user)
+}
+
+// IsSession is a free data retrieval call binding the contract method 0x011255b5.
+//
+// Solidity: function isSession(bytes32 _id, bytes32 _user) view returns(bool)
+func (_SessionRegistry *SessionRegistryCallerSession) IsSession(_id [32]byte, _user [32]byte) (bool, error) {
+	return _SessionRegistry.Contract.IsSession(&_SessionRegistry.CallOpts, _id, _user)
+}
+
 // IsSessionValid is a free data retrieval call binding the contract method 0xfa333d9b.
 //
 // Solidity: function isSessionValid(bytes32 _id) view returns(bool)
@@ -253,24 +284,24 @@ func (_SessionRegistry *SessionRegistryTransactorSession) SetContextHandler(cont
 	return _SessionRegistry.Contract.SetContextHandler(&_SessionRegistry.TransactOpts, contextHandler)
 }
 
-// StartSession is a paid mutator transaction binding the contract method 0x648fce79.
+// StartSession is a paid mutator transaction binding the contract method 0x04187076.
 //
-// Solidity: function startSession(bytes32 _id, bytes32 _token, bytes32 _subject) returns()
-func (_SessionRegistry *SessionRegistryTransactor) StartSession(opts *bind.TransactOpts, _id [32]byte, _token [32]byte, _subject [32]byte) (*types.Transaction, error) {
-	return _SessionRegistry.contract.Transact(opts, "startSession", _id, _token, _subject)
+// Solidity: function startSession(bytes32 _id, bytes _token, bytes32 _user) returns()
+func (_SessionRegistry *SessionRegistryTransactor) StartSession(opts *bind.TransactOpts, _id [32]byte, _token []byte, _user [32]byte) (*types.Transaction, error) {
+	return _SessionRegistry.contract.Transact(opts, "startSession", _id, _token, _user)
 }
 
-// StartSession is a paid mutator transaction binding the contract method 0x648fce79.
+// StartSession is a paid mutator transaction binding the contract method 0x04187076.
 //
-// Solidity: function startSession(bytes32 _id, bytes32 _token, bytes32 _subject) returns()
-func (_SessionRegistry *SessionRegistrySession) StartSession(_id [32]byte, _token [32]byte, _subject [32]byte) (*types.Transaction, error) {
-	return _SessionRegistry.Contract.StartSession(&_SessionRegistry.TransactOpts, _id, _token, _subject)
+// Solidity: function startSession(bytes32 _id, bytes _token, bytes32 _user) returns()
+func (_SessionRegistry *SessionRegistrySession) StartSession(_id [32]byte, _token []byte, _user [32]byte) (*types.Transaction, error) {
+	return _SessionRegistry.Contract.StartSession(&_SessionRegistry.TransactOpts, _id, _token, _user)
 }
 
-// StartSession is a paid mutator transaction binding the contract method 0x648fce79.
+// StartSession is a paid mutator transaction binding the contract method 0x04187076.
 //
-// Solidity: function startSession(bytes32 _id, bytes32 _token, bytes32 _subject) returns()
-func (_SessionRegistry *SessionRegistryTransactorSession) StartSession(_id [32]byte, _token [32]byte, _subject [32]byte) (*types.Transaction, error) {
-	return _SessionRegistry.Contract.StartSession(&_SessionRegistry.TransactOpts, _id, _token, _subject)
+// Solidity: function startSession(bytes32 _id, bytes _token, bytes32 _user) returns()
+func (_SessionRegistry *SessionRegistryTransactorSession) StartSession(_id [32]byte, _token []byte, _user [32]byte) (*types.Transaction, error) {
+	return _SessionRegistry.Contract.StartSession(&_SessionRegistry.TransactOpts, _id, _token, _user)
 }
 

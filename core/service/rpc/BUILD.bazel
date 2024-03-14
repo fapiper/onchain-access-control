@@ -20,7 +20,6 @@ go_library(
         "@com_github_ethereum_go_ethereum//crypto",
         "@com_github_ethereum_go_ethereum//ethclient",
         "@com_github_ethereum_go_ethereum//rpc",
-        "@com_github_goccy_go_json//:go-json",
         "@com_github_pkg_errors//:errors",
         "@com_github_sirupsen_logrus//:logrus",
         "@com_github_tbd54566975_ssi_sdk//util",
