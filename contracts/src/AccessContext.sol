@@ -81,6 +81,19 @@ contract AccessContext is IContextInstance, DIDOwnable, AccessControlListExtensi
     }
 
     /**
+     *  @notice         Checks if a given did has a role.
+     *
+     *  @param _role        Role to check against
+     *  @param _did         DID of the user
+     */
+    function hasRole(
+        bytes32 _role,
+        bytes32 _did
+    ) external view returns (bool) {
+        return _hasRole(_role, _did);
+    }
+
+    /**
      *  @notice         Revokes a role.
      *  @dev            Caller must be owner or role member.
      *                  Emits {RoleRevoke Event}.
