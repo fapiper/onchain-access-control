@@ -67,6 +67,13 @@ contract AccessContextHandler is IContextHandler, SessionRecipient, ContextHandl
         _forwardGrantRole(_roleContext, _role, _did, _policyContexts, _policies, _proofs, _inputs);
     }
 
+    function isSession(
+        bytes32 _id,
+        bytes32 _did
+    ) external returns (bool) {
+       return _forwardIsSession(_id, _did);
+    }
+
     function deleteContextInstance(
         bytes32 _id,
         bytes32 _did

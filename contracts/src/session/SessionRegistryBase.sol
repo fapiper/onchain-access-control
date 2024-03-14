@@ -56,6 +56,13 @@ contract SessionRegistryBase is DIDRecipient {
         return _isDID(_sessions[_id].user);
     }
 
+    function _checkSessionForUser(
+        bytes32 _id,
+        bytes32 _user
+    ) internal view returns (bool) {
+        return _user == _sessions[_id].user;
+    }
+
     function _checkSessionExists(
         bytes32 _id
     ) internal view returns (bool) {

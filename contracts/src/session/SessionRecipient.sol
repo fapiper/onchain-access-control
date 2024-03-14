@@ -38,4 +38,11 @@ contract SessionRecipient is Context {
     ) internal {
         _getSessionRegistry().startSession(_tokenId, _token, _did);
     }
+
+    function _forwardIsSession(
+        bytes32 _tokenId,
+        bytes32 _did
+    ) internal returns (bool) {
+       return _getSessionRegistry().isSession(_tokenId, _did);
+    }
 }

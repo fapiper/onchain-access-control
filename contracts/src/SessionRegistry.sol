@@ -43,4 +43,8 @@ contract SessionRegistry is ISessionRegistry, SessionRegistryBase, ContextHandle
     function isSessionValid(bytes32 _id) external view returns (bool) {
         return _checkSessionValid(_id);
     }
+
+    function isSession(bytes32 _id, bytes32 _user) external view returns (bool) {
+        return _checkSessionExists(_id) && _checkSessionValid(_id) && _checkSessionForUser(_id, _user);
+    }
 }
