@@ -22,6 +22,7 @@ go_library(
     importpath = "github.com/fapiper/onchain-access-control/core/server/router",
     visibility = ["//visibility:public"],
     deps = [
+        "//core/contracts",
         "//core/internal/credential",
         "//core/internal/keyaccess",
         "//core/internal/util",

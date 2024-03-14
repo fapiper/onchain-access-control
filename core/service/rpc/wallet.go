@@ -3,6 +3,7 @@ package rpc
 import (
 	"context"
 	"crypto/ecdsa"
+	"fmt"
 	"github.com/ethereum/go-ethereum/accounts/abi/bind"
 	"github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/crypto"
@@ -67,4 +68,12 @@ func (w Wallet) ToTransactOpts() (*bind.TransactOpts, error) {
 	auth.GasPrice = gasPrice
 
 	return auth, nil
+}
+
+func (w Wallet) GetDID() string {
+	return fmt.Sprintf("did:pkh:eip155:%d:%s", w.ChainID, w.Address)
+}
+func (w Wallet) GetDIDHash() common.Hash {
+	did := w.GetDID()
+	return crypto.Keccak256Hash([]byte(did))
 }

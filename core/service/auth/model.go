@@ -2,7 +2,9 @@ package auth
 
 import (
 	"github.com/TBD54566975/ssi-sdk/util"
+	"github.com/fapiper/onchain-access-control/core/contracts"
 	"github.com/fapiper/onchain-access-control/core/internal/keyaccess"
+	"math/big"
 )
 
 type CreateSessionInput struct {
@@ -29,8 +31,9 @@ type VerifySessionOutput struct {
 }
 
 type GrantRoleInput struct {
-	RoleContext string `json:"roleContext"`
-	RoleId      string `json:"roleId"`
+	RoleID string                         `json:"role_id"`
+	Proof  contracts.IPolicyVerifierProof `json:"proof"`
+	Inputs [20]*big.Int                   `json:"inputs"`
 }
 
 func (in GrantRoleInput) IsValid() bool {

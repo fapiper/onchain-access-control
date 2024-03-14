@@ -10,10 +10,11 @@ import (
 	"github.com/fapiper/onchain-access-control/core/service/framework"
 	"github.com/fapiper/onchain-access-control/core/service/persist"
 	"github.com/pkg/errors"
+	"math/big"
 )
 
 type Service struct {
-	wallet *Wallet
+	Wallet *Wallet
 }
 
 func (s Service) Type() framework.Type {
@@ -22,7 +23,7 @@ func (s Service) Type() framework.Type {
 
 func (s Service) Status() framework.Status {
 	ae := sdkutil.NewAppendError()
-	if s.wallet == nil {
+	if s.Wallet == nil {
 		ae.AppendString("no wallet configured")
 	}
 	if !ae.IsEmpty() {
@@ -41,7 +42,7 @@ func NewRPCService() (*Service, error) {
 	}
 
 	service := Service{
-		wallet: wallet,
+		Wallet: wallet,
 	}
 
 	if !service.Status().IsReady() {
@@ -51,26 +52,35 @@ func NewRPCService() (*Service, error) {
 }
 
 type GrantRoleParams struct {
-	RoleId        [32]byte
-	DID           [32]byte
-	PolicyContext [32]byte
-	PolicyId      [32]byte
-	Args          []byte
+	RoleIdentifier   persist.RoleIdentifier
+	DID              [32]byte
+	PolicyIdentifier persist.PolicyIdentifier
+	Proof            contracts.IPolicyVerifierProof
+	Inputs           [20]*big.Int
 }
 
 // GrantRole grants a role to a user
 func (s Service) GrantRole(ctx context.Context, address persist.Address, params GrantRoleParams) (*types.Transaction, error) {
-	instance, err := contracts.NewAccessContext(address.Address(), s.wallet.Client)
+	instance, err := contracts.NewAccessContext(address.Address(), s.Wallet.Client)
 	if err != nil {
 		return nil, err
 	}
 
-	txOpts, err := s.wallet.ToTransactOpts()
+	txOpts, err := s.Wallet.ToTransactOpts()
 	if err != nil {
 		return nil, err
 	}
 
-	tx, err := instance.GrantRole(txOpts, params.RoleId, params.DID, [][32]byte{params.PolicyId}, [][32]byte{params.PolicyContext}, [][]byte{params.Args})
+	tx, err := instance.GrantRole(
+		txOpts,
+		params.RoleIdentifier.RoleID,
+		params.DID,
+		[][32]byte{params.PolicyIdentifier.PolicyID},
+		[][32]byte{params.PolicyIdentifier.ContextID},
+		[]contracts.IPolicyVerifierProof{params.Proof},
+		[][20]*big.Int{params.Inputs},
+	)
+
 	if err != nil {
 		return nil, err
 	}

@@ -21,6 +21,8 @@ type Role struct {
 	Id string `json:"id"`
 	// Context of the role.
 	Context string `json:"context"`
+	// Context of the role.
+	Identifier string `json:"identifier"`
 }
 
 func (r *Role) IsValid() bool {

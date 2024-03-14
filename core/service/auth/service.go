@@ -6,6 +6,7 @@ import (
 	"github.com/TBD54566975/ssi-sdk/did/resolution"
 	sdkutil "github.com/TBD54566975/ssi-sdk/util"
 	"github.com/fapiper/onchain-access-control/core/config"
+	"github.com/fapiper/onchain-access-control/core/contracts"
 	didint "github.com/fapiper/onchain-access-control/core/internal/did"
 	"github.com/fapiper/onchain-access-control/core/internal/encryption"
 	"github.com/fapiper/onchain-access-control/core/internal/keyaccess"
@@ -19,6 +20,7 @@ import (
 	"github.com/lestrrat-go/jwx/v2/jwe"
 	"github.com/pkg/errors"
 	"github.com/sirupsen/logrus"
+	"math/big"
 )
 
 type ServiceFactory func(storage.Tx) (*Service, error)
@@ -177,24 +179,36 @@ func (s Service) GrantRole(ctx context.Context, input GrantRoleInput) (*Role, er
 		return nil, errors.Errorf("invalid grant role input: %+v", input)
 	}
 
-	params := rpc.GrantRoleParams{
-		RoleId:        [32]byte{}, // input.RoleId
-		DID:           [32]byte{}, // DID
-		PolicyId:      [32]byte{},
-		PolicyContext: [32]byte{},
+	role, err := persist.ParseRoleFromIdentifierString(input.RoleID)
+	if err != nil {
+		return nil, errors.Wrap(err, "could not parse role from param")
 	}
 
-	_, err := s.rpcService.GrantRole(ctx, persist.Address(input.RoleContext), params)
+	params := s.buildGrantRoleParams(role, input.Proof, input.Inputs)
+
+	_, err = s.rpcService.GrantRole(ctx, "0xFDADE7715222F2A3d1849B7ccb0aDe8E7e807ca3", params)
 	if err != nil {
 		return nil, errors.Wrap(err, "unable to execute grant role transaction")
 	}
 
-	stored := Role{Id: input.RoleId, Context: input.RoleContext}
+	stored := Role{Id: role.RoleID, Context: role.ContextID, Identifier: params.RoleIdentifier.String()}
 
-	err = s.storageClient.InsertRole(ctx, stored)
-	if err != nil {
+	if err = s.storageClient.InsertRole(ctx, stored); err != nil {
 		return nil, errors.Wrap(err, "could not store role for user")
 	}
 
 	return &stored, nil
+}
+
+func (s Service) buildGrantRoleParams(role *persist.Role, proof contracts.IPolicyVerifierProof, inputs [20]*big.Int) rpc.GrantRoleParams {
+	roleIdentifier := persist.NewRoleIdentifier(role.ContextID, role.RoleID)
+	policyIdentifier := persist.NewPolicyIdentifier(roleIdentifier.ContextID, roleIdentifier.RoleID)
+
+	return rpc.GrantRoleParams{
+		RoleIdentifier:   roleIdentifier,                   // input.RoleId
+		DID:              s.rpcService.Wallet.GetDIDHash(), // DID
+		PolicyIdentifier: policyIdentifier,
+		Proof:            proof,
+		Inputs:           inputs,
+	}
 }

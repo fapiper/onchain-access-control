@@ -3,17 +3,19 @@ package router
 import (
 	"fmt"
 	"github.com/TBD54566975/ssi-sdk/util"
+	"github.com/fapiper/onchain-access-control/core/contracts"
 	framework "github.com/fapiper/onchain-access-control/core/framework/server"
 	"github.com/fapiper/onchain-access-control/core/service/auth"
 	svcframework "github.com/fapiper/onchain-access-control/core/service/framework"
 	"github.com/gin-gonic/gin"
 	"github.com/pkg/errors"
+	"math/big"
 	"net/http"
 )
 
 const (
-	RoleIDParam    = "id"
-	SessionIDParam = "id"
+	RoleIdentifierParam = "id"
+	SessionIDParam      = "id"
 )
 
 type AuthRouter struct {
@@ -77,9 +79,8 @@ func (r AuthRouter) CreateSession(c *gin.Context) {
 }
 
 type GrantRoleRequest struct {
-	// A Role identifier
-	Password string `json:"password"`
-	ChainID  uint64 `json:"chainID"`
+	Proof  contracts.IPolicyVerifierProof `json:"proof"`
+	Inputs [20]*big.Int                   `json:"inputs"`
 }
 
 type GrantRoleResponse struct {
@@ -100,10 +101,9 @@ type GrantRoleResponse struct {
 //	@Failure		500		{string}	string	"Internal server error"
 //	@Router			/auth/session [put]
 func (r AuthRouter) GrantRole(ctx *gin.Context) {
-	id := framework.GetParam(ctx, RoleIDParam)
-	if id == nil {
-		errMsg := fmt.Sprintf("grant role request missing id parameter")
-		framework.LoggingRespondErrMsg(ctx, errMsg, http.StatusBadRequest)
+	roleIdentifierParam := framework.GetParam(ctx, RoleIdentifierParam)
+	if roleIdentifierParam == nil {
+		framework.LoggingRespondErrMsg(ctx, "grant role request missing id parameter", http.StatusBadRequest)
 		return
 	}
 
@@ -118,10 +118,10 @@ func (r AuthRouter) GrantRole(ctx *gin.Context) {
 		return
 	}
 
-	stored, err := r.service.GrantRole(ctx, auth.GrantRoleInput{RoleId: *id})
+	stored, err := r.service.GrantRole(ctx, auth.GrantRoleInput{RoleID: *roleIdentifierParam, Proof: request.Proof, Inputs: request.Inputs})
 
 	if err != nil {
-		framework.LoggingRespondErrWithMsg(ctx, err, "could not create session", http.StatusInternalServerError)
+		framework.LoggingRespondErrWithMsg(ctx, err, "could not grant role", http.StatusInternalServerError)
 		return
 	}
 

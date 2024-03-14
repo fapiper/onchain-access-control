@@ -31,7 +31,7 @@ var (
 
 // AccessContextHandlerMetaData contains all meta data concerning the AccessContextHandler contract.
 var AccessContextHandlerMetaData = &bind.MetaData{
-	ABI: "[{\"inputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"constructor\"},{\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"_id\",\"type\":\"bytes32\"},{\"internalType\":\"bytes32\",\"name\":\"_did\",\"type\":\"bytes32\"}],\"name\":\"createContextInstance\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"_id\",\"type\":\"bytes32\"},{\"internalType\":\"bytes32\",\"name\":\"_did\",\"type\":\"bytes32\"}],\"name\":\"deleteContextInstance\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"_id\",\"type\":\"bytes32\"}],\"name\":\"getContextInstance\",\"outputs\":[{\"internalType\":\"contractIContextInstance\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"sessionRegistry\",\"type\":\"address\"}],\"name\":\"setSessionRegistry\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"_roleContext\",\"type\":\"bytes32\"},{\"internalType\":\"bytes32\",\"name\":\"_role\",\"type\":\"bytes32\"},{\"internalType\":\"bytes32\",\"name\":\"_did\",\"type\":\"bytes32\"},{\"internalType\":\"bytes32[]\",\"name\":\"_policyContexts\",\"type\":\"bytes32[]\"},{\"internalType\":\"bytes32[]\",\"name\":\"_policies\",\"type\":\"bytes32[]\"},{\"internalType\":\"bytes[]\",\"name\":\"_args\",\"type\":\"bytes[]\"},{\"internalType\":\"bytes32\",\"name\":\"_tokenId\",\"type\":\"bytes32\"},{\"internalType\":\"bytes32\",\"name\":\"_token\",\"type\":\"bytes32\"}],\"name\":\"startSession\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"}]",
+	ABI: "[{\"inputs\":[{\"internalType\":\"address\",\"name\":\"didRegistry\",\"type\":\"address\"}],\"stateMutability\":\"nonpayable\",\"type\":\"constructor\"},{\"inputs\":[],\"name\":\"ERC1167FailedCreateClone\",\"type\":\"error\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"accessContext\",\"type\":\"address\"}],\"name\":\"CreateContextInstance\",\"type\":\"event\"},{\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"_id\",\"type\":\"bytes32\"},{\"internalType\":\"bytes20\",\"name\":\"_salt\",\"type\":\"bytes20\"},{\"internalType\":\"bytes32\",\"name\":\"_did\",\"type\":\"bytes32\"}],\"name\":\"createContextInstance\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"_id\",\"type\":\"bytes32\"},{\"internalType\":\"bytes32\",\"name\":\"_did\",\"type\":\"bytes32\"}],\"name\":\"deleteContextInstance\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"_id\",\"type\":\"bytes32\"}],\"name\":\"getContextInstance\",\"outputs\":[{\"internalType\":\"contractIContextInstance\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"_roleContext\",\"type\":\"bytes32\"},{\"internalType\":\"bytes32\",\"name\":\"_role\",\"type\":\"bytes32\"},{\"internalType\":\"bytes32\",\"name\":\"_did\",\"type\":\"bytes32\"},{\"internalType\":\"bytes32[]\",\"name\":\"_policyContexts\",\"type\":\"bytes32[]\"},{\"internalType\":\"bytes32[]\",\"name\":\"_policies\",\"type\":\"bytes32[]\"},{\"components\":[{\"components\":[{\"internalType\":\"uint256\",\"name\":\"X\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"Y\",\"type\":\"uint256\"}],\"internalType\":\"structPairing.G1Point\",\"name\":\"a\",\"type\":\"tuple\"},{\"components\":[{\"internalType\":\"uint256[2]\",\"name\":\"X\",\"type\":\"uint256[2]\"},{\"internalType\":\"uint256[2]\",\"name\":\"Y\",\"type\":\"uint256[2]\"}],\"internalType\":\"structPairing.G2Point\",\"name\":\"b\",\"type\":\"tuple\"},{\"components\":[{\"internalType\":\"uint256\",\"name\":\"X\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"Y\",\"type\":\"uint256\"}],\"internalType\":\"structPairing.G1Point\",\"name\":\"c\",\"type\":\"tuple\"}],\"internalType\":\"structIPolicyVerifier.Proof[]\",\"name\":\"_proofs\",\"type\":\"tuple[]\"},{\"internalType\":\"uint256[20][]\",\"name\":\"_inputs\",\"type\":\"uint256[20][]\"}],\"name\":\"grantRole\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"sessionRegistry\",\"type\":\"address\"}],\"name\":\"setSessionRegistry\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"_did\",\"type\":\"bytes32\"},{\"internalType\":\"bytes32\",\"name\":\"_tokenId\",\"type\":\"bytes32\"},{\"internalType\":\"bytes32\",\"name\":\"_token\",\"type\":\"bytes32\"}],\"name\":\"startSession\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"_roleContext\",\"type\":\"bytes32\"},{\"internalType\":\"bytes32\",\"name\":\"_role\",\"type\":\"bytes32\"},{\"internalType\":\"bytes32\",\"name\":\"_did\",\"type\":\"bytes32\"},{\"internalType\":\"bytes32[]\",\"name\":\"_policyContexts\",\"type\":\"bytes32[]\"},{\"internalType\":\"bytes32[]\",\"name\":\"_policies\",\"type\":\"bytes32[]\"},{\"components\":[{\"components\":[{\"internalType\":\"uint256\",\"name\":\"X\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"Y\",\"type\":\"uint256\"}],\"internalType\":\"structPairing.G1Point\",\"name\":\"a\",\"type\":\"tuple\"},{\"components\":[{\"internalType\":\"uint256[2]\",\"name\":\"X\",\"type\":\"uint256[2]\"},{\"internalType\":\"uint256[2]\",\"name\":\"Y\",\"type\":\"uint256[2]\"}],\"internalType\":\"structPairing.G2Point\",\"name\":\"b\",\"type\":\"tuple\"},{\"components\":[{\"internalType\":\"uint256\",\"name\":\"X\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"Y\",\"type\":\"uint256\"}],\"internalType\":\"structPairing.G1Point\",\"name\":\"c\",\"type\":\"tuple\"}],\"internalType\":\"structIPolicyVerifier.Proof[]\",\"name\":\"_proofs\",\"type\":\"tuple[]\"},{\"internalType\":\"uint256[20][]\",\"name\":\"_inputs\",\"type\":\"uint256[20][]\"},{\"internalType\":\"bytes32\",\"name\":\"_tokenId\",\"type\":\"bytes32\"},{\"internalType\":\"bytes32\",\"name\":\"_token\",\"type\":\"bytes32\"}],\"name\":\"startSession\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"}]",
 }
 
 // AccessContextHandlerABI is the input ABI used to generate the binding from.
@@ -211,25 +211,25 @@ func (_AccessContextHandler *AccessContextHandlerCallerSession) GetContextInstan
 	return _AccessContextHandler.Contract.GetContextInstance(&_AccessContextHandler.CallOpts, _id)
 }
 
-// CreateContextInstance is a paid mutator transaction binding the contract method 0x72a4b4be.
+// CreateContextInstance is a paid mutator transaction binding the contract method 0x656c4309.
 //
-// Solidity: function createContextInstance(bytes32 _id, bytes32 _did) returns()
-func (_AccessContextHandler *AccessContextHandlerTransactor) CreateContextInstance(opts *bind.TransactOpts, _id [32]byte, _did [32]byte) (*types.Transaction, error) {
-	return _AccessContextHandler.contract.Transact(opts, "createContextInstance", _id, _did)
+// Solidity: function createContextInstance(bytes32 _id, bytes20 _salt, bytes32 _did) returns()
+func (_AccessContextHandler *AccessContextHandlerTransactor) CreateContextInstance(opts *bind.TransactOpts, _id [32]byte, _salt [20]byte, _did [32]byte) (*types.Transaction, error) {
+	return _AccessContextHandler.contract.Transact(opts, "createContextInstance", _id, _salt, _did)
 }
 
-// CreateContextInstance is a paid mutator transaction binding the contract method 0x72a4b4be.
+// CreateContextInstance is a paid mutator transaction binding the contract method 0x656c4309.
 //
-// Solidity: function createContextInstance(bytes32 _id, bytes32 _did) returns()
-func (_AccessContextHandler *AccessContextHandlerSession) CreateContextInstance(_id [32]byte, _did [32]byte) (*types.Transaction, error) {
-	return _AccessContextHandler.Contract.CreateContextInstance(&_AccessContextHandler.TransactOpts, _id, _did)
+// Solidity: function createContextInstance(bytes32 _id, bytes20 _salt, bytes32 _did) returns()
+func (_AccessContextHandler *AccessContextHandlerSession) CreateContextInstance(_id [32]byte, _salt [20]byte, _did [32]byte) (*types.Transaction, error) {
+	return _AccessContextHandler.Contract.CreateContextInstance(&_AccessContextHandler.TransactOpts, _id, _salt, _did)
 }
 
-// CreateContextInstance is a paid mutator transaction binding the contract method 0x72a4b4be.
+// CreateContextInstance is a paid mutator transaction binding the contract method 0x656c4309.
 //
-// Solidity: function createContextInstance(bytes32 _id, bytes32 _did) returns()
-func (_AccessContextHandler *AccessContextHandlerTransactorSession) CreateContextInstance(_id [32]byte, _did [32]byte) (*types.Transaction, error) {
-	return _AccessContextHandler.Contract.CreateContextInstance(&_AccessContextHandler.TransactOpts, _id, _did)
+// Solidity: function createContextInstance(bytes32 _id, bytes20 _salt, bytes32 _did) returns()
+func (_AccessContextHandler *AccessContextHandlerTransactorSession) CreateContextInstance(_id [32]byte, _salt [20]byte, _did [32]byte) (*types.Transaction, error) {
+	return _AccessContextHandler.Contract.CreateContextInstance(&_AccessContextHandler.TransactOpts, _id, _salt, _did)
 }
 
 // DeleteContextInstance is a paid mutator transaction binding the contract method 0xe657c9e9.
@@ -253,6 +253,27 @@ func (_AccessContextHandler *AccessContextHandlerTransactorSession) DeleteContex
 	return _AccessContextHandler.Contract.DeleteContextInstance(&_AccessContextHandler.TransactOpts, _id, _did)
 }
 
+// GrantRole is a paid mutator transaction binding the contract method 0x86490b3e.
+//
+// Solidity: function grantRole(bytes32 _roleContext, bytes32 _role, bytes32 _did, bytes32[] _policyContexts, bytes32[] _policies, ((uint256,uint256),(uint256[2],uint256[2]),(uint256,uint256))[] _proofs, uint256[20][] _inputs) returns()
+func (_AccessContextHandler *AccessContextHandlerTransactor) GrantRole(opts *bind.TransactOpts, _roleContext [32]byte, _role [32]byte, _did [32]byte, _policyContexts [][32]byte, _policies [][32]byte, _proofs []IPolicyVerifierProof, _inputs [][20]*big.Int) (*types.Transaction, error) {
+	return _AccessContextHandler.contract.Transact(opts, "grantRole", _roleContext, _role, _did, _policyContexts, _policies, _proofs, _inputs)
+}
+
+// GrantRole is a paid mutator transaction binding the contract method 0x86490b3e.
+//
+// Solidity: function grantRole(bytes32 _roleContext, bytes32 _role, bytes32 _did, bytes32[] _policyContexts, bytes32[] _policies, ((uint256,uint256),(uint256[2],uint256[2]),(uint256,uint256))[] _proofs, uint256[20][] _inputs) returns()
+func (_AccessContextHandler *AccessContextHandlerSession) GrantRole(_roleContext [32]byte, _role [32]byte, _did [32]byte, _policyContexts [][32]byte, _policies [][32]byte, _proofs []IPolicyVerifierProof, _inputs [][20]*big.Int) (*types.Transaction, error) {
+	return _AccessContextHandler.Contract.GrantRole(&_AccessContextHandler.TransactOpts, _roleContext, _role, _did, _policyContexts, _policies, _proofs, _inputs)
+}
+
+// GrantRole is a paid mutator transaction binding the contract method 0x86490b3e.
+//
+// Solidity: function grantRole(bytes32 _roleContext, bytes32 _role, bytes32 _did, bytes32[] _policyContexts, bytes32[] _policies, ((uint256,uint256),(uint256[2],uint256[2]),(uint256,uint256))[] _proofs, uint256[20][] _inputs) returns()
+func (_AccessContextHandler *AccessContextHandlerTransactorSession) GrantRole(_roleContext [32]byte, _role [32]byte, _did [32]byte, _policyContexts [][32]byte, _policies [][32]byte, _proofs []IPolicyVerifierProof, _inputs [][20]*big.Int) (*types.Transaction, error) {
+	return _AccessContextHandler.Contract.GrantRole(&_AccessContextHandler.TransactOpts, _roleContext, _role, _did, _policyContexts, _policies, _proofs, _inputs)
+}
+
 // SetSessionRegistry is a paid mutator transaction binding the contract method 0x4fd9d24b.
 //
 // Solidity: function setSessionRegistry(address sessionRegistry) returns()
@@ -274,24 +295,189 @@ func (_AccessContextHandler *AccessContextHandlerTransactorSession) SetSessionRe
 	return _AccessContextHandler.Contract.SetSessionRegistry(&_AccessContextHandler.TransactOpts, sessionRegistry)
 }
 
-// StartSession is a paid mutator transaction binding the contract method 0x76ed4a6c.
+// StartSession is a paid mutator transaction binding the contract method 0x648fce79.
 //
-// Solidity: function startSession(bytes32 _roleContext, bytes32 _role, bytes32 _did, bytes32[] _policyContexts, bytes32[] _policies, bytes[] _args, bytes32 _tokenId, bytes32 _token) returns()
-func (_AccessContextHandler *AccessContextHandlerTransactor) StartSession(opts *bind.TransactOpts, _roleContext [32]byte, _role [32]byte, _did [32]byte, _policyContexts [][32]byte, _policies [][32]byte, _args [][]byte, _tokenId [32]byte, _token [32]byte) (*types.Transaction, error) {
-	return _AccessContextHandler.contract.Transact(opts, "startSession", _roleContext, _role, _did, _policyContexts, _policies, _args, _tokenId, _token)
+// Solidity: function startSession(bytes32 _did, bytes32 _tokenId, bytes32 _token) returns()
+func (_AccessContextHandler *AccessContextHandlerTransactor) StartSession(opts *bind.TransactOpts, _did [32]byte, _tokenId [32]byte, _token [32]byte) (*types.Transaction, error) {
+	return _AccessContextHandler.contract.Transact(opts, "startSession", _did, _tokenId, _token)
 }
 
-// StartSession is a paid mutator transaction binding the contract method 0x76ed4a6c.
+// StartSession is a paid mutator transaction binding the contract method 0x648fce79.
 //
-// Solidity: function startSession(bytes32 _roleContext, bytes32 _role, bytes32 _did, bytes32[] _policyContexts, bytes32[] _policies, bytes[] _args, bytes32 _tokenId, bytes32 _token) returns()
-func (_AccessContextHandler *AccessContextHandlerSession) StartSession(_roleContext [32]byte, _role [32]byte, _did [32]byte, _policyContexts [][32]byte, _policies [][32]byte, _args [][]byte, _tokenId [32]byte, _token [32]byte) (*types.Transaction, error) {
-	return _AccessContextHandler.Contract.StartSession(&_AccessContextHandler.TransactOpts, _roleContext, _role, _did, _policyContexts, _policies, _args, _tokenId, _token)
+// Solidity: function startSession(bytes32 _did, bytes32 _tokenId, bytes32 _token) returns()
+func (_AccessContextHandler *AccessContextHandlerSession) StartSession(_did [32]byte, _tokenId [32]byte, _token [32]byte) (*types.Transaction, error) {
+	return _AccessContextHandler.Contract.StartSession(&_AccessContextHandler.TransactOpts, _did, _tokenId, _token)
 }
 
-// StartSession is a paid mutator transaction binding the contract method 0x76ed4a6c.
+// StartSession is a paid mutator transaction binding the contract method 0x648fce79.
 //
-// Solidity: function startSession(bytes32 _roleContext, bytes32 _role, bytes32 _did, bytes32[] _policyContexts, bytes32[] _policies, bytes[] _args, bytes32 _tokenId, bytes32 _token) returns()
-func (_AccessContextHandler *AccessContextHandlerTransactorSession) StartSession(_roleContext [32]byte, _role [32]byte, _did [32]byte, _policyContexts [][32]byte, _policies [][32]byte, _args [][]byte, _tokenId [32]byte, _token [32]byte) (*types.Transaction, error) {
-	return _AccessContextHandler.Contract.StartSession(&_AccessContextHandler.TransactOpts, _roleContext, _role, _did, _policyContexts, _policies, _args, _tokenId, _token)
+// Solidity: function startSession(bytes32 _did, bytes32 _tokenId, bytes32 _token) returns()
+func (_AccessContextHandler *AccessContextHandlerTransactorSession) StartSession(_did [32]byte, _tokenId [32]byte, _token [32]byte) (*types.Transaction, error) {
+	return _AccessContextHandler.Contract.StartSession(&_AccessContextHandler.TransactOpts, _did, _tokenId, _token)
+}
+
+// StartSession0 is a paid mutator transaction binding the contract method 0xc65910fe.
+//
+// Solidity: function startSession(bytes32 _roleContext, bytes32 _role, bytes32 _did, bytes32[] _policyContexts, bytes32[] _policies, ((uint256,uint256),(uint256[2],uint256[2]),(uint256,uint256))[] _proofs, uint256[20][] _inputs, bytes32 _tokenId, bytes32 _token) returns()
+func (_AccessContextHandler *AccessContextHandlerTransactor) StartSession0(opts *bind.TransactOpts, _roleContext [32]byte, _role [32]byte, _did [32]byte, _policyContexts [][32]byte, _policies [][32]byte, _proofs []IPolicyVerifierProof, _inputs [][20]*big.Int, _tokenId [32]byte, _token [32]byte) (*types.Transaction, error) {
+	return _AccessContextHandler.contract.Transact(opts, "startSession0", _roleContext, _role, _did, _policyContexts, _policies, _proofs, _inputs, _tokenId, _token)
+}
+
+// StartSession0 is a paid mutator transaction binding the contract method 0xc65910fe.
+//
+// Solidity: function startSession(bytes32 _roleContext, bytes32 _role, bytes32 _did, bytes32[] _policyContexts, bytes32[] _policies, ((uint256,uint256),(uint256[2],uint256[2]),(uint256,uint256))[] _proofs, uint256[20][] _inputs, bytes32 _tokenId, bytes32 _token) returns()
+func (_AccessContextHandler *AccessContextHandlerSession) StartSession0(_roleContext [32]byte, _role [32]byte, _did [32]byte, _policyContexts [][32]byte, _policies [][32]byte, _proofs []IPolicyVerifierProof, _inputs [][20]*big.Int, _tokenId [32]byte, _token [32]byte) (*types.Transaction, error) {
+	return _AccessContextHandler.Contract.StartSession0(&_AccessContextHandler.TransactOpts, _roleContext, _role, _did, _policyContexts, _policies, _proofs, _inputs, _tokenId, _token)
+}
+
+// StartSession0 is a paid mutator transaction binding the contract method 0xc65910fe.
+//
+// Solidity: function startSession(bytes32 _roleContext, bytes32 _role, bytes32 _did, bytes32[] _policyContexts, bytes32[] _policies, ((uint256,uint256),(uint256[2],uint256[2]),(uint256,uint256))[] _proofs, uint256[20][] _inputs, bytes32 _tokenId, bytes32 _token) returns()
+func (_AccessContextHandler *AccessContextHandlerTransactorSession) StartSession0(_roleContext [32]byte, _role [32]byte, _did [32]byte, _policyContexts [][32]byte, _policies [][32]byte, _proofs []IPolicyVerifierProof, _inputs [][20]*big.Int, _tokenId [32]byte, _token [32]byte) (*types.Transaction, error) {
+	return _AccessContextHandler.Contract.StartSession0(&_AccessContextHandler.TransactOpts, _roleContext, _role, _did, _policyContexts, _policies, _proofs, _inputs, _tokenId, _token)
+}
+
+// AccessContextHandlerCreateContextInstanceIterator is returned from FilterCreateContextInstance and is used to iterate over the raw logs and unpacked data for CreateContextInstance events raised by the AccessContextHandler contract.
+type AccessContextHandlerCreateContextInstanceIterator struct {
+	Event *AccessContextHandlerCreateContextInstance // Event containing the contract specifics and raw log
+
+	contract *bind.BoundContract // Generic contract to use for unpacking event data
+	event    string              // Event name to use for unpacking event data
+
+	logs chan types.Log        // Log channel receiving the found contract events
+	sub  ethereum.Subscription // Subscription for errors, completion and termination
+	done bool                  // Whether the subscription completed delivering logs
+	fail error                 // Occurred error to stop iteration
+}
+
+// Next advances the iterator to the subsequent event, returning whether there
+// are any more events found. In case of a retrieval or parsing error, false is
+// returned and Error() can be queried for the exact failure.
+func (it *AccessContextHandlerCreateContextInstanceIterator) Next() bool {
+	// If the iterator failed, stop iterating
+	if it.fail != nil {
+		return false
+	}
+	// If the iterator completed, deliver directly whatever's available
+	if it.done {
+		select {
+		case log := <-it.logs:
+			it.Event = new(AccessContextHandlerCreateContextInstance)
+			if err := it.contract.UnpackLog(it.Event, it.event, log); err != nil {
+				it.fail = err
+				return false
+			}
+			it.Event.Raw = log
+			return true
+
+		default:
+			return false
+		}
+	}
+	// Iterator still in progress, wait for either a data or an error event
+	select {
+	case log := <-it.logs:
+		it.Event = new(AccessContextHandlerCreateContextInstance)
+		if err := it.contract.UnpackLog(it.Event, it.event, log); err != nil {
+			it.fail = err
+			return false
+		}
+		it.Event.Raw = log
+		return true
+
+	case err := <-it.sub.Err():
+		it.done = true
+		it.fail = err
+		return it.Next()
+	}
+}
+
+// Error returns any retrieval or parsing error occurred during filtering.
+func (it *AccessContextHandlerCreateContextInstanceIterator) Error() error {
+	return it.fail
+}
+
+// Close terminates the iteration process, releasing any pending underlying
+// resources.
+func (it *AccessContextHandlerCreateContextInstanceIterator) Close() error {
+	it.sub.Unsubscribe()
+	return nil
+}
+
+// AccessContextHandlerCreateContextInstance represents a CreateContextInstance event raised by the AccessContextHandler contract.
+type AccessContextHandlerCreateContextInstance struct {
+	AccessContext common.Address
+	Raw           types.Log // Blockchain specific contextual infos
+}
+
+// FilterCreateContextInstance is a free log retrieval operation binding the contract event 0xe949066119e817dca657ddef4b6bb5d7f3d1ccec2153ae908edcec5205f89000.
+//
+// Solidity: event CreateContextInstance(address indexed accessContext)
+func (_AccessContextHandler *AccessContextHandlerFilterer) FilterCreateContextInstance(opts *bind.FilterOpts, accessContext []common.Address) (*AccessContextHandlerCreateContextInstanceIterator, error) {
+
+	var accessContextRule []interface{}
+	for _, accessContextItem := range accessContext {
+		accessContextRule = append(accessContextRule, accessContextItem)
+	}
+
+	logs, sub, err := _AccessContextHandler.contract.FilterLogs(opts, "CreateContextInstance", accessContextRule)
+	if err != nil {
+		return nil, err
+	}
+	return &AccessContextHandlerCreateContextInstanceIterator{contract: _AccessContextHandler.contract, event: "CreateContextInstance", logs: logs, sub: sub}, nil
+}
+
+// WatchCreateContextInstance is a free log subscription operation binding the contract event 0xe949066119e817dca657ddef4b6bb5d7f3d1ccec2153ae908edcec5205f89000.
+//
+// Solidity: event CreateContextInstance(address indexed accessContext)
+func (_AccessContextHandler *AccessContextHandlerFilterer) WatchCreateContextInstance(opts *bind.WatchOpts, sink chan<- *AccessContextHandlerCreateContextInstance, accessContext []common.Address) (event.Subscription, error) {
+
+	var accessContextRule []interface{}
+	for _, accessContextItem := range accessContext {
+		accessContextRule = append(accessContextRule, accessContextItem)
+	}
+
+	logs, sub, err := _AccessContextHandler.contract.WatchLogs(opts, "CreateContextInstance", accessContextRule)
+	if err != nil {
+		return nil, err
+	}
+	return event.NewSubscription(func(quit <-chan struct{}) error {
+		defer sub.Unsubscribe()
+		for {
+			select {
+			case log := <-logs:
+				// New log arrived, parse the event and forward to the user
+				event := new(AccessContextHandlerCreateContextInstance)
+				if err := _AccessContextHandler.contract.UnpackLog(event, "CreateContextInstance", log); err != nil {
+					return err
+				}
+				event.Raw = log
+
+				select {
+				case sink <- event:
+				case err := <-sub.Err():
+					return err
+				case <-quit:
+					return nil
+				}
+			case err := <-sub.Err():
+				return err
+			case <-quit:
+				return nil
+			}
+		}
+	}), nil
+}
+
+// ParseCreateContextInstance is a log parse operation binding the contract event 0xe949066119e817dca657ddef4b6bb5d7f3d1ccec2153ae908edcec5205f89000.
+//
+// Solidity: event CreateContextInstance(address indexed accessContext)
+func (_AccessContextHandler *AccessContextHandlerFilterer) ParseCreateContextInstance(log types.Log) (*AccessContextHandlerCreateContextInstance, error) {
+	event := new(AccessContextHandlerCreateContextInstance)
+	if err := _AccessContextHandler.contract.UnpackLog(event, "CreateContextInstance", log); err != nil {
+		return nil, err
+	}
+	event.Raw = log
+	return event, nil
 }
 

@@ -33,14 +33,32 @@ var (
 type IPolicyExtensionPolicy struct {
 	Context  [32]byte
 	Id       [32]byte
-	Instance common.Address
-	Verify   [4]byte
+	Verifier common.Address
 	Exists   bool
+}
+
+// IPolicyVerifierProof is an auto generated low-level Go binding around an user-defined struct.
+type IPolicyVerifierProof struct {
+	A PairingG1Point
+	B PairingG2Point
+	C PairingG1Point
+}
+
+// PairingG1Point is an auto generated low-level Go binding around an user-defined struct.
+type PairingG1Point struct {
+	X *big.Int
+	Y *big.Int
+}
+
+// PairingG2Point is an auto generated low-level Go binding around an user-defined struct.
+type PairingG2Point struct {
+	X [2]*big.Int
+	Y [2]*big.Int
 }
 
 // AccessContextMetaData contains all meta data concerning the AccessContext contract.
 var AccessContextMetaData = &bind.MetaData{
-	ABI: "[{\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"initialOwner\",\"type\":\"bytes32\"},{\"internalType\":\"bytes32\",\"name\":\"contextId\",\"type\":\"bytes32\"},{\"internalType\":\"address\",\"name\":\"contextHandler\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"didRegistry\",\"type\":\"address\"}],\"stateMutability\":\"nonpayable\",\"type\":\"constructor\"},{\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"owner\",\"type\":\"bytes32\"}],\"name\":\"OwnableInvalidOwner\",\"type\":\"error\"},{\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"did\",\"type\":\"bytes32\"},{\"internalType\":\"address\",\"name\":\"account\",\"type\":\"address\"}],\"name\":\"OwnableUnauthorizedAccount\",\"type\":\"error\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"bytes32\",\"name\":\"previousOwner\",\"type\":\"bytes32\"},{\"indexed\":true,\"internalType\":\"bytes32\",\"name\":\"newOwner\",\"type\":\"bytes32\"}],\"name\":\"OwnershipTransferred\",\"type\":\"event\"},{\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"_permission\",\"type\":\"bytes32\"},{\"internalType\":\"bytes32\",\"name\":\"_roleContext\",\"type\":\"bytes32\"},{\"internalType\":\"bytes32\",\"name\":\"_role\",\"type\":\"bytes32\"},{\"internalType\":\"bytes32\",\"name\":\"_did\",\"type\":\"bytes32\"}],\"name\":\"assignPermission\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"_policyContext\",\"type\":\"bytes32\"},{\"internalType\":\"bytes32\",\"name\":\"_policy\",\"type\":\"bytes32\"},{\"internalType\":\"bytes32\",\"name\":\"_role\",\"type\":\"bytes32\"},{\"internalType\":\"bytes32\",\"name\":\"_did\",\"type\":\"bytes32\"}],\"name\":\"assignPolicy\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"_did\",\"type\":\"bytes32\"},{\"internalType\":\"address\",\"name\":\"_account\",\"type\":\"address\"}],\"name\":\"checkAdmin\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bytes32[]\",\"name\":\"_contexts\",\"type\":\"bytes32[]\"},{\"internalType\":\"bytes32[]\",\"name\":\"_ids\",\"type\":\"bytes32[]\"}],\"name\":\"getPolicies\",\"outputs\":[{\"components\":[{\"internalType\":\"bytes32\",\"name\":\"context\",\"type\":\"bytes32\"},{\"internalType\":\"bytes32\",\"name\":\"id\",\"type\":\"bytes32\"},{\"internalType\":\"address\",\"name\":\"instance\",\"type\":\"address\"},{\"internalType\":\"bytes4\",\"name\":\"verify\",\"type\":\"bytes4\"},{\"internalType\":\"bool\",\"name\":\"exists\",\"type\":\"bool\"}],\"internalType\":\"structIPolicyExtension.Policy[]\",\"name\":\"policies\",\"type\":\"tuple[]\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"_context\",\"type\":\"bytes32\"},{\"internalType\":\"bytes32\",\"name\":\"_id\",\"type\":\"bytes32\"}],\"name\":\"getPolicy\",\"outputs\":[{\"components\":[{\"internalType\":\"bytes32\",\"name\":\"context\",\"type\":\"bytes32\"},{\"internalType\":\"bytes32\",\"name\":\"id\",\"type\":\"bytes32\"},{\"internalType\":\"address\",\"name\":\"instance\",\"type\":\"address\"},{\"internalType\":\"bytes4\",\"name\":\"verify\",\"type\":\"bytes4\"},{\"internalType\":\"bool\",\"name\":\"exists\",\"type\":\"bool\"}],\"internalType\":\"structIPolicyExtension.Policy\",\"name\":\"\",\"type\":\"tuple\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"_role\",\"type\":\"bytes32\"},{\"internalType\":\"bytes32\",\"name\":\"_did\",\"type\":\"bytes32\"},{\"internalType\":\"bytes32[]\",\"name\":\"_policyContexts\",\"type\":\"bytes32[]\"},{\"internalType\":\"bytes32[]\",\"name\":\"_policies\",\"type\":\"bytes32[]\"},{\"internalType\":\"bytes[]\",\"name\":\"_args\",\"type\":\"bytes[]\"}],\"name\":\"grantRole\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"owner\",\"outputs\":[{\"internalType\":\"bytes32\",\"name\":\"\",\"type\":\"bytes32\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"_permission\",\"type\":\"bytes32\"},{\"internalType\":\"bytes32\",\"name\":\"_resource\",\"type\":\"bytes32\"},{\"internalType\":\"enumPermissionExtension.Operation[]\",\"name\":\"_operations\",\"type\":\"uint8[]\"}],\"name\":\"registerPermission\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"_permission\",\"type\":\"bytes32\"},{\"internalType\":\"bytes32\",\"name\":\"_resource\",\"type\":\"bytes32\"},{\"internalType\":\"enumPermissionExtension.Operation[]\",\"name\":\"_operations\",\"type\":\"uint8[]\"},{\"internalType\":\"bytes32\",\"name\":\"_roleContext\",\"type\":\"bytes32\"},{\"internalType\":\"bytes32\",\"name\":\"_role\",\"type\":\"bytes32\"},{\"internalType\":\"bytes32\",\"name\":\"_did\",\"type\":\"bytes32\"}],\"name\":\"registerPermission\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"_policy\",\"type\":\"bytes32\"},{\"internalType\":\"address\",\"name\":\"_contract\",\"type\":\"address\"},{\"internalType\":\"bytes4\",\"name\":\"_verify\",\"type\":\"bytes4\"},{\"internalType\":\"bytes32\",\"name\":\"_role\",\"type\":\"bytes32\"},{\"internalType\":\"bytes32\",\"name\":\"_did\",\"type\":\"bytes32\"}],\"name\":\"registerPolicy\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"_policy\",\"type\":\"bytes32\"},{\"internalType\":\"address\",\"name\":\"_contract\",\"type\":\"address\"},{\"internalType\":\"bytes4\",\"name\":\"_verify\",\"type\":\"bytes4\"},{\"internalType\":\"bytes32\",\"name\":\"_did\",\"type\":\"bytes32\"}],\"name\":\"registerPolicy\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"owner_\",\"type\":\"bytes32\"}],\"name\":\"renounceOwnership\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"_role\",\"type\":\"bytes32\"},{\"internalType\":\"bytes32\",\"name\":\"_did\",\"type\":\"bytes32\"}],\"name\":\"revokeRole\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"_role\",\"type\":\"bytes32\"},{\"internalType\":\"bytes32\",\"name\":\"_policyContext\",\"type\":\"bytes32\"},{\"internalType\":\"bytes32\",\"name\":\"_policy\",\"type\":\"bytes32\"},{\"internalType\":\"bytes32\",\"name\":\"_permission\",\"type\":\"bytes32\"},{\"internalType\":\"bytes32\",\"name\":\"_resource\",\"type\":\"bytes32\"},{\"internalType\":\"enumPermissionExtension.Operation[]\",\"name\":\"_operations\",\"type\":\"uint8[]\"},{\"internalType\":\"bytes32\",\"name\":\"_did\",\"type\":\"bytes32\"}],\"name\":\"setupRole\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"_role\",\"type\":\"bytes32\"},{\"internalType\":\"bytes32\",\"name\":\"_policy\",\"type\":\"bytes32\"},{\"internalType\":\"bytes32\",\"name\":\"_permission\",\"type\":\"bytes32\"},{\"internalType\":\"bytes32\",\"name\":\"_resource\",\"type\":\"bytes32\"},{\"internalType\":\"enumPermissionExtension.Operation[]\",\"name\":\"_operations\",\"type\":\"uint8[]\"},{\"internalType\":\"address\",\"name\":\"_instance\",\"type\":\"address\"},{\"internalType\":\"bytes4\",\"name\":\"_verify\",\"type\":\"bytes4\"},{\"internalType\":\"bytes32\",\"name\":\"_did\",\"type\":\"bytes32\"}],\"name\":\"setupRole\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"oldOwner\",\"type\":\"bytes32\"},{\"internalType\":\"bytes32\",\"name\":\"newOwner\",\"type\":\"bytes32\"}],\"name\":\"transferOwnership\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"_permission\",\"type\":\"bytes32\"},{\"internalType\":\"bytes32\",\"name\":\"_roleContext\",\"type\":\"bytes32\"},{\"internalType\":\"bytes32\",\"name\":\"_role\",\"type\":\"bytes32\"},{\"internalType\":\"bytes32\",\"name\":\"_did\",\"type\":\"bytes32\"}],\"name\":\"unassignPermission\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"}]",
+	ABI: "[{\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"owner\",\"type\":\"bytes32\"}],\"name\":\"OwnableInvalidOwner\",\"type\":\"error\"},{\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"did\",\"type\":\"bytes32\"},{\"internalType\":\"address\",\"name\":\"account\",\"type\":\"address\"}],\"name\":\"OwnableUnauthorizedAccount\",\"type\":\"error\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"bytes32\",\"name\":\"previousOwner\",\"type\":\"bytes32\"},{\"indexed\":true,\"internalType\":\"bytes32\",\"name\":\"newOwner\",\"type\":\"bytes32\"}],\"name\":\"OwnershipTransferred\",\"type\":\"event\"},{\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"_permission\",\"type\":\"bytes32\"},{\"internalType\":\"bytes32\",\"name\":\"_roleContext\",\"type\":\"bytes32\"},{\"internalType\":\"bytes32\",\"name\":\"_role\",\"type\":\"bytes32\"},{\"internalType\":\"bytes32\",\"name\":\"_did\",\"type\":\"bytes32\"}],\"name\":\"assignPermission\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"_policyContext\",\"type\":\"bytes32\"},{\"internalType\":\"bytes32\",\"name\":\"_policy\",\"type\":\"bytes32\"},{\"internalType\":\"bytes32\",\"name\":\"_role\",\"type\":\"bytes32\"},{\"internalType\":\"bytes32\",\"name\":\"_did\",\"type\":\"bytes32\"}],\"name\":\"assignPolicy\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"_did\",\"type\":\"bytes32\"},{\"internalType\":\"address\",\"name\":\"_account\",\"type\":\"address\"}],\"name\":\"checkAdmin\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bytes32[]\",\"name\":\"_contexts\",\"type\":\"bytes32[]\"},{\"internalType\":\"bytes32[]\",\"name\":\"_ids\",\"type\":\"bytes32[]\"}],\"name\":\"getPolicies\",\"outputs\":[{\"components\":[{\"internalType\":\"bytes32\",\"name\":\"context\",\"type\":\"bytes32\"},{\"internalType\":\"bytes32\",\"name\":\"id\",\"type\":\"bytes32\"},{\"internalType\":\"contractIPolicyVerifier\",\"name\":\"verifier\",\"type\":\"address\"},{\"internalType\":\"bool\",\"name\":\"exists\",\"type\":\"bool\"}],\"internalType\":\"structIPolicyExtension.Policy[]\",\"name\":\"policies\",\"type\":\"tuple[]\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"_context\",\"type\":\"bytes32\"},{\"internalType\":\"bytes32\",\"name\":\"_id\",\"type\":\"bytes32\"}],\"name\":\"getPolicy\",\"outputs\":[{\"components\":[{\"internalType\":\"bytes32\",\"name\":\"context\",\"type\":\"bytes32\"},{\"internalType\":\"bytes32\",\"name\":\"id\",\"type\":\"bytes32\"},{\"internalType\":\"contractIPolicyVerifier\",\"name\":\"verifier\",\"type\":\"address\"},{\"internalType\":\"bool\",\"name\":\"exists\",\"type\":\"bool\"}],\"internalType\":\"structIPolicyExtension.Policy\",\"name\":\"\",\"type\":\"tuple\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"_role\",\"type\":\"bytes32\"},{\"internalType\":\"bytes32\",\"name\":\"_did\",\"type\":\"bytes32\"},{\"internalType\":\"bytes32[]\",\"name\":\"_policyContexts\",\"type\":\"bytes32[]\"},{\"internalType\":\"bytes32[]\",\"name\":\"_policies\",\"type\":\"bytes32[]\"},{\"components\":[{\"components\":[{\"internalType\":\"uint256\",\"name\":\"X\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"Y\",\"type\":\"uint256\"}],\"internalType\":\"structPairing.G1Point\",\"name\":\"a\",\"type\":\"tuple\"},{\"components\":[{\"internalType\":\"uint256[2]\",\"name\":\"X\",\"type\":\"uint256[2]\"},{\"internalType\":\"uint256[2]\",\"name\":\"Y\",\"type\":\"uint256[2]\"}],\"internalType\":\"structPairing.G2Point\",\"name\":\"b\",\"type\":\"tuple\"},{\"components\":[{\"internalType\":\"uint256\",\"name\":\"X\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"Y\",\"type\":\"uint256\"}],\"internalType\":\"structPairing.G1Point\",\"name\":\"c\",\"type\":\"tuple\"}],\"internalType\":\"structIPolicyVerifier.Proof[]\",\"name\":\"_proofs\",\"type\":\"tuple[]\"},{\"internalType\":\"uint256[20][]\",\"name\":\"_inputs\",\"type\":\"uint256[20][]\"}],\"name\":\"grantRole\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"initialOwner\",\"type\":\"bytes32\"},{\"internalType\":\"bytes32\",\"name\":\"id\",\"type\":\"bytes32\"},{\"internalType\":\"address\",\"name\":\"handler\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"didRegistry\",\"type\":\"address\"}],\"name\":\"init\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"owner\",\"outputs\":[{\"internalType\":\"bytes32\",\"name\":\"\",\"type\":\"bytes32\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"_permission\",\"type\":\"bytes32\"},{\"internalType\":\"bytes32\",\"name\":\"_resource\",\"type\":\"bytes32\"},{\"internalType\":\"enumPermissionExtension.Operation[]\",\"name\":\"_operations\",\"type\":\"uint8[]\"}],\"name\":\"registerPermission\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"_permission\",\"type\":\"bytes32\"},{\"internalType\":\"bytes32\",\"name\":\"_resource\",\"type\":\"bytes32\"},{\"internalType\":\"enumPermissionExtension.Operation[]\",\"name\":\"_operations\",\"type\":\"uint8[]\"},{\"internalType\":\"bytes32\",\"name\":\"_roleContext\",\"type\":\"bytes32\"},{\"internalType\":\"bytes32\",\"name\":\"_role\",\"type\":\"bytes32\"},{\"internalType\":\"bytes32\",\"name\":\"_did\",\"type\":\"bytes32\"}],\"name\":\"registerPermission\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"_policy\",\"type\":\"bytes32\"},{\"internalType\":\"address\",\"name\":\"_verifier\",\"type\":\"address\"},{\"internalType\":\"bytes32\",\"name\":\"_did\",\"type\":\"bytes32\"}],\"name\":\"registerPolicy\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"_policy\",\"type\":\"bytes32\"},{\"internalType\":\"address\",\"name\":\"_verifier\",\"type\":\"address\"},{\"internalType\":\"bytes32\",\"name\":\"_role\",\"type\":\"bytes32\"},{\"internalType\":\"bytes32\",\"name\":\"_did\",\"type\":\"bytes32\"}],\"name\":\"registerPolicy\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"owner_\",\"type\":\"bytes32\"}],\"name\":\"renounceOwnership\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"_role\",\"type\":\"bytes32\"},{\"internalType\":\"bytes32\",\"name\":\"_did\",\"type\":\"bytes32\"}],\"name\":\"revokeRole\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"_role\",\"type\":\"bytes32\"},{\"internalType\":\"bytes32\",\"name\":\"_policy\",\"type\":\"bytes32\"},{\"internalType\":\"bytes32\",\"name\":\"_permission\",\"type\":\"bytes32\"},{\"internalType\":\"bytes32\",\"name\":\"_resource\",\"type\":\"bytes32\"},{\"internalType\":\"enumPermissionExtension.Operation[]\",\"name\":\"_operations\",\"type\":\"uint8[]\"},{\"internalType\":\"address\",\"name\":\"_verifier\",\"type\":\"address\"},{\"internalType\":\"bytes32\",\"name\":\"_did\",\"type\":\"bytes32\"}],\"name\":\"setupRole\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"_role\",\"type\":\"bytes32\"},{\"internalType\":\"bytes32\",\"name\":\"_policyContext\",\"type\":\"bytes32\"},{\"internalType\":\"bytes32\",\"name\":\"_policy\",\"type\":\"bytes32\"},{\"internalType\":\"bytes32\",\"name\":\"_permission\",\"type\":\"bytes32\"},{\"internalType\":\"bytes32\",\"name\":\"_resource\",\"type\":\"bytes32\"},{\"internalType\":\"enumPermissionExtension.Operation[]\",\"name\":\"_operations\",\"type\":\"uint8[]\"},{\"internalType\":\"bytes32\",\"name\":\"_did\",\"type\":\"bytes32\"}],\"name\":\"setupRole\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"oldOwner\",\"type\":\"bytes32\"},{\"internalType\":\"bytes32\",\"name\":\"newOwner\",\"type\":\"bytes32\"}],\"name\":\"transferOwnership\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"_permission\",\"type\":\"bytes32\"},{\"internalType\":\"bytes32\",\"name\":\"_roleContext\",\"type\":\"bytes32\"},{\"internalType\":\"bytes32\",\"name\":\"_role\",\"type\":\"bytes32\"},{\"internalType\":\"bytes32\",\"name\":\"_did\",\"type\":\"bytes32\"}],\"name\":\"unassignPermission\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"}]",
 }
 
 // AccessContextABI is the input ABI used to generate the binding from.
@@ -191,7 +209,7 @@ func (_AccessContext *AccessContextTransactorRaw) Transact(opts *bind.TransactOp
 
 // GetPolicies is a free data retrieval call binding the contract method 0x32adfd2b.
 //
-// Solidity: function getPolicies(bytes32[] _contexts, bytes32[] _ids) view returns((bytes32,bytes32,address,bytes4,bool)[] policies)
+// Solidity: function getPolicies(bytes32[] _contexts, bytes32[] _ids) view returns((bytes32,bytes32,address,bool)[] policies)
 func (_AccessContext *AccessContextCaller) GetPolicies(opts *bind.CallOpts, _contexts [][32]byte, _ids [][32]byte) ([]IPolicyExtensionPolicy, error) {
 	var out []interface{}
 	err := _AccessContext.contract.Call(opts, &out, "getPolicies", _contexts, _ids)
@@ -208,21 +226,21 @@ func (_AccessContext *AccessContextCaller) GetPolicies(opts *bind.CallOpts, _con
 
 // GetPolicies is a free data retrieval call binding the contract method 0x32adfd2b.
 //
-// Solidity: function getPolicies(bytes32[] _contexts, bytes32[] _ids) view returns((bytes32,bytes32,address,bytes4,bool)[] policies)
+// Solidity: function getPolicies(bytes32[] _contexts, bytes32[] _ids) view returns((bytes32,bytes32,address,bool)[] policies)
 func (_AccessContext *AccessContextSession) GetPolicies(_contexts [][32]byte, _ids [][32]byte) ([]IPolicyExtensionPolicy, error) {
 	return _AccessContext.Contract.GetPolicies(&_AccessContext.CallOpts, _contexts, _ids)
 }
 
 // GetPolicies is a free data retrieval call binding the contract method 0x32adfd2b.
 //
-// Solidity: function getPolicies(bytes32[] _contexts, bytes32[] _ids) view returns((bytes32,bytes32,address,bytes4,bool)[] policies)
+// Solidity: function getPolicies(bytes32[] _contexts, bytes32[] _ids) view returns((bytes32,bytes32,address,bool)[] policies)
 func (_AccessContext *AccessContextCallerSession) GetPolicies(_contexts [][32]byte, _ids [][32]byte) ([]IPolicyExtensionPolicy, error) {
 	return _AccessContext.Contract.GetPolicies(&_AccessContext.CallOpts, _contexts, _ids)
 }
 
 // GetPolicy is a free data retrieval call binding the contract method 0x2654083f.
 //
-// Solidity: function getPolicy(bytes32 _context, bytes32 _id) view returns((bytes32,bytes32,address,bytes4,bool))
+// Solidity: function getPolicy(bytes32 _context, bytes32 _id) view returns((bytes32,bytes32,address,bool))
 func (_AccessContext *AccessContextCaller) GetPolicy(opts *bind.CallOpts, _context [32]byte, _id [32]byte) (IPolicyExtensionPolicy, error) {
 	var out []interface{}
 	err := _AccessContext.contract.Call(opts, &out, "getPolicy", _context, _id)
@@ -239,14 +257,14 @@ func (_AccessContext *AccessContextCaller) GetPolicy(opts *bind.CallOpts, _conte
 
 // GetPolicy is a free data retrieval call binding the contract method 0x2654083f.
 //
-// Solidity: function getPolicy(bytes32 _context, bytes32 _id) view returns((bytes32,bytes32,address,bytes4,bool))
+// Solidity: function getPolicy(bytes32 _context, bytes32 _id) view returns((bytes32,bytes32,address,bool))
 func (_AccessContext *AccessContextSession) GetPolicy(_context [32]byte, _id [32]byte) (IPolicyExtensionPolicy, error) {
 	return _AccessContext.Contract.GetPolicy(&_AccessContext.CallOpts, _context, _id)
 }
 
 // GetPolicy is a free data retrieval call binding the contract method 0x2654083f.
 //
-// Solidity: function getPolicy(bytes32 _context, bytes32 _id) view returns((bytes32,bytes32,address,bytes4,bool))
+// Solidity: function getPolicy(bytes32 _context, bytes32 _id) view returns((bytes32,bytes32,address,bool))
 func (_AccessContext *AccessContextCallerSession) GetPolicy(_context [32]byte, _id [32]byte) (IPolicyExtensionPolicy, error) {
 	return _AccessContext.Contract.GetPolicy(&_AccessContext.CallOpts, _context, _id)
 }
@@ -345,25 +363,46 @@ func (_AccessContext *AccessContextTransactorSession) CheckAdmin(_did [32]byte, 
 	return _AccessContext.Contract.CheckAdmin(&_AccessContext.TransactOpts, _did, _account)
 }
 
-// GrantRole is a paid mutator transaction binding the contract method 0x38f03dbf.
+// GrantRole is a paid mutator transaction binding the contract method 0x0888ee4c.
 //
-// Solidity: function grantRole(bytes32 _role, bytes32 _did, bytes32[] _policyContexts, bytes32[] _policies, bytes[] _args) returns()
-func (_AccessContext *AccessContextTransactor) GrantRole(opts *bind.TransactOpts, _role [32]byte, _did [32]byte, _policyContexts [][32]byte, _policies [][32]byte, _args [][]byte) (*types.Transaction, error) {
-	return _AccessContext.contract.Transact(opts, "grantRole", _role, _did, _policyContexts, _policies, _args)
+// Solidity: function grantRole(bytes32 _role, bytes32 _did, bytes32[] _policyContexts, bytes32[] _policies, ((uint256,uint256),(uint256[2],uint256[2]),(uint256,uint256))[] _proofs, uint256[20][] _inputs) returns()
+func (_AccessContext *AccessContextTransactor) GrantRole(opts *bind.TransactOpts, _role [32]byte, _did [32]byte, _policyContexts [][32]byte, _policies [][32]byte, _proofs []IPolicyVerifierProof, _inputs [][20]*big.Int) (*types.Transaction, error) {
+	return _AccessContext.contract.Transact(opts, "grantRole", _role, _did, _policyContexts, _policies, _proofs, _inputs)
 }
 
-// GrantRole is a paid mutator transaction binding the contract method 0x38f03dbf.
+// GrantRole is a paid mutator transaction binding the contract method 0x0888ee4c.
 //
-// Solidity: function grantRole(bytes32 _role, bytes32 _did, bytes32[] _policyContexts, bytes32[] _policies, bytes[] _args) returns()
-func (_AccessContext *AccessContextSession) GrantRole(_role [32]byte, _did [32]byte, _policyContexts [][32]byte, _policies [][32]byte, _args [][]byte) (*types.Transaction, error) {
-	return _AccessContext.Contract.GrantRole(&_AccessContext.TransactOpts, _role, _did, _policyContexts, _policies, _args)
+// Solidity: function grantRole(bytes32 _role, bytes32 _did, bytes32[] _policyContexts, bytes32[] _policies, ((uint256,uint256),(uint256[2],uint256[2]),(uint256,uint256))[] _proofs, uint256[20][] _inputs) returns()
+func (_AccessContext *AccessContextSession) GrantRole(_role [32]byte, _did [32]byte, _policyContexts [][32]byte, _policies [][32]byte, _proofs []IPolicyVerifierProof, _inputs [][20]*big.Int) (*types.Transaction, error) {
+	return _AccessContext.Contract.GrantRole(&_AccessContext.TransactOpts, _role, _did, _policyContexts, _policies, _proofs, _inputs)
 }
 
-// GrantRole is a paid mutator transaction binding the contract method 0x38f03dbf.
+// GrantRole is a paid mutator transaction binding the contract method 0x0888ee4c.
 //
-// Solidity: function grantRole(bytes32 _role, bytes32 _did, bytes32[] _policyContexts, bytes32[] _policies, bytes[] _args) returns()
-func (_AccessContext *AccessContextTransactorSession) GrantRole(_role [32]byte, _did [32]byte, _policyContexts [][32]byte, _policies [][32]byte, _args [][]byte) (*types.Transaction, error) {
-	return _AccessContext.Contract.GrantRole(&_AccessContext.TransactOpts, _role, _did, _policyContexts, _policies, _args)
+// Solidity: function grantRole(bytes32 _role, bytes32 _did, bytes32[] _policyContexts, bytes32[] _policies, ((uint256,uint256),(uint256[2],uint256[2]),(uint256,uint256))[] _proofs, uint256[20][] _inputs) returns()
+func (_AccessContext *AccessContextTransactorSession) GrantRole(_role [32]byte, _did [32]byte, _policyContexts [][32]byte, _policies [][32]byte, _proofs []IPolicyVerifierProof, _inputs [][20]*big.Int) (*types.Transaction, error) {
+	return _AccessContext.Contract.GrantRole(&_AccessContext.TransactOpts, _role, _did, _policyContexts, _policies, _proofs, _inputs)
+}
+
+// Init is a paid mutator transaction binding the contract method 0x118beb7a.
+//
+// Solidity: function init(bytes32 initialOwner, bytes32 id, address handler, address didRegistry) returns()
+func (_AccessContext *AccessContextTransactor) Init(opts *bind.TransactOpts, initialOwner [32]byte, id [32]byte, handler common.Address, didRegistry common.Address) (*types.Transaction, error) {
+	return _AccessContext.contract.Transact(opts, "init", initialOwner, id, handler, didRegistry)
+}
+
+// Init is a paid mutator transaction binding the contract method 0x118beb7a.
+//
+// Solidity: function init(bytes32 initialOwner, bytes32 id, address handler, address didRegistry) returns()
+func (_AccessContext *AccessContextSession) Init(initialOwner [32]byte, id [32]byte, handler common.Address, didRegistry common.Address) (*types.Transaction, error) {
+	return _AccessContext.Contract.Init(&_AccessContext.TransactOpts, initialOwner, id, handler, didRegistry)
+}
+
+// Init is a paid mutator transaction binding the contract method 0x118beb7a.
+//
+// Solidity: function init(bytes32 initialOwner, bytes32 id, address handler, address didRegistry) returns()
+func (_AccessContext *AccessContextTransactorSession) Init(initialOwner [32]byte, id [32]byte, handler common.Address, didRegistry common.Address) (*types.Transaction, error) {
+	return _AccessContext.Contract.Init(&_AccessContext.TransactOpts, initialOwner, id, handler, didRegistry)
 }
 
 // RegisterPermission is a paid mutator transaction binding the contract method 0x6c541a3d.
@@ -408,46 +447,46 @@ func (_AccessContext *AccessContextTransactorSession) RegisterPermission0(_permi
 	return _AccessContext.Contract.RegisterPermission0(&_AccessContext.TransactOpts, _permission, _resource, _operations, _roleContext, _role, _did)
 }
 
-// RegisterPolicy is a paid mutator transaction binding the contract method 0x94c4f3a3.
+// RegisterPolicy is a paid mutator transaction binding the contract method 0x50ef0554.
 //
-// Solidity: function registerPolicy(bytes32 _policy, address _contract, bytes4 _verify, bytes32 _role, bytes32 _did) returns()
-func (_AccessContext *AccessContextTransactor) RegisterPolicy(opts *bind.TransactOpts, _policy [32]byte, _contract common.Address, _verify [4]byte, _role [32]byte, _did [32]byte) (*types.Transaction, error) {
-	return _AccessContext.contract.Transact(opts, "registerPolicy", _policy, _contract, _verify, _role, _did)
+// Solidity: function registerPolicy(bytes32 _policy, address _verifier, bytes32 _did) returns()
+func (_AccessContext *AccessContextTransactor) RegisterPolicy(opts *bind.TransactOpts, _policy [32]byte, _verifier common.Address, _did [32]byte) (*types.Transaction, error) {
+	return _AccessContext.contract.Transact(opts, "registerPolicy", _policy, _verifier, _did)
 }
 
-// RegisterPolicy is a paid mutator transaction binding the contract method 0x94c4f3a3.
+// RegisterPolicy is a paid mutator transaction binding the contract method 0x50ef0554.
 //
-// Solidity: function registerPolicy(bytes32 _policy, address _contract, bytes4 _verify, bytes32 _role, bytes32 _did) returns()
-func (_AccessContext *AccessContextSession) RegisterPolicy(_policy [32]byte, _contract common.Address, _verify [4]byte, _role [32]byte, _did [32]byte) (*types.Transaction, error) {
-	return _AccessContext.Contract.RegisterPolicy(&_AccessContext.TransactOpts, _policy, _contract, _verify, _role, _did)
+// Solidity: function registerPolicy(bytes32 _policy, address _verifier, bytes32 _did) returns()
+func (_AccessContext *AccessContextSession) RegisterPolicy(_policy [32]byte, _verifier common.Address, _did [32]byte) (*types.Transaction, error) {
+	return _AccessContext.Contract.RegisterPolicy(&_AccessContext.TransactOpts, _policy, _verifier, _did)
 }
 
-// RegisterPolicy is a paid mutator transaction binding the contract method 0x94c4f3a3.
+// RegisterPolicy is a paid mutator transaction binding the contract method 0x50ef0554.
 //
-// Solidity: function registerPolicy(bytes32 _policy, address _contract, bytes4 _verify, bytes32 _role, bytes32 _did) returns()
-func (_AccessContext *AccessContextTransactorSession) RegisterPolicy(_policy [32]byte, _contract common.Address, _verify [4]byte, _role [32]byte, _did [32]byte) (*types.Transaction, error) {
-	return _AccessContext.Contract.RegisterPolicy(&_AccessContext.TransactOpts, _policy, _contract, _verify, _role, _did)
+// Solidity: function registerPolicy(bytes32 _policy, address _verifier, bytes32 _did) returns()
+func (_AccessContext *AccessContextTransactorSession) RegisterPolicy(_policy [32]byte, _verifier common.Address, _did [32]byte) (*types.Transaction, error) {
+	return _AccessContext.Contract.RegisterPolicy(&_AccessContext.TransactOpts, _policy, _verifier, _did)
 }
 
-// RegisterPolicy0 is a paid mutator transaction binding the contract method 0x9ac47f5b.
+// RegisterPolicy0 is a paid mutator transaction binding the contract method 0xb51b05a9.
 //
-// Solidity: function registerPolicy(bytes32 _policy, address _contract, bytes4 _verify, bytes32 _did) returns()
-func (_AccessContext *AccessContextTransactor) RegisterPolicy0(opts *bind.TransactOpts, _policy [32]byte, _contract common.Address, _verify [4]byte, _did [32]byte) (*types.Transaction, error) {
-	return _AccessContext.contract.Transact(opts, "registerPolicy0", _policy, _contract, _verify, _did)
+// Solidity: function registerPolicy(bytes32 _policy, address _verifier, bytes32 _role, bytes32 _did) returns()
+func (_AccessContext *AccessContextTransactor) RegisterPolicy0(opts *bind.TransactOpts, _policy [32]byte, _verifier common.Address, _role [32]byte, _did [32]byte) (*types.Transaction, error) {
+	return _AccessContext.contract.Transact(opts, "registerPolicy0", _policy, _verifier, _role, _did)
 }
 
-// RegisterPolicy0 is a paid mutator transaction binding the contract method 0x9ac47f5b.
+// RegisterPolicy0 is a paid mutator transaction binding the contract method 0xb51b05a9.
 //
-// Solidity: function registerPolicy(bytes32 _policy, address _contract, bytes4 _verify, bytes32 _did) returns()
-func (_AccessContext *AccessContextSession) RegisterPolicy0(_policy [32]byte, _contract common.Address, _verify [4]byte, _did [32]byte) (*types.Transaction, error) {
-	return _AccessContext.Contract.RegisterPolicy0(&_AccessContext.TransactOpts, _policy, _contract, _verify, _did)
+// Solidity: function registerPolicy(bytes32 _policy, address _verifier, bytes32 _role, bytes32 _did) returns()
+func (_AccessContext *AccessContextSession) RegisterPolicy0(_policy [32]byte, _verifier common.Address, _role [32]byte, _did [32]byte) (*types.Transaction, error) {
+	return _AccessContext.Contract.RegisterPolicy0(&_AccessContext.TransactOpts, _policy, _verifier, _role, _did)
 }
 
-// RegisterPolicy0 is a paid mutator transaction binding the contract method 0x9ac47f5b.
+// RegisterPolicy0 is a paid mutator transaction binding the contract method 0xb51b05a9.
 //
-// Solidity: function registerPolicy(bytes32 _policy, address _contract, bytes4 _verify, bytes32 _did) returns()
-func (_AccessContext *AccessContextTransactorSession) RegisterPolicy0(_policy [32]byte, _contract common.Address, _verify [4]byte, _did [32]byte) (*types.Transaction, error) {
-	return _AccessContext.Contract.RegisterPolicy0(&_AccessContext.TransactOpts, _policy, _contract, _verify, _did)
+// Solidity: function registerPolicy(bytes32 _policy, address _verifier, bytes32 _role, bytes32 _did) returns()
+func (_AccessContext *AccessContextTransactorSession) RegisterPolicy0(_policy [32]byte, _verifier common.Address, _role [32]byte, _did [32]byte) (*types.Transaction, error) {
+	return _AccessContext.Contract.RegisterPolicy0(&_AccessContext.TransactOpts, _policy, _verifier, _role, _did)
 }
 
 // RenounceOwnership is a paid mutator transaction binding the contract method 0x219adc2e.
@@ -492,46 +531,46 @@ func (_AccessContext *AccessContextTransactorSession) RevokeRole(_role [32]byte,
 	return _AccessContext.Contract.RevokeRole(&_AccessContext.TransactOpts, _role, _did)
 }
 
-// SetupRole is a paid mutator transaction binding the contract method 0xac2b831b.
+// SetupRole is a paid mutator transaction binding the contract method 0x43aaf7ed.
+//
+// Solidity: function setupRole(bytes32 _role, bytes32 _policy, bytes32 _permission, bytes32 _resource, uint8[] _operations, address _verifier, bytes32 _did) returns()
+func (_AccessContext *AccessContextTransactor) SetupRole(opts *bind.TransactOpts, _role [32]byte, _policy [32]byte, _permission [32]byte, _resource [32]byte, _operations []uint8, _verifier common.Address, _did [32]byte) (*types.Transaction, error) {
+	return _AccessContext.contract.Transact(opts, "setupRole", _role, _policy, _permission, _resource, _operations, _verifier, _did)
+}
+
+// SetupRole is a paid mutator transaction binding the contract method 0x43aaf7ed.
+//
+// Solidity: function setupRole(bytes32 _role, bytes32 _policy, bytes32 _permission, bytes32 _resource, uint8[] _operations, address _verifier, bytes32 _did) returns()
+func (_AccessContext *AccessContextSession) SetupRole(_role [32]byte, _policy [32]byte, _permission [32]byte, _resource [32]byte, _operations []uint8, _verifier common.Address, _did [32]byte) (*types.Transaction, error) {
+	return _AccessContext.Contract.SetupRole(&_AccessContext.TransactOpts, _role, _policy, _permission, _resource, _operations, _verifier, _did)
+}
+
+// SetupRole is a paid mutator transaction binding the contract method 0x43aaf7ed.
+//
+// Solidity: function setupRole(bytes32 _role, bytes32 _policy, bytes32 _permission, bytes32 _resource, uint8[] _operations, address _verifier, bytes32 _did) returns()
+func (_AccessContext *AccessContextTransactorSession) SetupRole(_role [32]byte, _policy [32]byte, _permission [32]byte, _resource [32]byte, _operations []uint8, _verifier common.Address, _did [32]byte) (*types.Transaction, error) {
+	return _AccessContext.Contract.SetupRole(&_AccessContext.TransactOpts, _role, _policy, _permission, _resource, _operations, _verifier, _did)
+}
+
+// SetupRole0 is a paid mutator transaction binding the contract method 0xac2b831b.
 //
 // Solidity: function setupRole(bytes32 _role, bytes32 _policyContext, bytes32 _policy, bytes32 _permission, bytes32 _resource, uint8[] _operations, bytes32 _did) returns()
-func (_AccessContext *AccessContextTransactor) SetupRole(opts *bind.TransactOpts, _role [32]byte, _policyContext [32]byte, _policy [32]byte, _permission [32]byte, _resource [32]byte, _operations []uint8, _did [32]byte) (*types.Transaction, error) {
-	return _AccessContext.contract.Transact(opts, "setupRole", _role, _policyContext, _policy, _permission, _resource, _operations, _did)
+func (_AccessContext *AccessContextTransactor) SetupRole0(opts *bind.TransactOpts, _role [32]byte, _policyContext [32]byte, _policy [32]byte, _permission [32]byte, _resource [32]byte, _operations []uint8, _did [32]byte) (*types.Transaction, error) {
+	return _AccessContext.contract.Transact(opts, "setupRole0", _role, _policyContext, _policy, _permission, _resource, _operations, _did)
 }
 
-// SetupRole is a paid mutator transaction binding the contract method 0xac2b831b.
+// SetupRole0 is a paid mutator transaction binding the contract method 0xac2b831b.
 //
 // Solidity: function setupRole(bytes32 _role, bytes32 _policyContext, bytes32 _policy, bytes32 _permission, bytes32 _resource, uint8[] _operations, bytes32 _did) returns()
-func (_AccessContext *AccessContextSession) SetupRole(_role [32]byte, _policyContext [32]byte, _policy [32]byte, _permission [32]byte, _resource [32]byte, _operations []uint8, _did [32]byte) (*types.Transaction, error) {
-	return _AccessContext.Contract.SetupRole(&_AccessContext.TransactOpts, _role, _policyContext, _policy, _permission, _resource, _operations, _did)
+func (_AccessContext *AccessContextSession) SetupRole0(_role [32]byte, _policyContext [32]byte, _policy [32]byte, _permission [32]byte, _resource [32]byte, _operations []uint8, _did [32]byte) (*types.Transaction, error) {
+	return _AccessContext.Contract.SetupRole0(&_AccessContext.TransactOpts, _role, _policyContext, _policy, _permission, _resource, _operations, _did)
 }
 
-// SetupRole is a paid mutator transaction binding the contract method 0xac2b831b.
+// SetupRole0 is a paid mutator transaction binding the contract method 0xac2b831b.
 //
 // Solidity: function setupRole(bytes32 _role, bytes32 _policyContext, bytes32 _policy, bytes32 _permission, bytes32 _resource, uint8[] _operations, bytes32 _did) returns()
-func (_AccessContext *AccessContextTransactorSession) SetupRole(_role [32]byte, _policyContext [32]byte, _policy [32]byte, _permission [32]byte, _resource [32]byte, _operations []uint8, _did [32]byte) (*types.Transaction, error) {
-	return _AccessContext.Contract.SetupRole(&_AccessContext.TransactOpts, _role, _policyContext, _policy, _permission, _resource, _operations, _did)
-}
-
-// SetupRole0 is a paid mutator transaction binding the contract method 0xd7392ce6.
-//
-// Solidity: function setupRole(bytes32 _role, bytes32 _policy, bytes32 _permission, bytes32 _resource, uint8[] _operations, address _instance, bytes4 _verify, bytes32 _did) returns()
-func (_AccessContext *AccessContextTransactor) SetupRole0(opts *bind.TransactOpts, _role [32]byte, _policy [32]byte, _permission [32]byte, _resource [32]byte, _operations []uint8, _instance common.Address, _verify [4]byte, _did [32]byte) (*types.Transaction, error) {
-	return _AccessContext.contract.Transact(opts, "setupRole0", _role, _policy, _permission, _resource, _operations, _instance, _verify, _did)
-}
-
-// SetupRole0 is a paid mutator transaction binding the contract method 0xd7392ce6.
-//
-// Solidity: function setupRole(bytes32 _role, bytes32 _policy, bytes32 _permission, bytes32 _resource, uint8[] _operations, address _instance, bytes4 _verify, bytes32 _did) returns()
-func (_AccessContext *AccessContextSession) SetupRole0(_role [32]byte, _policy [32]byte, _permission [32]byte, _resource [32]byte, _operations []uint8, _instance common.Address, _verify [4]byte, _did [32]byte) (*types.Transaction, error) {
-	return _AccessContext.Contract.SetupRole0(&_AccessContext.TransactOpts, _role, _policy, _permission, _resource, _operations, _instance, _verify, _did)
-}
-
-// SetupRole0 is a paid mutator transaction binding the contract method 0xd7392ce6.
-//
-// Solidity: function setupRole(bytes32 _role, bytes32 _policy, bytes32 _permission, bytes32 _resource, uint8[] _operations, address _instance, bytes4 _verify, bytes32 _did) returns()
-func (_AccessContext *AccessContextTransactorSession) SetupRole0(_role [32]byte, _policy [32]byte, _permission [32]byte, _resource [32]byte, _operations []uint8, _instance common.Address, _verify [4]byte, _did [32]byte) (*types.Transaction, error) {
-	return _AccessContext.Contract.SetupRole0(&_AccessContext.TransactOpts, _role, _policy, _permission, _resource, _operations, _instance, _verify, _did)
+func (_AccessContext *AccessContextTransactorSession) SetupRole0(_role [32]byte, _policyContext [32]byte, _policy [32]byte, _permission [32]byte, _resource [32]byte, _operations []uint8, _did [32]byte) (*types.Transaction, error) {
+	return _AccessContext.Contract.SetupRole0(&_AccessContext.TransactOpts, _role, _policyContext, _policy, _permission, _resource, _operations, _did)
 }
 
 // TransferOwnership is a paid mutator transaction binding the contract method 0x6d8c9532.
