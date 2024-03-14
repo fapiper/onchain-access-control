@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"github.com/fapiper/onchain-access-control/core/service/auth"
+	"github.com/fapiper/onchain-access-control/core/service/rpc"
 
 	sdkutil "github.com/TBD54566975/ssi-sdk/util"
 	"github.com/pkg/errors"
@@ -32,6 +33,7 @@ type Service struct {
 	Webhook          *webhook.Service
 	storage          storage.ServiceStorage
 	BatchDID         *did.BatchService
+	RPC              *rpc.Service
 	Auth             *auth.Service
 	DIDConfiguration *wellknown.DIDConfigurationService
 }
@@ -132,7 +134,12 @@ func servicesInitUnsafe(c *Clients, config config.ServicesConfig) (*Service, err
 		return nil, sdkutil.LoggingErrorMsg(err, "could not instantiate the did configuration service")
 	}
 
-	authServiceFactory := auth.NewAuthServiceFactory(storageProvider, didResolver, keyStoreService, keyEncrypter, keyDecrypter, c.EthClient, c.IPFSClient)
+	rpcService, err := rpc.NewRPCService()
+	if err != nil {
+		return nil, sdkutil.LoggingErrorMsg(err, "could not instantiate the rpc service")
+	}
+
+	authServiceFactory := auth.NewAuthServiceFactory(storageProvider, didResolver, keyStoreService, keyEncrypter, keyDecrypter, rpcService, c.IPFSClient)
 	if err != nil {
 		return nil, sdkutil.LoggingErrorMsg(err, "could not instantiate the auth service factory")
 	}
@@ -152,6 +159,7 @@ func servicesInitUnsafe(c *Clients, config config.ServicesConfig) (*Service, err
 		Operation:        operationService,
 		Webhook:          webhookService,
 		Auth:             authService,
+		RPC:              rpcService,
 		DIDConfiguration: didConfigurationService,
 		storage:          storageProvider,
 	}, nil

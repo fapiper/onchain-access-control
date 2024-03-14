@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"github.com/TBD54566975/ssi-sdk/did/resolution"
 	sdkutil "github.com/TBD54566975/ssi-sdk/util"
-	"github.com/ethereum/go-ethereum/ethclient"
 	"github.com/fapiper/onchain-access-control/core/config"
 	didint "github.com/fapiper/onchain-access-control/core/internal/did"
 	"github.com/fapiper/onchain-access-control/core/internal/encryption"
@@ -16,7 +15,6 @@ import (
 	"github.com/fapiper/onchain-access-control/core/service/persist"
 	"github.com/fapiper/onchain-access-control/core/service/rpc"
 	"github.com/fapiper/onchain-access-control/core/storage"
-	"github.com/fapiper/onchain-access-control/core/tx"
 	shell "github.com/ipfs/go-ipfs-api"
 	"github.com/lestrrat-go/jwx/v2/jwe"
 	"github.com/pkg/errors"
@@ -27,7 +25,7 @@ type ServiceFactory func(storage.Tx) (*Service, error)
 type Service struct {
 	storageClient *Storage
 	ipfsClient    *shell.Shell
-	ethClient     *ethclient.Client
+	rpcService    *rpc.Service
 	keystore      *keystore.Service
 	resolver      resolution.Resolver
 }
@@ -44,8 +42,8 @@ func (s Service) Status() framework.Status {
 	if s.ipfsClient == nil {
 		e.AppendString("no ipfs client configured")
 	}
-	if s.ethClient == nil {
-		e.AppendString("no eth client configured")
+	if s.rpcService == nil {
+		e.AppendString("no rpc service configured")
 	}
 	if !e.IsEmpty() {
 		return framework.Status{
@@ -56,17 +54,17 @@ func (s Service) Status() framework.Status {
 	return framework.Status{Status: framework.StatusReady}
 }
 
-func NewAuthService(config config.AuthServiceConfig, s storage.ServiceStorage, r resolution.Resolver, k *keystore.Service, ethClient *ethclient.Client, ipfsClient *shell.Shell) (*Service, error) {
+func NewAuthService(config config.AuthServiceConfig, s storage.ServiceStorage, r resolution.Resolver, k *keystore.Service, rpcService *rpc.Service, ipfsClient *shell.Shell) (*Service, error) {
 	encrypter, decrypter, err := keystore.NewServiceEncryption(s, config.EncryptionConfig, keystore.ServiceKeyEncryptionKey)
 	if err != nil {
 		return nil, errors.Wrap(err, "creating new encryption")
 	}
 
-	factory := NewAuthServiceFactory(s, r, k, encrypter, decrypter, ethClient, ipfsClient)
+	factory := NewAuthServiceFactory(s, r, k, encrypter, decrypter, rpcService, ipfsClient)
 	return factory(s)
 }
 
-func NewAuthServiceFactory(s storage.ServiceStorage, r resolution.Resolver, k *keystore.Service, encrypter encryption.Encrypter, decrypter encryption.Decrypter, ethClient *ethclient.Client, ipfsClient *shell.Shell) ServiceFactory {
+func NewAuthServiceFactory(s storage.ServiceStorage, r resolution.Resolver, k *keystore.Service, encrypter encryption.Encrypter, decrypter encryption.Decrypter, rpcService *rpc.Service, ipfsClient *shell.Shell) ServiceFactory {
 	return func(tx storage.Tx) (*Service, error) {
 		// Next, instantiate the key storage
 		sc, err := NewAuthStorage(s, encrypter, decrypter, tx)
@@ -79,8 +77,8 @@ func NewAuthServiceFactory(s storage.ServiceStorage, r resolution.Resolver, k *k
 			storageClient: sc,
 			keystore:      k,
 			resolver:      r,
+			rpcService:    rpcService,
 			ipfsClient:    ipfsClient,
-			ethClient:     ethClient,
 		}
 		if !service.Status().IsReady() {
 			return nil, errors.New(service.Status().Message)
@@ -174,12 +172,10 @@ func (s Service) VerifySession(ctx context.Context, request VerifySessionInput) 
 }
 
 // GrantRole verifies a policy and assign the role.
-func (s Service) GrantRole(ctx context.Context, input GrantRoleInput, password string, chainID uint64) (*Role, error) {
+func (s Service) GrantRole(ctx context.Context, input GrantRoleInput) (*Role, error) {
 	if !input.IsValid() {
 		return nil, errors.Errorf("invalid grant role input: %+v", input)
 	}
-
-	txOpts := tx.SendTxArgs{}.ToTransactOpts("key", password, chainID)
 
 	params := rpc.GrantRoleParams{
 		RoleId:        [32]byte{}, // input.RoleId
@@ -188,7 +184,7 @@ func (s Service) GrantRole(ctx context.Context, input GrantRoleInput, password s
 		PolicyContext: [32]byte{},
 	}
 
-	_, err := rpc.GrantRole(ctx, txOpts, s.ethClient, persist.Address(input.RoleContext), params)
+	_, err := s.rpcService.GrantRole(ctx, persist.Address(input.RoleContext), params)
 	if err != nil {
 		return nil, errors.Wrap(err, "unable to execute grant role transaction")
 	}

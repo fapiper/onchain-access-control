@@ -13,6 +13,7 @@ const (
 	Access           Type = "access"
 	Authorize        Type = "authorize"
 	Schema           Type = "schema"
+	RPC              Type = "rpc"
 	Issuance         Type = "issuance"
 	Credential       Type = "credential"
 	KeyStore         Type = "keystore"

@@ -2,13 +2,9 @@ package rpc
 
 import (
 	"context"
-	"github.com/ethereum/go-ethereum/accounts/abi/bind"
-	"github.com/ethereum/go-ethereum/core/types"
 	"github.com/ethereum/go-ethereum/ethclient"
 	"github.com/ethereum/go-ethereum/rpc"
-	"github.com/fapiper/onchain-access-control/core/contracts"
 	"github.com/fapiper/onchain-access-control/core/env"
-	"github.com/fapiper/onchain-access-control/core/service/persist"
 	"net"
 	"net/http"
 	"strings"
@@ -63,31 +59,6 @@ func NewEthClient() *ethclient.Client {
 	}
 
 	return ethclient.NewClient(client)
-}
-
-type GrantRoleParams struct {
-	RoleId        [32]byte
-	DID           [32]byte
-	PolicyContext [32]byte
-	PolicyId      [32]byte
-	Args          []byte
-}
-
-// GrantRole grants a role to a user
-func GrantRole(ctx context.Context, txOpts *bind.TransactOpts, ethClient *ethclient.Client, address persist.Address, params GrantRoleParams) (*types.Transaction, error) {
-	contract := address.Address()
-
-	instance, err := contracts.NewAccessContext(contract, ethClient)
-	if err != nil {
-		return nil, err
-	}
-
-	tx, err := instance.GrantRole(txOpts, params.RoleId, params.DID, [][32]byte{params.PolicyId}, [][32]byte{params.PolicyContext}, [][]byte{params.Args})
-	if err != nil {
-		return nil, err
-	}
-
-	return tx, nil
 }
 
 // newHTTPClientForRPC returns a http.Client configured with default settings intended for RPC calls.

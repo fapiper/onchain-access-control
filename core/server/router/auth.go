@@ -118,7 +118,7 @@ func (r AuthRouter) GrantRole(ctx *gin.Context) {
 		return
 	}
 
-	stored, err := r.service.GrantRole(ctx, auth.GrantRoleInput{RoleId: *id}, request.Password, request.ChainID)
+	stored, err := r.service.GrantRole(ctx, auth.GrantRoleInput{RoleId: *id})
 
 	if err != nil {
 		framework.LoggingRespondErrWithMsg(ctx, err, "could not create session", http.StatusInternalServerError)
