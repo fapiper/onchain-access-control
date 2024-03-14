@@ -17,8 +17,8 @@ type PolicyIdentifier struct {
 // NewPolicyIdentifier creates a new token identifiers
 func NewPolicyIdentifier(contextID common.Hash, policyID common.Hash) PolicyIdentifier {
 	return PolicyIdentifier{
-		ContextID: [32]byte(common.FromHex("0xb847a0ab3c84cfd0e0d826306fdd832d83b712583d6c2659850a2f7a866c96ce")), // contextID,
-		PolicyID:  [32]byte(common.FromHex("0x4a99c3ee483ab2168992d7bb443539c77b520e2d0030a3ce32e95387e14b1ebc")), // policyID,
+		ContextID: contextID,                                                                                      // [32]byte(common.FromHex("0xb847a0ab3c84cfd0e0d826306fdd832d83b712583d6c2659850a2f7a866c96ce")),
+		PolicyID:  [32]byte(common.FromHex("0x44cc95fcac4cdc6a7c4b6d1f14643ba6ce89542b47dcba98b79ed3173efc13e6")), // policyID,  //
 	}
 }
 
@@ -59,7 +59,7 @@ func ParseRoleFromIdentifierString(data string) (*Role, error) {
 // NewRoleIdentifier creates a new token identifiers
 func NewRoleIdentifier(contextID string, roleID string) RoleIdentifier {
 	return RoleIdentifier{
-		ContextID: [32]byte(common.FromHex("0xb847a0ab3c84cfd0e0d826306fdd832d83b712583d6c2659850a2f7a866c96ce")), // crypto.Keccak256Hash([]byte(contextID)),
+		ContextID: crypto.Keccak256Hash([]byte(contextID)), // [32]byte(common.FromHex("0xb847a0ab3c84cfd0e0d826306fdd832d83b712583d6c2659850a2f7a866c96ce"))
 		RoleID:    crypto.Keccak256Hash([]byte(roleID)),
 	}
 }

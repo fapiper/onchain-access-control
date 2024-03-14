@@ -71,7 +71,7 @@ func (w Wallet) ToTransactOpts() (*bind.TransactOpts, error) {
 }
 
 func (w Wallet) GetDID() string {
-	return fmt.Sprintf("did:pkh:%d:eip155:%s", w.ChainID, w.Address)
+	return fmt.Sprintf("did:pkh:eip155:%d:%s", w.ChainID, w.Address)
 }
 func (w Wallet) GetDIDHash() common.Hash {
 	did := w.GetDID()
