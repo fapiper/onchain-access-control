@@ -33,7 +33,7 @@ contract SessionRecipient is Context {
 
     function _forwardStartSession(
         bytes32 _tokenId,
-        bytes32 _token,
+        bytes memory _token,
         bytes32 _did
     ) internal {
         _getSessionRegistry().startSession(_tokenId, _token, _did);

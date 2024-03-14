@@ -9,8 +9,8 @@ contract SessionRegistryBase is DIDRecipient {
 
     struct SessionInfo {
         bytes32 id;
-        bytes32 token;
-        bytes32 subject;
+        bytes token;
+        bytes32 user;
         uint256 expiration;
         bool exists;
     }
@@ -25,14 +25,14 @@ contract SessionRegistryBase is DIDRecipient {
 
     function _setSession(
         bytes32 _id,
-        bytes32 _token,
-        bytes32 _subject,
+        bytes memory _token,
+        bytes32 _user,
         uint256 duration
     ) internal {
         _sessions[_id] = SessionInfo({
             id: _id,
             token: _token,
-            subject: _subject,
+            user: _user,
             exists: true,
             expiration: block.timestamp + duration
         });
@@ -50,10 +50,10 @@ contract SessionRegistryBase is DIDRecipient {
         delete _sessions[_id];
     }
 
-    function _checkSessionSubject(
+    function _checkSessionUser(
         bytes32 _id
     ) internal returns (bool) {
-        return _isDID(_sessions[_id].subject);
+        return _isDID(_sessions[_id].user);
     }
 
     function _checkSessionExists(

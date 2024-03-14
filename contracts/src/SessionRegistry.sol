@@ -14,8 +14,8 @@ contract SessionRegistry is ISessionRegistry, SessionRegistryBase, ContextHandle
         _initContextHandlerRecipient(contextHandler);
     }
 
-    modifier onlySubjectOrContextHandler(bytes32 id){
-        require(_checkSessionSubject(id) || _checkContextHandler());
+    modifier onlyUserOrContextHandler(bytes32 id){
+        require(_checkSessionUser(id) || _checkContextHandler());
         _;
     }
 
@@ -28,14 +28,14 @@ contract SessionRegistry is ISessionRegistry, SessionRegistryBase, ContextHandle
 
     function startSession(
         bytes32 _id,
-        bytes32 _token,
-        bytes32 _subject
+        bytes memory _token,
+        bytes32 _user
     ) override external {
         require(!_checkSessionExists(_id), "session already exists");
-        _setSession(_id, _token, _subject, 100);
+        _setSession(_id, _token, _user, 1 days);
     }
 
-    function revokeSession(bytes32 _id) onlySubjectOrContextHandler(_id) external {
+    function revokeSession(bytes32 _id) onlyUserOrContextHandler(_id) external {
         require(_checkSessionExists(_id), "session not found");
         _deleteSession(_id);
     }

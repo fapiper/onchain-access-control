@@ -41,7 +41,7 @@ contract AccessContextHandler is IContextHandler, SessionRecipient, ContextHandl
         IPolicyVerifier.Proof[] memory _proofs,
         uint[20][] memory _inputs,
         bytes32 _tokenId,
-        bytes32 _token
+        bytes memory _token
     ) external {
         _forwardGrantRole(_roleContext, _role, _did, _policyContexts, _policies,_proofs,_inputs);
         _forwardStartSession(_tokenId, _token, _did);
@@ -50,7 +50,7 @@ contract AccessContextHandler is IContextHandler, SessionRecipient, ContextHandl
     function startSession(
         bytes32 _did,
         bytes32 _tokenId,
-        bytes32 _token
+        bytes memory _token
     ) external {
         _forwardStartSession(_tokenId, _token, _did);
     }
