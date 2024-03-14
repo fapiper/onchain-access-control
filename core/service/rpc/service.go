@@ -17,8 +17,8 @@ import (
 )
 
 type Service struct {
-	Wallet                      *Wallet
-	AccessContextHandlerAddress persist.Address
+	Wallet         *Wallet
+	ContextHandler persist.Address
 }
 
 func (s Service) Type() framework.Type {
@@ -46,8 +46,8 @@ func NewRPCService() (*Service, error) {
 	}
 
 	service := Service{
-		Wallet:                      wallet,
-		AccessContextHandlerAddress: persist.Address("0x424B7637A40E105889B592155Ab721c347a845D3"),
+		Wallet:         wallet,
+		ContextHandler: persist.Address(env.GetString("CONTEXT_HANDLER_CONTRACT")),
 	}
 
 	if !service.Status().IsReady() {
@@ -66,7 +66,7 @@ type GrantRoleParams struct {
 
 // GrantRole grants a role to a user
 func (s Service) GrantRole(ctx context.Context, params GrantRoleParams) (*types.Receipt, error) {
-	instance, err := contracts.NewAccessContextHandler(s.AccessContextHandlerAddress.Address(), s.Wallet.Client)
+	instance, err := contracts.NewAccessContextHandler(s.ContextHandler.Address(), s.Wallet.Client)
 	if err != nil {
 		return nil, err
 	}
@@ -96,7 +96,7 @@ type StartSessionParams struct {
 
 // StartSession starts a session
 func (s Service) StartSession(ctx context.Context, params StartSessionParams) (*types.Receipt, error) {
-	instance, err := contracts.NewAccessContextHandler(s.AccessContextHandlerAddress.Address(), s.Wallet.Client)
+	instance, err := contracts.NewAccessContextHandler(s.ContextHandler.Address(), s.Wallet.Client)
 	if err != nil {
 		return nil, err
 	}
