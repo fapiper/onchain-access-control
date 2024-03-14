@@ -3,21 +3,22 @@ package persist
 import (
 	"database/sql/driver"
 	"fmt"
+	"github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/crypto"
 	"strings"
 )
 
 // PolicyIdentifier represents an identifier for a policy within an access context
 type PolicyIdentifier struct {
-	ContextID [32]byte `json:"context_id"`
-	PolicyID  [32]byte `json:"policy_id"`
+	ContextID common.Hash `json:"context_id"`
+	PolicyID  common.Hash `json:"policy_id"`
 }
 
 // NewPolicyIdentifier creates a new token identifiers
-func NewPolicyIdentifier(contextID [32]byte, policyID [32]byte) PolicyIdentifier {
+func NewPolicyIdentifier(contextID common.Hash, policyID common.Hash) PolicyIdentifier {
 	return PolicyIdentifier{
-		ContextID: contextID,
-		PolicyID:  policyID,
+		ContextID: [32]byte(common.FromHex("0xb847a0ab3c84cfd0e0d826306fdd832d83b712583d6c2659850a2f7a866c96ce")), // contextID,
+		PolicyID:  [32]byte(common.FromHex("0x4a99c3ee483ab2168992d7bb443539c77b520e2d0030a3ce32e95387e14b1ebc")), // policyID,
 	}
 }
 
@@ -32,8 +33,8 @@ func (p PolicyIdentifier) Value() (driver.Value, error) {
 
 // RoleIdentifier represents an identifier for a role within an access context
 type RoleIdentifier struct {
-	ContextID [32]byte `json:"context_id"`
-	RoleID    [32]byte `json:"role_id"`
+	ContextID common.Hash `json:"context_id"`
+	RoleID    common.Hash `json:"role_id"`
 }
 
 // Role represents an identifier for a role within an access context
@@ -58,7 +59,7 @@ func ParseRoleFromIdentifierString(data string) (*Role, error) {
 // NewRoleIdentifier creates a new token identifiers
 func NewRoleIdentifier(contextID string, roleID string) RoleIdentifier {
 	return RoleIdentifier{
-		ContextID: crypto.Keccak256Hash([]byte(contextID)),
+		ContextID: [32]byte(common.FromHex("0xb847a0ab3c84cfd0e0d826306fdd832d83b712583d6c2659850a2f7a866c96ce")), // crypto.Keccak256Hash([]byte(contextID)),
 		RoleID:    crypto.Keccak256Hash([]byte(roleID)),
 	}
 }

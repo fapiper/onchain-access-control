@@ -63,15 +63,15 @@ func (w Wallet) ToTransactOpts() (*bind.TransactOpts, error) {
 	}
 
 	auth.Nonce = big.NewInt(int64(nonce))
-	auth.Value = big.NewInt(0)     // in wei
-	auth.GasLimit = uint64(300000) // in units
+	auth.Value = big.NewInt(0)        // in wei
+	auth.GasLimit = uint64(8_000_000) // in units
 	auth.GasPrice = gasPrice
 
 	return auth, nil
 }
 
 func (w Wallet) GetDID() string {
-	return fmt.Sprintf("did:pkh:eip155:%d:%s", w.ChainID, w.Address)
+	return fmt.Sprintf("did:pkh:%d:eip155:%s", w.ChainID, w.Address)
 }
 func (w Wallet) GetDIDHash() common.Hash {
 	did := w.GetDID()

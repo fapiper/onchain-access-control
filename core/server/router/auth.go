@@ -3,13 +3,11 @@ package router
 import (
 	"fmt"
 	"github.com/TBD54566975/ssi-sdk/util"
-	"github.com/fapiper/onchain-access-control/core/contracts"
 	framework "github.com/fapiper/onchain-access-control/core/framework/server"
 	"github.com/fapiper/onchain-access-control/core/service/auth"
 	svcframework "github.com/fapiper/onchain-access-control/core/service/framework"
 	"github.com/gin-gonic/gin"
 	"github.com/pkg/errors"
-	"math/big"
 	"net/http"
 )
 
@@ -79,8 +77,8 @@ func (r AuthRouter) CreateSession(c *gin.Context) {
 }
 
 type GrantRoleRequest struct {
-	Proof  contracts.IPolicyVerifierProof `json:"proof"`
-	Inputs [20]*big.Int                   `json:"inputs"`
+	Proof  any `json:"proof"`
+	Inputs any `json:"inputs"`
 }
 
 type GrantRoleResponse struct {
@@ -108,17 +106,13 @@ func (r AuthRouter) GrantRole(ctx *gin.Context) {
 	}
 
 	var request GrantRoleRequest
-	if err := framework.Decode(ctx.Request, &request); err != nil {
-		framework.LoggingRespondErrWithMsg(ctx, err, "invalid grant role request", http.StatusBadRequest)
-		return
-	}
 
 	if err := util.IsValidStruct(request); err != nil {
 		framework.LoggingRespondError(ctx, err, http.StatusBadRequest)
 		return
 	}
 
-	stored, err := r.service.GrantRole(ctx, auth.GrantRoleInput{RoleID: *roleIdentifierParam, Proof: request.Proof, Inputs: request.Inputs})
+	stored, err := r.service.GrantRole(ctx, auth.GrantRoleInput{RoleID: *roleIdentifierParam, Proof: auth.Proof, Inputs: auth.Inputs})
 
 	if err != nil {
 		framework.LoggingRespondErrWithMsg(ctx, err, "could not grant role", http.StatusInternalServerError)

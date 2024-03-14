@@ -4,12 +4,16 @@ import (
 	"context"
 	"fmt"
 	sdkutil "github.com/TBD54566975/ssi-sdk/util"
+	"github.com/ethereum/go-ethereum/accounts/abi/bind"
+	"github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/core/types"
 	"github.com/fapiper/onchain-access-control/core/contracts"
 	"github.com/fapiper/onchain-access-control/core/env"
 	"github.com/fapiper/onchain-access-control/core/service/framework"
 	"github.com/fapiper/onchain-access-control/core/service/persist"
+	"github.com/goccy/go-json"
 	"github.com/pkg/errors"
+	"github.com/sirupsen/logrus"
 	"math/big"
 )
 
@@ -53,15 +57,16 @@ func NewRPCService() (*Service, error) {
 
 type GrantRoleParams struct {
 	RoleIdentifier   persist.RoleIdentifier
-	DID              [32]byte
+	DID              common.Hash
 	PolicyIdentifier persist.PolicyIdentifier
 	Proof            contracts.IPolicyVerifierProof
 	Inputs           [20]*big.Int
 }
 
 // GrantRole grants a role to a user
-func (s Service) GrantRole(ctx context.Context, address persist.Address, params GrantRoleParams) (*types.Transaction, error) {
-	instance, err := contracts.NewAccessContext(address.Address(), s.Wallet.Client)
+func (s Service) GrantRole(ctx context.Context, params GrantRoleParams) (*types.Receipt, error) {
+	address := persist.Address("0x424B7637A40E105889B592155Ab721c347a845D3")
+	instance, err := contracts.NewAccessContextHandler(address.Address(), s.Wallet.Client)
 	if err != nil {
 		return nil, err
 	}
@@ -73,17 +78,27 @@ func (s Service) GrantRole(ctx context.Context, address persist.Address, params 
 
 	tx, err := instance.GrantRole(
 		txOpts,
+		params.RoleIdentifier.ContextID,
 		params.RoleIdentifier.RoleID,
 		params.DID,
-		[][32]byte{params.PolicyIdentifier.PolicyID},
 		[][32]byte{params.PolicyIdentifier.ContextID},
+		[][32]byte{params.PolicyIdentifier.PolicyID},
 		[]contracts.IPolicyVerifierProof{params.Proof},
 		[][20]*big.Int{params.Inputs},
 	)
-
 	if err != nil {
 		return nil, err
 	}
 
-	return tx, nil
+	txJson, _ := json.MarshalIndent(tx, "", "\t")
+	logrus.Infof("Sent transaction\n%s\nWaiting for confirmation...", string(txJson))
+
+	receipt, err := bind.WaitMined(context.Background(), s.Wallet.Client, tx)
+	receiptJson, _ := json.MarshalIndent(*receipt, "", "	")
+	logrus.Infof("Mined transaction\n%s", string(receiptJson))
+	if err != nil {
+		return nil, err
+	}
+
+	return receipt, nil
 }

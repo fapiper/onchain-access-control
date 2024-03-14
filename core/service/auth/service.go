@@ -186,7 +186,7 @@ func (s Service) GrantRole(ctx context.Context, input GrantRoleInput) (*Role, er
 
 	params := s.buildGrantRoleParams(role, input.Proof, input.Inputs)
 
-	_, err = s.rpcService.GrantRole(ctx, "0xFDADE7715222F2A3d1849B7ccb0aDe8E7e807ca3", params)
+	_, err = s.rpcService.GrantRole(ctx, params)
 	if err != nil {
 		return nil, errors.Wrap(err, "unable to execute grant role transaction")
 	}

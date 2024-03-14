@@ -3,6 +3,7 @@ load("@io_bazel_rules_go//go:def.bzl", "go_library", "go_test")
 go_library(
     name = "auth",
     srcs = [
+        "mock.go",
         "model.go",
         "service.go",
         "storage.go",
@@ -21,6 +22,7 @@ go_library(
         "//core/service/persist",
         "//core/service/rpc",
         "//core/storage",
+        "@com_github_ethereum_go_ethereum//common/math",
         "@com_github_ipfs_go_ipfs_api//:go-ipfs-api",
         "@com_github_lestrrat_go_jwx_v2//jwe",
         "@com_github_pkg_errors//:errors",

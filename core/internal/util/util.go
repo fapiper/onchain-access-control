@@ -27,6 +27,40 @@ func IsStructPtr(obj any) bool {
 	return true
 }
 
+// FromPointer returns the value of a pointer, or the zero value of the pointer's type if the pointer is nil.
+func FromPointer[T comparable](s *T) T {
+	if s == nil {
+		return reflect.Zero(reflect.TypeOf(s).Elem()).Interface().(T)
+	}
+	return *s
+}
+
+func IsEmpty[T any](s *T) bool {
+	return s == nil || any(*s) == reflect.Zero(reflect.TypeOf(s).Elem()).Interface()
+}
+
+func ToPointer[T any](s T) *T {
+	return &s
+}
+
+func ToPointerSlice[T any](s []T) []*T {
+	result := make([]*T, len(s))
+	for i, v := range s {
+		c := v
+		result[i] = &c
+	}
+	return result
+}
+
+func FromPointerSlice[T any](s []*T) []T {
+	result := make([]T, len(s))
+	for i, v := range s {
+		c := v
+		result[i] = *c
+	}
+	return result
+}
+
 // GetMethodForDID gets a DID method from a did, the second part of the did (e.g. did:test:abcd, the method is 'test')
 func GetMethodForDID(did string) (didsdk.Method, error) {
 	split := strings.Split(did, ":")
