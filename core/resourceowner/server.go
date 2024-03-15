@@ -1,4 +1,4 @@
-package owner
+package resourceowner
 
 import (
 	sdkutil "github.com/TBD54566975/ssi-sdk/util"
