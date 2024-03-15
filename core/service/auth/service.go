@@ -8,10 +8,7 @@ import (
 	"github.com/ethereum/go-ethereum/crypto"
 	"github.com/fapiper/onchain-access-control/core/config"
 	"github.com/fapiper/onchain-access-control/core/contracts"
-	didint "github.com/fapiper/onchain-access-control/core/internal/did"
 	"github.com/fapiper/onchain-access-control/core/internal/encryption"
-	"github.com/fapiper/onchain-access-control/core/internal/keyaccess"
-	"github.com/fapiper/onchain-access-control/core/internal/util"
 	"github.com/fapiper/onchain-access-control/core/service/framework"
 	"github.com/fapiper/onchain-access-control/core/service/keystore"
 	"github.com/fapiper/onchain-access-control/core/service/persist"
@@ -23,7 +20,6 @@ import (
 	"github.com/lestrrat-go/jwx/v2/jwe"
 	"github.com/lestrrat-go/jwx/v2/jwt"
 	"github.com/pkg/errors"
-	"github.com/sirupsen/logrus"
 	"math/big"
 )
 
@@ -145,90 +141,6 @@ func (s Service) encryptJWE(ctx context.Context, signedToken []byte, audience st
 
 	return jwe.Encrypt(signedToken, jwe.WithKey(verificationMethod.Type, verificationMethod.PublicKeyJWK))
 
-}
-
-// CreateSession houses the main service logic for session token storage.
-// It accepts only requests from trusted parties that are indexing the blockchain state, validates the input, and
-// stores a session entry.
-func (s Service) CreateSession(ctx context.Context, request CreateSessionInput) (*StoredSession, error) {
-	if !request.IsValid() {
-		return nil, errors.Errorf("invalid create session request: %+v", request)
-	}
-
-	sessionJWT, err := s.decryptJWE(ctx, request.SessionJWE, "kid")
-	if err != nil {
-		return nil, errors.Wrap(err, "could not decrypt session JWE")
-	}
-
-	signature, session, err := util.ParseJWT(sessionJWT)
-	if err != nil {
-		return nil, errors.Wrap(err, "could not parse session JWT")
-	}
-
-	kid := signature.ProtectedHeaders().KeyID()
-	if kid == "" {
-		return nil, errors.Errorf("missing kid in header of session<%s>", session.JwtID())
-	}
-
-	// verify the token with the did by first resolving the did and getting the public key and next verifying the token
-	if err = didint.VerifyTokenFromDID(ctx, s.resolver, session.Issuer(), kid, sessionJWT); err != nil {
-		return nil, errors.Wrapf(err, "verifying token from did<%s> with kid<%s>", session.Issuer(), kid)
-	}
-
-	// TODO verify nonce
-
-	storedSession := StoredSession{
-		ID:         session.JwtID(),
-		Audience:   session.Audience(),
-		SessionJWT: sessionJWT, // TODO only store encrypted token
-		Issuer:     session.Issuer(),
-		Subject:    session.Subject(),
-		CreatedAt:  session.IssuedAt(),
-		Revoked:    false,
-		Expired:    false,
-	}
-
-	if s.storageClient.InsertSession(ctx, storedSession) != nil {
-		return nil, errors.Wrap(err, "storing session token")
-	}
-
-	return &storedSession, nil
-}
-
-func (s Service) decryptJWE(ctx context.Context, jweBytes []byte, kid string) (keyaccess.JWT, error) {
-
-	key, err := s.keystore.GetKey(ctx, keystore.GetKeyRequest{ID: kid})
-	if err != nil {
-		return "", errors.Wrap(err, "getting key from keystore")
-	}
-
-	jwtBytes, err := jwe.Decrypt(jweBytes, jwe.WithKey(key.Type, key.Key))
-	if err != nil {
-		return "", errors.Wrap(err, "decrypting jwe")
-	}
-
-	return keyaccess.JWT(jwtBytes), nil
-}
-
-func (s Service) VerifySession(ctx context.Context, request VerifySessionInput) (*VerifySessionOutput, error) {
-	logrus.Debugf("verifying session: %+v", request)
-
-	_, session, err := util.ParseJWT(request.SessionJWT)
-	if err != nil {
-		return &VerifySessionOutput{Verified: false, Reason: err.Error()}, nil
-	}
-
-	_, err = s.storageClient.GetSession(ctx, session.JwtID())
-	if err != nil {
-		return &VerifySessionOutput{Verified: false, Reason: err.Error()}, nil
-	}
-	// TODO
-	//	err := s.verifier.VerifyJWTSession(ctx, session)
-	//	if err != nil {
-	//		return &VerifySessionResponse{Verified: false, Reason: err.Error()}, nil
-	//	}
-
-	return &VerifySessionOutput{Verified: true}, nil
 }
 
 // GrantRole verifies a policy and assign the role.

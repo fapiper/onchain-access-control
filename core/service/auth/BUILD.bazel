@@ -1,4 +1,4 @@
-load("@io_bazel_rules_go//go:def.bzl", "go_library", "go_test")
+load("@io_bazel_rules_go//go:def.bzl", "go_library")
 
 go_library(
     name = "auth",
@@ -13,16 +13,12 @@ go_library(
     deps = [
         "//core/config",
         "//core/contracts",
-        "//core/internal/did",
         "//core/internal/encryption",
-        "//core/internal/keyaccess",
-        "//core/internal/util",
         "//core/service/framework",
         "//core/service/keystore",
         "//core/service/persist",
         "//core/service/rpc",
         "//core/storage",
-        "@com_github_ethereum_go_ethereum//common/hexutil",
         "@com_github_ethereum_go_ethereum//common/math",
         "@com_github_ethereum_go_ethereum//crypto",
         "@com_github_google_uuid//:uuid",
@@ -31,14 +27,7 @@ go_library(
         "@com_github_lestrrat_go_jwx_v2//jwe",
         "@com_github_lestrrat_go_jwx_v2//jwt",
         "@com_github_pkg_errors//:errors",
-        "@com_github_sirupsen_logrus//:logrus",
         "@com_github_tbd54566975_ssi_sdk//did/resolution",
         "@com_github_tbd54566975_ssi_sdk//util",
     ],
-)
-
-go_test(
-    name = "auth_test",
-    srcs = ["service_test.go"],
-    embed = [":auth"],
 )
