@@ -8,6 +8,7 @@ go_library(
     srcs = ["main.go"],
     importpath = "github.com/fapiper/onchain-access-control/core/cmd/resourceowner",
     visibility = ["//visibility:private"],
+    deps = ["//core/resourceowner"],
 )
 
 go_binary(

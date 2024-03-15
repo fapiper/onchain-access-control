@@ -1,125 +1,123 @@
 package resourceowner
 
 import (
-	sdkutil "github.com/TBD54566975/ssi-sdk/util"
-	"github.com/gin-gonic/gin"
-	swaggerfiles "github.com/swaggo/files"
-	ginswagger "github.com/swaggo/gin-swagger"
-	"go.opentelemetry.io/contrib/instrumentation/github.com/gin-gonic/gin/otelgin"
-	"os"
-
-	"github.com/fapiper/onchain-access-control/core/config"
+	"context"
+	"fmt"
+	"github.com/TBD54566975/ssi-sdk/schema"
+	"github.com/ethereum/go-ethereum/ethclient"
+	configpkg "github.com/fapiper/onchain-access-control/core/config"
+	"github.com/fapiper/onchain-access-control/core/env"
+	"github.com/fapiper/onchain-access-control/core/log"
 	framework "github.com/fapiper/onchain-access-control/core/server/framework"
-	"github.com/fapiper/onchain-access-control/core/server/handler"
 	"github.com/fapiper/onchain-access-control/core/server/middleware"
-	"github.com/fapiper/onchain-access-control/core/server/router"
+	"github.com/fapiper/onchain-access-control/core/service/rpc"
+	"github.com/fapiper/onchain-access-control/core/service/rpc/ipfs"
+	"github.com/gin-gonic/gin"
+	shell "github.com/ipfs/go-ipfs-api"
+	"github.com/sirupsen/logrus"
+	"github.com/spf13/viper"
+	"go.opentelemetry.io/contrib/instrumentation/github.com/gin-gonic/gin/otelgin"
+	"net/http"
 )
 
-const (
-	HealthPrefix    = "/health"
-	AuthPrefix      = "/auth"
-	ReadinessPrefix = "/readiness"
-	SwaggerPrefix   = "/swagger/*any"
-	V1Prefix        = "/v1"
-)
-
-// Server exposes all dependencies needed to run a http server and all its services
-type Server struct {
-	*config.ServerConfig
-	*Service
-	*framework.Server
-}
-
-// NewServer does two things: instantiates all service and registers their HTTP bindings
-func NewServer(shutdown chan os.Signal, cfg config.SSIServiceConfig) (*Server, error) {
-	// creates an HTTP server from the framework, and wrap it to extend it for the Consumers
-	engine := setUpEngine(cfg.Server, shutdown)
-	httpServer := framework.NewServer(cfg.Server, engine, shutdown)
-	owner, err := instantiateService(cfg.Services)
+func Run() {
+	engine := Init()
+	addr := fmt.Sprintf(":%s", env.GetString("PORT"))
+	err := http.ListenAndServe(addr, engine)
 	if err != nil {
-		return nil, sdkutil.LoggingErrorMsg(err, "unable to instantiate owner service")
+		logrus.WithError(err).Errorf(err.Error())
 	}
-
-	// make sure to set the api base and filestore base in our service info
-	config.SetAPIBase(cfg.Services.ServiceEndpoint)
-	config.SetFileStoreBase(cfg.Services.FileStoreConfig.EndpointPrefix)
-
-	// service-level routers
-	engine.GET(HealthPrefix, router.Health)
-	engine.GET(ReadinessPrefix, router.Readiness(owner.GetServices()))
-	engine.StaticFile("swagger.yaml", "./doc/swagger.yaml")
-	engine.GET(SwaggerPrefix, ginswagger.WrapHandler(swaggerfiles.Handler, ginswagger.URL("/swagger.yaml")))
-
-	// auth routers
-	if err = handler.AuthAPI(engine.Group(AuthPrefix), owner.Auth); err != nil {
-		return nil, sdkutil.LoggingErrorMsg(err, "unable to instantiate Auth API")
-	}
-
-	// data router with auth
-	data := engine.Group(config.GetFileStoreBase())
-	// TODO middleware for authn + authz
-	data.Use(middleware.AuthMiddleware(owner.Auth))
-	data.StaticFS("/", gin.Dir(cfg.Services.FileStoreConfig.LocalPath, false))
-
-	// register all v1 routers
-	v1 := engine.Group(V1Prefix)
-	if err = handler.AccessAPI(v1, owner.Access); err != nil {
-		return nil, sdkutil.LoggingErrorMsg(err, "unable to instantiate Access API")
-	}
-	if err = handler.KeyStoreAPI(v1, owner.KeyStore); err != nil {
-		return nil, sdkutil.LoggingErrorMsg(err, "unable to instantiate KeyStore API")
-	}
-	if err = handler.DecentralizedIdentityAPI(v1, owner.DID, owner.BatchDID, owner.Webhook); err != nil {
-		return nil, sdkutil.LoggingErrorMsg(err, "unable to instantiate DID API")
-	}
-	if err = handler.CredentialAPI(v1, owner.Credential, owner.Webhook, cfg.Services.StatusEndpoint); err != nil {
-		return nil, sdkutil.LoggingErrorMsg(err, "unable to instantiate Credential API")
-	}
-	if err = handler.OperationAPI(v1, owner.Operation); err != nil {
-		return nil, sdkutil.LoggingErrorMsg(err, "unable to instantiate Operation API")
-	}
-	if err = handler.PresentationAPI(v1, owner.Presentation, owner.Webhook); err != nil {
-		return nil, sdkutil.LoggingErrorMsg(err, "unable to instantiate Presentation API")
-	}
-	if err = handler.WebhookAPI(v1, owner.Webhook); err != nil {
-		return nil, sdkutil.LoggingErrorMsg(err, "unable to instantiate Webhook API")
-	}
-	if err = handler.DIDConfigurationAPI(v1, owner.DIDConfiguration); err != nil {
-		return nil, sdkutil.LoggingErrorMsg(err, "unable to instantiate DIDConfiguration API")
-	}
-
-	return &Server{
-		Server:       httpServer,
-		Service:      owner,
-		ServerConfig: &cfg.Server,
-	}, nil
 }
 
-// setUpEngine creates the gin engine and sets up the middleware based on config
-func setUpEngine(cfg config.ServerConfig, shutdown chan os.Signal) *gin.Engine {
-	gin.ForceConsoleColor()
+// Init does two things: instantiate all services and register their HTTP bindings
+func Init() *gin.Engine {
+	SetDefaults()
+
+	config := configpkg.Init()
+	log.Init(config.Server.LogLevel, config.Server.LogLocation)
+
+	ctx := context.Background()
+	clients := ClientInit(ctx)
+	i, err := ServicesInit(ctx, clients, config.Services)
+	if err != nil {
+		logrus.WithError(err).Error(err.Error())
+	}
+
+	engine, err := CoreInit(ctx, *config, i)
+	if err != nil {
+		logrus.WithError(err).Error(err.Error())
+	}
+
+	return engine
+}
+
+type Clients struct {
+	HTTPClient *http.Client
+	EthClient  *ethclient.Client
+	IPFSClient *shell.Shell
+}
+
+func ClientInit(ctx context.Context) *Clients {
+	return &Clients{
+		HTTPClient: &http.Client{Timeout: 0},
+		EthClient:  rpc.NewEthClient(),
+		IPFSClient: ipfs.NewShell(),
+	}
+}
+
+// CoreInit initializes core server functionality. This is abstracted
+// so the test server can also utilize it
+func CoreInit(ctx context.Context, config configpkg.SSIServiceConfig, instance *Service) (*gin.Engine, error) {
+	engine := framework.SetupEngine(ctx, config.Server)
+
+	// set up engine and middleware
 	middlewares := gin.HandlersChain{
 		gin.Recovery(),
 		gin.Logger(),
-		middleware.Errors(shutdown),
+		middleware.ErrLogger(),
 	}
-	if cfg.JagerEnabled {
-		middlewares = append(middlewares, otelgin.Middleware(config.ServiceName))
+	if config.Server.JagerEnabled {
+		middlewares = append(middlewares, otelgin.Middleware(configpkg.ServiceName))
 	}
-	if cfg.EnableAllowAllCORS {
+	if config.Server.EnableAllowAllCORS {
 		middlewares = append(middlewares, middleware.CORS())
 	}
 
-	// set up engine and middleware
-	engine := gin.New()
 	engine.Use(middlewares...)
-	switch cfg.Environment {
-	case config.EnvironmentDev:
-		gin.SetMode(gin.DebugMode)
-	case config.EnvironmentTest:
-		gin.SetMode(gin.TestMode)
-	case config.EnvironmentProd:
-		gin.SetMode(gin.ReleaseMode)
+
+	// setup schema caching based on config
+	if config.Server.EnableSchemaCaching {
+		localSchemas, err := schema.GetAllLocalSchemas()
+		if err != nil {
+			logrus.WithError(err).Error("could not load local schemas")
+		} else {
+			cl, err := schema.NewCachingLoader(localSchemas)
+			if err != nil {
+				logrus.WithError(err).Error("could not create caching loader")
+			}
+			cl.EnableHTTPCache()
+		}
 	}
-	return engine
+
+	return handlersInit(ctx, config, instance, engine)
+}
+
+func SetDefaults() {
+	viper.SetDefault("ENV_PATH", "")
+	viper.SetDefault("CONFIG_PATH", "")
+	viper.SetDefault("ENV", "dev")
+	viper.SetDefault("PORT", 4001)
+	viper.SetDefault("IPFS_URL", "https://cloudflare-ipfs.com/ipfs")
+	viper.SetDefault("REDIS_URL", "localhost:6379")
+	viper.SetDefault("RPC_URL", "https://eth-sepolia.g.alchemy.com/v2/demo")
+	viper.SetDefault("PRIVATE_KEY", "")
+	viper.SetDefault("CONTEXT_HANDLER_CONTRACT", "")
+	viper.SetDefault("INFURA_API_KEY", "")
+	viper.SetDefault("INFURA_API_SECRET", "")
+	viper.SetDefault("KEYSTORE_PASSWORD", "default-keystore-password")
+	viper.SetDefault("DB_PASSWORD", "default-db-password")
+	viper.SetDefault("USE_AUTH_TOKEN", true)
+	viper.SetDefault("FILESTORE_PATH", "./static")
+
+	viper.AutomaticEnv()
 }

@@ -1,16 +1,17 @@
 package resourceowner
 
 import (
+	"context"
 	"fmt"
 	sdkutil "github.com/TBD54566975/ssi-sdk/util"
 	"github.com/fapiper/onchain-access-control/core/service/access"
-	"github.com/fapiper/onchain-access-control/core/service/auth"
+	"github.com/fapiper/onchain-access-control/core/service/rpc"
 	"github.com/pkg/errors"
 
-	"github.com/fapiper/onchain-access-control/core/config"
+	configpkg "github.com/fapiper/onchain-access-control/core/config"
 	"github.com/fapiper/onchain-access-control/core/service/credential"
 	"github.com/fapiper/onchain-access-control/core/service/did"
-	"github.com/fapiper/onchain-access-control/core/service/framework"
+	frameworksvc "github.com/fapiper/onchain-access-control/core/service/framework"
 	"github.com/fapiper/onchain-access-control/core/service/keystore"
 	"github.com/fapiper/onchain-access-control/core/service/operation"
 	"github.com/fapiper/onchain-access-control/core/service/presentation"
@@ -23,10 +24,10 @@ import (
 // Service represents all services and their dependencies independent of transport
 type Service struct {
 	KeyStore         *keystore.Service
-	Auth             *auth.Service
-	Access           *access.Service
+	AccessControl    *access.Service
+	RPC              *rpc.Service
 	DID              *did.Service
-	Schema           *schema.Service // TODO seperate service into SchemaRead and SchemaWrite
+	Schema           *schema.Service
 	Credential       *credential.Service
 	Presentation     *presentation.Service
 	Operation        *operation.Service
@@ -36,38 +37,33 @@ type Service struct {
 	DIDConfiguration *wellknown.DIDConfigurationService
 }
 
-// instantiateService creates a new instance of the Consumers which instantiates all services and their
+// ServicesInit creates a new instance of the resource user which instantiates all services and their
 // dependencies independent of transport.
-func instantiateService(config config.ServicesConfig) (*Service, error) {
+func ServicesInit(ctx context.Context, clients *Clients, config configpkg.ServicesConfig) (*Service, error) {
 	if err := validateServiceConfig(config); err != nil {
 		return nil, sdkutil.LoggingErrorMsg(err, "could not instantiate SSI Service, invalid config")
 	}
-	service, err := instantiateServices(config)
-	if err != nil {
-		return nil, sdkutil.LoggingErrorMsgf(err, "could not instantiate the ssi service")
-	}
-	return service, nil
+	return servicesInitUnsafe(clients, config)
 }
 
-func validateServiceConfig(config config.ServicesConfig) error {
+func validateServiceConfig(config configpkg.ServicesConfig) error {
 	if !storage.IsStorageAvailable(storage.Type(config.StorageProvider)) {
 		return fmt.Errorf("%s storage provider configured, but not available", config.StorageProvider)
 	}
 	if config.KeyStoreConfig.IsEmpty() {
-		return fmt.Errorf("%s no config provided", framework.KeyStore)
+		return fmt.Errorf("%s no config provided", frameworksvc.KeyStore)
 	}
 	if config.DIDConfig.IsEmpty() {
-		return fmt.Errorf("%s no config provided", framework.DID)
+		return fmt.Errorf("%s no config provided", frameworksvc.DID)
 	}
 	if config.WebhookConfig.IsEmpty() {
-		return fmt.Errorf("%s no config provided", framework.Webhook)
+		return fmt.Errorf("%s no config provided", frameworksvc.Webhook)
 	}
 	return nil
 }
 
-// instantiateServices begins all instantiates and their dependencies
-func instantiateServices(config config.ServicesConfig) (*Service, error) {
-
+// servicesInitUnsafe starts all instantiates and their dependencies without validation
+func servicesInitUnsafe(c *Clients, config configpkg.ServicesConfig) (*Service, error) {
 	unencryptedStorageProvider, err := storage.NewStorage(storage.Type(config.StorageProvider), config.StorageOptions...)
 	if err != nil {
 		return nil, sdkutil.LoggingErrorMsgf(err, "could not instantiate storage provider: %s", config.StorageProvider)
@@ -132,27 +128,23 @@ func instantiateServices(config config.ServicesConfig) (*Service, error) {
 		return nil, sdkutil.LoggingErrorMsg(err, "could not instantiate the operation service")
 	}
 
-	didConfigurationService, _ := wellknown.NewDIDConfigurationService(keyStoreService, didResolver, schemaService)
-
-	authServiceFactory := auth.NewAuthServiceFactory(storageProvider, didResolver, keyStoreService, keyEncrypter, keyDecrypter)
+	didConfigurationService, err := wellknown.NewDIDConfigurationService(keyStoreService, didResolver, schemaService)
 	if err != nil {
-		return nil, sdkutil.LoggingErrorMsg(err, "could not instantiate the auth service factory")
+		return nil, sdkutil.LoggingErrorMsg(err, "could not instantiate the did configuration service")
 	}
 
-	authService, err := authServiceFactory(storageProvider)
+	rpcService, err := rpc.NewRPCService()
 	if err != nil {
-		return nil, sdkutil.LoggingErrorMsg(err, "could not instantiate Auth service")
+		return nil, sdkutil.LoggingErrorMsg(err, "could not instantiate the rpc service")
 	}
 
-	accessService, err := access.NewAccessService(storageProvider, presentationService)
+	accessControlService, err := access.NewAccessControlService(config.AuthConfig, storageProvider, presentationService, didResolver, keyStoreService, rpcService, c.IPFSClient)
 	if err != nil {
 		return nil, sdkutil.LoggingErrorMsg(err, "could not instantiate Access service")
 	}
 
 	return &Service{
 		KeyStore:         keyStoreService,
-		Auth:             authService,
-		Access:           accessService,
 		DID:              didService,
 		BatchDID:         batchDIDService,
 		Schema:           schemaService,
@@ -160,22 +152,23 @@ func instantiateServices(config config.ServicesConfig) (*Service, error) {
 		Presentation:     presentationService,
 		Operation:        operationService,
 		Webhook:          webhookService,
+		AccessControl:    accessControlService,
+		RPC:              rpcService,
 		DIDConfiguration: didConfigurationService,
 		storage:          storageProvider,
 	}, nil
 }
 
 // GetServices returns all services
-func (s *Service) GetServices() []framework.Service {
-	return []framework.Service{
+func (s *Service) GetServices() []frameworksvc.Service {
+	return []frameworksvc.Service{
 		s.KeyStore,
-		s.Auth,
-		s.Access,
 		s.DID,
 		s.Schema,
 		s.Credential,
 		s.Presentation,
 		s.Operation,
+		s.AccessControl,
 		s.Webhook,
 	}
 }

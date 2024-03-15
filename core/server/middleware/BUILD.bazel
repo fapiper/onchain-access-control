@@ -14,7 +14,7 @@ go_library(
         "//core/config",
         "//core/internal/keyaccess",
         "//core/server/framework",
-        "//core/service/auth",
+        "//core/service/accesscontrol",
         "//core/service/webhook",
         "@com_github_gin_contrib_cors//:cors",
         "@com_github_gin_gonic_gin//:gin",

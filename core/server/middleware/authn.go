@@ -6,7 +6,7 @@ import (
 	"fmt"
 	"github.com/fapiper/onchain-access-control/core/config"
 	"github.com/fapiper/onchain-access-control/core/internal/keyaccess"
-	"github.com/fapiper/onchain-access-control/core/service/auth"
+	access "github.com/fapiper/onchain-access-control/core/service/accesscontrol"
 	"net/http"
 	"os"
 	"strconv"
@@ -36,7 +36,7 @@ type authHeader struct {
 	Token string `header:"Authorization"`
 }
 
-func AuthMiddleware(authService *auth.Service) gin.HandlerFunc {
+func AuthMiddleware(accessControlService *access.Service) gin.HandlerFunc {
 	useAuthToken, _ := strconv.ParseBool(os.Getenv("USE_AUTH_TOKEN"))
 
 	return func(c *gin.Context) {
@@ -61,7 +61,7 @@ func AuthMiddleware(authService *auth.Service) gin.HandlerFunc {
 			token = header.Token[7:]
 		}
 
-		result, err := authService.VerifySession(c, auth.VerifySessionInput{SessionJWT: keyaccess.JWT(token)})
+		result, err := accessControlService.VerifySession(c, accessControlService.VerifySessionInput{SessionJWT: keyaccess.JWT(token)})
 
 		if !result.Verified || err != nil {
 			c.JSON(http.StatusUnauthorized, gin.H{"error": result.Reason})
