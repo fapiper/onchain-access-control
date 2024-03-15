@@ -61,7 +61,7 @@ func AuthMiddleware(accessControlService *accesscontrol.Service) gin.HandlerFunc
 			token = header.Token[7:]
 		}
 
-		result, err := accessControlService.VerifySession(c, accessControlService.VerifySessionInput{SessionJWT: keyaccess.JWT(token)})
+		result, err := accessControlService.VerifySession(c, accesscontrol.VerifySessionInput{SessionJWT: keyaccess.JWT(token)})
 
 		if !result.Verified || err != nil {
 			c.JSON(http.StatusUnauthorized, gin.H{"error": result.Reason})
