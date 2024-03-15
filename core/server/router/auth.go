@@ -78,51 +78,6 @@ func (r AuthRouter) StartSession(c *gin.Context) {
 	framework.Respond(c, resp, http.StatusOK)
 }
 
-type CreateSessionRequest struct {
-	// A JWE that encodes a session token
-	SessionJWE []byte `json:"sessionJwe,omitempty" validate:"required"`
-}
-
-type CreateSessionResponse struct {
-	// The created session
-	Session auth.StoredSession `json:"session"`
-}
-
-// CreateSession godoc
-//
-//	@Summary		Creates a Session
-//	@Tags			Auth
-//	@Accept			json
-//	@Produce		json
-//	@Param			request	body		CreateSessionRequest	true	"request body"
-//	@Success		200		{object}	CreateSessionResponse
-//	@Failure		400		{string}	string	"Bad request"
-//	@Failure		500		{string}	string	"Internal server error"
-//	@Router			/auth/session [put]
-func (r AuthRouter) CreateSession(c *gin.Context) {
-	var request CreateSessionRequest
-	if err := framework.Decode(c.Request, &request); err != nil {
-		framework.LoggingRespondErrWithMsg(c, err, "invalid create session request", http.StatusBadRequest)
-		return
-	}
-
-	if err := util.IsValidStruct(request); err != nil {
-		framework.LoggingRespondError(c, err, http.StatusBadRequest)
-		return
-	}
-
-	stored, err := r.service.CreateSession(c, auth.CreateSessionInput{
-		SessionJWE: request.SessionJWE,
-	})
-	if err != nil {
-		framework.LoggingRespondErrWithMsg(c, err, "could not create session", http.StatusInternalServerError)
-		return
-	}
-
-	resp := CreateSessionResponse{Session: *stored}
-	framework.Respond(c, resp, http.StatusOK)
-}
-
 type GrantRoleRequest struct {
 	Proof  any `json:"proof"`
 	Inputs any `json:"inputs"`

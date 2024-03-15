@@ -138,9 +138,14 @@ func servicesInitUnsafe(c *Clients, config configpkg.ServicesConfig) (*Service, 
 		return nil, sdkutil.LoggingErrorMsg(err, "could not instantiate the rpc service")
 	}
 
-	accessControlService, err := accesscontrol.NewAccessControlService(config.AuthConfig, storageProvider, presentationService, didResolver, keyStoreService, rpcService, c.IPFSClient)
+	accessControlServiceFactory := accesscontrol.NewAccessControlServiceFactory(storageProvider, presentationService, didResolver, keyStoreService, keyEncrypter, keyDecrypter, rpcService, c.IPFSClient)
 	if err != nil {
-		return nil, sdkutil.LoggingErrorMsg(err, "could not instantiate Access service")
+		return nil, sdkutil.LoggingErrorMsg(err, "could not instantiate the access control service factory")
+	}
+
+	accessControlService, err := accessControlServiceFactory(storageProvider)
+	if err != nil {
+		return nil, sdkutil.LoggingErrorMsg(err, "could not instantiate access control service")
 	}
 
 	return &Service{
