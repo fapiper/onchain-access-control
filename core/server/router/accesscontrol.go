@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"github.com/TBD54566975/ssi-sdk/util"
 	framework "github.com/fapiper/onchain-access-control/core/framework/server"
-	"github.com/fapiper/onchain-access-control/core/service/access"
+	"github.com/fapiper/onchain-access-control/core/service/accesscontrol"
 	svcframework "github.com/fapiper/onchain-access-control/core/service/framework"
 	"github.com/gin-gonic/gin"
 	"github.com/pkg/errors"
@@ -12,14 +12,14 @@ import (
 )
 
 type AccessRouter struct {
-	service *access.Service
+	service *accesscontrol.Service
 }
 
-func NewAccessRouter(s svcframework.Service) (*AccessRouter, error) {
+func NewAccessControlRouter(s svcframework.Service) (*AccessRouter, error) {
 	if s == nil {
 		return nil, errors.New("service cannot be nil")
 	}
-	service, ok := s.(*access.Service)
+	service, ok := s.(*accesscontrol.Service)
 	if !ok {
 		return nil, fmt.Errorf("casting service: %s", s.Type())
 	}
@@ -27,11 +27,11 @@ func NewAccessRouter(s svcframework.Service) (*AccessRouter, error) {
 }
 
 type CreatePolicyRequest struct {
-	*access.CreatePolicyRequest
+	*accesscontrol.CreatePolicyRequest
 }
 
 type CreatePolicyResponse struct {
-	*access.CreatePolicyResponse
+	*accesscontrol.CreatePolicyResponse
 }
 
 // CreatePolicy godoc
@@ -57,7 +57,7 @@ func (ar AccessRouter) CreatePolicy(c *gin.Context) {
 		return
 	}
 
-	storedPolicy, err := ar.service.CreatePolicy(c, access.CreatePolicyRequest{})
+	storedPolicy, err := ar.service.CreatePolicy(c, accesscontrol.CreatePolicyRequest{})
 
 	if err != nil {
 		framework.LoggingRespondErrWithMsg(c, err, "could not create policy", http.StatusInternalServerError)

@@ -4,7 +4,7 @@ import (
 	"context"
 	"fmt"
 	sdkutil "github.com/TBD54566975/ssi-sdk/util"
-	"github.com/fapiper/onchain-access-control/core/service/access"
+	"github.com/fapiper/onchain-access-control/core/service/accesscontrol"
 	"github.com/fapiper/onchain-access-control/core/service/rpc"
 	"github.com/pkg/errors"
 
@@ -24,7 +24,7 @@ import (
 // Service represents all services and their dependencies independent of transport
 type Service struct {
 	KeyStore         *keystore.Service
-	AccessControl    *access.Service
+	AccessControl    *accesscontrol.Service
 	RPC              *rpc.Service
 	DID              *did.Service
 	Schema           *schema.Service
@@ -138,7 +138,7 @@ func servicesInitUnsafe(c *Clients, config configpkg.ServicesConfig) (*Service, 
 		return nil, sdkutil.LoggingErrorMsg(err, "could not instantiate the rpc service")
 	}
 
-	accessControlService, err := access.NewAccessControlService(config.AuthConfig, storageProvider, presentationService, didResolver, keyStoreService, rpcService, c.IPFSClient)
+	accessControlService, err := accesscontrol.NewAccessControlService(config.AuthConfig, storageProvider, presentationService, didResolver, keyStoreService, rpcService, c.IPFSClient)
 	if err != nil {
 		return nil, sdkutil.LoggingErrorMsg(err, "could not instantiate Access service")
 	}

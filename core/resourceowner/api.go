@@ -195,7 +195,7 @@ func DIDConfigurationAPI(rg *gin.RouterGroup, service svcframework.Service) erro
 
 // AccessControlAPI registers all HTTP handlers for the AccessControl Service
 func AccessControlAPI(rg *gin.RouterGroup, service svcframework.Service) (err error) {
-	accessRouter, err := router.NewAccessRouter(service)
+	accessRouter, err := router.NewAccessControlRouter(service)
 	if err != nil {
 		return sdkutil.LoggingErrorMsg(err, "creating key store router")
 	}

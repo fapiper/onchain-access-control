@@ -6,7 +6,7 @@ import (
 	"fmt"
 	"github.com/fapiper/onchain-access-control/core/config"
 	"github.com/fapiper/onchain-access-control/core/internal/keyaccess"
-	access "github.com/fapiper/onchain-access-control/core/service/accesscontrol"
+	"github.com/fapiper/onchain-access-control/core/service/accesscontrol"
 	"net/http"
 	"os"
 	"strconv"
@@ -36,7 +36,7 @@ type authHeader struct {
 	Token string `header:"Authorization"`
 }
 
-func AuthMiddleware(accessControlService *access.Service) gin.HandlerFunc {
+func AuthMiddleware(accessControlService *accesscontrol.Service) gin.HandlerFunc {
 	useAuthToken, _ := strconv.ParseBool(os.Getenv("USE_AUTH_TOKEN"))
 
 	return func(c *gin.Context) {

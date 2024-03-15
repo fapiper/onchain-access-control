@@ -1,4 +1,4 @@
-package access
+package accesscontrol
 
 import (
 	"github.com/TBD54566975/ssi-sdk/util"
