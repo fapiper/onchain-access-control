@@ -4,16 +4,15 @@ load("@io_bazel_rules_go//go:def.bzl", "go_binary", "go_library")
 #load("@rules_pkg//:pkg.bzl", "pkg_tar")
 
 go_library(
-    name = "owner_lib",
+    name = "resourceowner_lib",
     srcs = ["main.go"],
-    importpath = "github.com/fapiper/onchain-access-control/core/cmd/owner",
+    importpath = "github.com/fapiper/onchain-access-control/core/cmd/resourceowner",
     visibility = ["//visibility:private"],
-    deps = ["//core/owner"],
 )
 
 go_binary(
-    name = "owner",
-    embed = [":owner_lib"],
+    name = "resourceowner",
+    embed = [":resourceowner_lib"],
     visibility = ["//visibility:public"],
 )
 
