@@ -1,12 +1,12 @@
 package issuer
 
 import (
+	"context"
 	"fmt"
-
 	sdkutil "github.com/TBD54566975/ssi-sdk/util"
 	"github.com/pkg/errors"
 
-	"github.com/fapiper/onchain-access-control/core/config"
+	configpkg "github.com/fapiper/onchain-access-control/core/config"
 	"github.com/fapiper/onchain-access-control/core/service/credential"
 	"github.com/fapiper/onchain-access-control/core/service/did"
 	"github.com/fapiper/onchain-access-control/core/service/framework"
@@ -37,20 +37,16 @@ type Service struct {
 	DIDConfiguration *wellknown.DIDConfigurationService
 }
 
-// instantiateService creates a new instance of the Consumers which instantiates all services and their
+// ServicesInit creates a new instance of the issuer which instantiates all services and their
 // dependencies independent of transport.
-func instantiateService(config config.ServicesConfig) (*Service, error) {
+func ServicesInit(ctx context.Context, clients *Clients, config configpkg.ServicesConfig) (*Service, error) {
 	if err := validateServiceConfig(config); err != nil {
-		return nil, sdkutil.LoggingErrorMsg(err, "could not instantiate SSI Service, invalid config")
+		return nil, sdkutil.LoggingErrorMsg(err, "could not instantiate issuer service, invalid config")
 	}
-	service, err := instantiateServices(config)
-	if err != nil {
-		return nil, sdkutil.LoggingErrorMsgf(err, "could not instantiate the ssi service")
-	}
-	return service, nil
+	return servicesInitUnsafe(clients, config)
 }
 
-func validateServiceConfig(config config.ServicesConfig) error {
+func validateServiceConfig(config configpkg.ServicesConfig) error {
 	if !storage.IsStorageAvailable(storage.Type(config.StorageProvider)) {
 		return fmt.Errorf("%s storage provider configured, but not available", config.StorageProvider)
 	}
@@ -66,8 +62,8 @@ func validateServiceConfig(config config.ServicesConfig) error {
 	return nil
 }
 
-// instantiateServices begins all instantiates and their dependencies
-func instantiateServices(config config.ServicesConfig) (*Service, error) {
+// servicesInitUnsafe starts all instantiates and their dependencies without validation
+func servicesInitUnsafe(c *Clients, config configpkg.ServicesConfig) (*Service, error) {
 	unencryptedStorageProvider, err := storage.NewStorage(storage.Type(config.StorageProvider), config.StorageOptions...)
 	if err != nil {
 		return nil, sdkutil.LoggingErrorMsgf(err, "could not instantiate storage provider: %s", config.StorageProvider)
