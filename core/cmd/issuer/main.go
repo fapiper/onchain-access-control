@@ -5,5 +5,5 @@ import (
 )
 
 func main() {
-	issuer.Init()
+	issuer.Run()
 }

@@ -1,15 +1,15 @@
 load("@io_bazel_rules_go//go:def.bzl", "go_binary", "go_library")
 
 go_library(
-    name = "authority_lib",
+    name = "accreditation_body_lib",
     srcs = ["main.go"],
-    importpath = "github.com/fapiper/onchain-access-control/usecase/authority",
+    importpath = "github.com/fapiper/onchain-access-control/usecase/accreditation_body",
     visibility = ["//visibility:private"],
     deps = ["//core/issuer"],
 )
 
 go_binary(
-    name = "authority",
-    embed = [":authority_lib"],
+    name = "accreditation_body",
+    embed = [":accreditation_body_lib"],
     visibility = ["//visibility:public"],
 )
