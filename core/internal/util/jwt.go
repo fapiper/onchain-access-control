@@ -2,9 +2,8 @@ package util
 
 import (
 	"fmt"
-
-	"github.com/lestrrat-go/jwx/jws"
-	"github.com/lestrrat-go/jwx/jwt"
+	"github.com/lestrrat-go/jwx/v2/jws"
+	"github.com/lestrrat-go/jwx/v2/jwt"
 
 	"github.com/fapiper/onchain-access-control/core/internal/keyaccess"
 )
@@ -20,7 +19,7 @@ func ParseJWT(token keyaccess.JWT) (*jws.Signature, jwt.Token, error) {
 	if len(signatures) != 1 {
 		return nil, nil, fmt.Errorf("expected 1 signature, got %d", len(signatures))
 	}
-	parsedJWT, err := jwt.Parse(tokenBytes)
+	parsedJWT, err := jwt.Parse(tokenBytes, jwt.WithVerify(false))
 	if err != nil {
 		return nil, nil, err
 	}

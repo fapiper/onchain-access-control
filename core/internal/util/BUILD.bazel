@@ -12,8 +12,8 @@ go_library(
     visibility = ["//visibility:public"],
     deps = [
         "//core/internal/keyaccess",
-        "@com_github_lestrrat_go_jwx//jws",
-        "@com_github_lestrrat_go_jwx//jwt",
+        "@com_github_lestrrat_go_jwx_v2//jws",
+        "@com_github_lestrrat_go_jwx_v2//jwt",
         "@com_github_pkg_errors//:errors",
         "@com_github_sourcegraph_conc//pool",
         "@com_github_tbd54566975_ssi_sdk//did",

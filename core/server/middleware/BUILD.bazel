@@ -12,6 +12,7 @@ go_library(
     visibility = ["//visibility:public"],
     deps = [
         "//core/config",
+        "//core/env",
         "//core/internal/keyaccess",
         "//core/server/framework",
         "//core/service/accesscontrol",

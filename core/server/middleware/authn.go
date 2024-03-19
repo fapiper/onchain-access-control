@@ -1,17 +1,13 @@
 package middleware
 
 import (
-	"crypto/sha256"
-	"encoding/hex"
 	"fmt"
 	"github.com/fapiper/onchain-access-control/core/config"
+	"github.com/fapiper/onchain-access-control/core/env"
 	"github.com/fapiper/onchain-access-control/core/internal/keyaccess"
 	"github.com/fapiper/onchain-access-control/core/service/accesscontrol"
-	"net/http"
-	"os"
-	"strconv"
-
 	"github.com/gin-gonic/gin"
+	"net/http"
 )
 
 /*
@@ -37,11 +33,10 @@ type authHeader struct {
 }
 
 func AuthMiddleware(accessControlService *accesscontrol.Service) gin.HandlerFunc {
-	useAuthToken, _ := strconv.ParseBool(os.Getenv("USE_AUTH_TOKEN"))
+	useAuthToken := env.GetBool("USE_AUTH_TOKEN")
 
 	return func(c *gin.Context) {
 
-		// If USE_AUTH_TOKEN is false or not set, skip the authentication
 		if !useAuthToken {
 			c.Next()
 			return
@@ -49,7 +44,7 @@ func AuthMiddleware(accessControlService *accesscontrol.Service) gin.HandlerFunc
 
 		header := authHeader{}
 
-		if err := c.ShouldBindHeader(header); err != nil {
+		if err := c.ShouldBindHeader(&header); err != nil {
 			c.JSON(http.StatusUnauthorized, gin.H{"error": "Authorization is required"})
 			c.Abort()
 			return
@@ -61,7 +56,7 @@ func AuthMiddleware(accessControlService *accesscontrol.Service) gin.HandlerFunc
 			token = header.Token[7:]
 		}
 
-		result, err := accessControlService.VerifySession(c, accesscontrol.VerifySessionInput{SessionJWT: keyaccess.JWT(token)})
+		result, err := accessControlService.VerifySession(c, accesscontrol.VerifySessionInput{SessionToken: keyaccess.JWT(token)})
 
 		if !result.Verified || err != nil {
 			c.JSON(http.StatusUnauthorized, gin.H{"error": result.Reason})
@@ -77,20 +72,6 @@ func AuthMiddleware(accessControlService *accesscontrol.Service) gin.HandlerFunc
 		// 1. check if `fileRefFromToken` matches requested file
 		if fileRefFromToken != fileRefFromPath {
 			c.JSON(http.StatusUnauthorized, gin.H{"error": "Session token invalid"})
-			c.Abort()
-			return
-		}
-
-		// 2. check if token exists in db and isn't expired
-		authToken := ""
-
-		// Generate SHA256 hash of the token from the header
-		hash := sha256.Sum256([]byte(token))
-		hashedToken := hex.EncodeToString(hash[:])
-
-		// Check if the hashed token from the header matches the AUTH token
-		if hashedToken != authToken {
-			c.JSON(http.StatusUnauthorized, gin.H{"error": "Authorization is required"})
 			c.Abort()
 			return
 		}
