@@ -17,8 +17,9 @@ import (
 )
 
 type Service struct {
-	Wallet         *Wallet
-	ContextHandler persist.Address
+	Wallet          *Wallet
+	ContextHandler  persist.Address
+	SessionRegistry persist.Address
 }
 
 func (s Service) Type() framework.Type {
@@ -46,8 +47,9 @@ func NewRPCService() (*Service, error) {
 	}
 
 	service := Service{
-		Wallet:         wallet,
-		ContextHandler: persist.Address(env.GetString("CONTEXT_HANDLER_CONTRACT")),
+		Wallet:          wallet,
+		ContextHandler:  persist.Address(env.GetString("CONTEXT_HANDLER_CONTRACT")),
+		SessionRegistry: persist.Address(env.GetString("SESSION_REGISTRY_CONTRACT")),
 	}
 
 	if !service.Status().IsReady() {
@@ -112,6 +114,27 @@ func (s Service) StartSession(ctx context.Context, params StartSessionParams) (*
 		params.TokenID,
 		params.SessionJWE,
 	))
+}
+
+type CheckSessionParams struct {
+	TokenID common.Hash
+	DID     common.Hash
+}
+
+// CheckSession starts a session
+func (s Service) CheckSession(ctx context.Context, params CheckSessionParams) (bool, error) {
+	instance, err := contracts.NewSessionRegistryCaller(s.ContextHandler.Address(), s.Wallet.Client)
+	if err != nil {
+		return false, err
+	}
+
+	txOpts := s.Wallet.ToCallOpts()
+
+	return instance.IsSession(
+		txOpts,
+		params.TokenID,
+		params.DID,
+	)
 }
 
 func (s Service) waitMined(tx *types.Transaction, err error) (*types.Receipt, error) {

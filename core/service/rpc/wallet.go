@@ -46,6 +46,12 @@ func NewWallet(privateKey string, chainID uint64) (*Wallet, error) {
 	return &wallet, nil
 }
 
+func (w Wallet) ToCallOpts() *bind.CallOpts {
+	return &bind.CallOpts{
+		From: w.Address,
+	}
+}
+
 func (w Wallet) ToTransactOpts() (*bind.TransactOpts, error) {
 
 	nonce, err := w.Client.PendingNonceAt(context.Background(), w.Address)

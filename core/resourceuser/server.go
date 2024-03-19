@@ -112,6 +112,7 @@ func SetDefaults() {
 	viper.SetDefault("RPC_URL", "https://eth-sepolia.g.alchemy.com/v2/demo")
 	viper.SetDefault("PRIVATE_KEY", "")
 	viper.SetDefault("CONTEXT_HANDLER_CONTRACT", "")
+	viper.SetDefault("SESSION_REGISTRY_CONTRACT", "")
 	viper.SetDefault("INFURA_API_KEY", "")
 	viper.SetDefault("INFURA_API_SECRET", "")
 	viper.SetDefault("KEYSTORE_PASSWORD", "default-keystore-password")

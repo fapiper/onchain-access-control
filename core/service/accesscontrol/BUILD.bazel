@@ -21,6 +21,7 @@ go_library(
         "//core/service/presentation/model",
         "//core/service/rpc",
         "//core/storage",
+        "@com_github_ethereum_go_ethereum//crypto",
         "@com_github_ipfs_go_ipfs_api//:go-ipfs-api",
         "@com_github_lestrrat_go_jwx_v2//jwe",
         "@com_github_pkg_errors//:errors",

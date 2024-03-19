@@ -43,7 +43,7 @@ func (in CreateSessionInput) IsValid() bool {
 }
 
 type VerifySessionInput struct {
-	SessionJWT keyaccess.JWT `json:"jwt,omitempty" validate:"required"`
+	SessionToken keyaccess.JWT `json:"jwt,omitempty" validate:"required"`
 }
 
 type VerifySessionOutput struct {
