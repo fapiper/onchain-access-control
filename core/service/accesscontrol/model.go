@@ -38,29 +38,49 @@ type CreatePolicyResponse struct {
 }
 
 type RegisterResourceInput struct {
-	Role     string `json:"role"`
-	Policy   string `json:"policy"`
-	Resource string `json:"resource"`
+	Role           string `json:"role"`
+	PolicyContract string `json:"policy_contract"`
+	Resource       string `json:"resource"`
+}
+
+type RegisterResourceValue struct {
+	Role       persist.Role   `json:"role"`
+	Policy     persist.Policy `json:"policy"`
+	Permission string         `json:"permission"`
+	Resource   string         `json:"resource"`
+	Operations []uint8        `json:"operations"`
+	DID        string         `json:"did"`
 }
 
 type RegisterResourceOutput struct {
 	Role       string  `json:"role"`
 	Policy     string  `json:"policy"`
-	Permission []byte  `json:"permission"`
+	Permission string  `json:"permission"`
 	Resource   string  `json:"resource"`
 	Operations []uint8 `json:"operations"`
 	DID        string  `json:"did"`
 }
 
-func (o RegisterResourceOutput) toParams(address persist.Address) rpc.RegisterResourceParams {
+func (v RegisterResourceValue) toParams(address persist.Address) rpc.RegisterResourceParams {
 	return rpc.RegisterResourceParams{
 		AccessContext: address,
-		Role:          crypto.Keccak256Hash([]byte(o.Role)),
-		Policy:        crypto.Keccak256Hash([]byte(o.Policy)),
-		Permission:    crypto.Keccak256Hash(o.Permission),
-		Resource:      crypto.Keccak256Hash([]byte(o.Resource)),
-		Operations:    o.Operations, // read + write
-		DID:           crypto.Keccak256Hash([]byte(o.DID)),
+		Role:          crypto.Keccak256Hash([]byte(v.Role.RoleID)),
+		Policy:        crypto.Keccak256Hash([]byte(v.Policy.PolicyID)),
+		Permission:    crypto.Keccak256Hash([]byte(v.Permission)),
+		Resource:      crypto.Keccak256Hash([]byte(v.Resource)),
+		Operations:    v.Operations, // read + write
+		DID:           crypto.Keccak256Hash([]byte(v.DID)),
+	}
+}
+
+func (v RegisterResourceValue) toOut() RegisterResourceOutput {
+	return RegisterResourceOutput{
+		Role:       v.Role.String(),
+		Policy:     v.Policy.String(),
+		Permission: v.Permission,
+		Resource:   v.Resource,
+		Operations: v.Operations,
+		DID:        v.DID,
 	}
 }
 

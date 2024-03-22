@@ -124,6 +124,7 @@ func (s Service) RegisterResource(ctx context.Context, params RegisterResourcePa
 	}
 
 	v := persist.Address("0x04756f72242049Eb05A0BAADa41E0F46828122cD")
+	logrus.Infof("RegisterResource TxParams: %s", params)
 	return s.waitMined(instance.SetupRole(txOpts, params.Role, params.Policy, params.Permission, params.Resource, params.Operations, v.Address(), params.DID))
 }
 
@@ -237,7 +238,7 @@ func (s Service) waitMined(tx *types.Transaction, err error) (*types.Receipt, er
 
 	receipt, err := bind.WaitMined(context.Background(), s.Wallet.Client, tx)
 	if receipt.Status == types.ReceiptStatusFailed {
-		return nil, fmt.Errorf("Transaction status failed\n%s", receipt.TxHash)
+		return nil, fmt.Errorf("transaction status failed for transaction %s", receipt.TxHash)
 	}
 	if err != nil {
 		return nil, err

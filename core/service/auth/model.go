@@ -7,9 +7,10 @@ import (
 )
 
 type GrantRoleInput struct {
-	RoleID string                         `json:"role_id"`
-	Proof  contracts.IPolicyVerifierProof `json:"proof"`
-	Inputs [20]*big.Int                   `json:"inputs"`
+	RoleID   string                         `json:"role"`
+	PolicyID string                         `json:"policy"`
+	Proof    contracts.IPolicyVerifierProof `json:"proof"`
+	Inputs   [20]*big.Int                   `json:"inputs"`
 }
 
 func (in GrantRoleInput) IsValid() bool {

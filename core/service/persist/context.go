@@ -8,6 +8,29 @@ import (
 	"strings"
 )
 
+// Policy represents an identifier for a policy within an access context
+type Policy struct {
+	ContextID string `json:"context_id"`
+	PolicyID  string `json:"policy_id"`
+}
+
+func (p Policy) String() string {
+	return fmt.Sprintf("%s+%s", p.ContextID, p.PolicyID)
+}
+
+// ParsePolicyFromIdentifierString Parses string to Policy type
+func ParsePolicyFromIdentifierString(data string) (*Policy, error) {
+	res := strings.Split(data, "+")
+	if len(res) != 2 {
+		return nil, fmt.Errorf("invalid policy identifier format")
+	}
+	policy := Policy{
+		ContextID: res[0],
+		PolicyID:  res[1],
+	}
+	return &policy, nil
+}
+
 // PolicyIdentifier represents an identifier for a policy within an access context
 type PolicyIdentifier struct {
 	ContextID common.Hash `json:"context_id"`
@@ -49,6 +72,10 @@ type RoleIdentifier struct {
 type Role struct {
 	ContextID string `json:"context_id"`
 	RoleID    string `json:"role_id"`
+}
+
+func (r Role) String() string {
+	return fmt.Sprintf("%s+%s", r.ContextID, r.RoleID)
 }
 
 // ParseRoleFromIdentifierString Parses string to Role type

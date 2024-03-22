@@ -19,6 +19,7 @@ import (
 	"github.com/fapiper/onchain-access-control/core/service/rpc"
 	"github.com/fapiper/onchain-access-control/core/storage"
 	"github.com/google/tink/go/subtle/random"
+	"github.com/google/uuid"
 	shell "github.com/ipfs/go-ipfs-api"
 	"github.com/lestrrat-go/jwx/v2/jwe"
 	"github.com/lestrrat-go/jwx/v2/jwt"
@@ -156,26 +157,32 @@ func (s Service) RegisterResource(ctx context.Context, request RegisterResourceI
 		return nil, errors.Errorf("invalid register resource request: %+v", request)
 	}
 	did := s.rpcService.Wallet.GetDID()
-
 	address, err := s.rpcService.GetAccessContextAddress(s.rpcService.Wallet.GetDIDHash())
 	if err != nil {
 		return nil, errors.Wrap(err, "could not get access context address")
 	}
 
-	out := RegisterResourceOutput{
-		Role:       request.Role,
-		Policy:     request.Policy,
-		Permission: random.GetRandomBytes(32),
+	val := RegisterResourceValue{
+		Role: persist.Role{
+			ContextID: did,
+			RoleID:    request.Role,
+		},
+		Policy: persist.Policy{
+			ContextID: did,
+			PolicyID:  uuid.NewString(),
+		},
+		Permission: uuid.NewString(),
 		Resource:   fmt.Sprintf("%s;%s", did, request.Resource),
 		Operations: []uint8{0, 1},
 		DID:        did,
 	}
 
-	_, err = s.rpcService.RegisterResource(ctx, out.toParams(address))
+	_, err = s.rpcService.RegisterResource(ctx, val.toParams(address))
 	if err != nil {
 		return nil, errors.Wrap(err, "could not register resource")
 	}
 
+	out := val.toOut()
 	return &out, nil
 }
 

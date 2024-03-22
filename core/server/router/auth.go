@@ -36,7 +36,7 @@ type StartSessionResponse struct {
 	// The created session
 	Session jwt.Token `json:"session"`
 	// The created session
-	SignedToken []byte `json:"signed_token"`
+	SignedToken string `json:"signed_token"`
 }
 
 // StartSession godoc
@@ -56,13 +56,14 @@ func (r AuthRouter) StartSession(c *gin.Context) {
 		return
 	}
 
-	resp := StartSessionResponse{Session: *token, SignedToken: *signedToken}
+	resp := StartSessionResponse{Session: *token, SignedToken: signedToken}
 	framework.Respond(c, resp, http.StatusOK)
 }
 
 type GrantRoleRequest struct {
-	Proof  any `json:"proof"`
-	Inputs any `json:"inputs"`
+	Proof  any    `json:"proof"`
+	Inputs any    `json:"inputs"`
+	Policy string `json:"policy"`
 }
 
 type GrantRoleResponse struct {
@@ -90,13 +91,17 @@ func (r AuthRouter) GrantRole(ctx *gin.Context) {
 	}
 
 	var request GrantRoleRequest
+	if err := framework.Decode(ctx.Request, &request); err != nil {
+		framework.LoggingRespondErrWithMsg(ctx, err, "grant role invalid request", http.StatusBadRequest)
+		return
+	}
 
 	if err := util.IsValidStruct(request); err != nil {
 		framework.LoggingRespondError(ctx, err, http.StatusBadRequest)
 		return
 	}
 
-	stored, err := r.service.GrantRole(ctx, auth.GrantRoleInput{RoleID: *roleIdentifierParam, Proof: auth.Proof, Inputs: auth.Inputs})
+	stored, err := r.service.GrantRole(ctx, auth.GrantRoleInput{RoleID: *roleIdentifierParam, PolicyID: request.Policy, Proof: auth.Proof, Inputs: auth.Inputs})
 
 	if err != nil {
 		framework.LoggingRespondErrWithMsg(ctx, err, "could not grant role", http.StatusInternalServerError)

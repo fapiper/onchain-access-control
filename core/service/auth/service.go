@@ -20,6 +20,7 @@ import (
 	"github.com/lestrrat-go/jwx/v2/jwe"
 	"github.com/lestrrat-go/jwx/v2/jwt"
 	"github.com/pkg/errors"
+	"github.com/sirupsen/logrus"
 	"math/big"
 )
 
@@ -90,7 +91,7 @@ func NewAuthServiceFactory(s storage.ServiceStorage, r resolution.Resolver, k *k
 }
 
 // StartSession starts a session by registering the session token on-chain.
-func (s Service) StartSession(ctx context.Context) (*jwt.Token, *[]byte, error) {
+func (s Service) StartSession(ctx context.Context) (*jwt.Token, string, error) {
 	tid := uuid.NewString()
 
 	builder := jwt.NewBuilder().
@@ -103,7 +104,7 @@ func (s Service) StartSession(ctx context.Context) (*jwt.Token, *[]byte, error) 
 
 	signedToken, err := jwt.Sign(token, jwt.WithKey(jwa.ES256K, s.rpcService.Wallet.PrivateKey))
 	if err != nil {
-		return nil, nil, errors.Wrap(err, "failed to sign token")
+		return nil, "", errors.Wrap(err, "failed to sign token")
 	}
 
 	_, err = s.rpcService.StartSession(ctx, rpc.StartSessionParams{
@@ -113,10 +114,10 @@ func (s Service) StartSession(ctx context.Context) (*jwt.Token, *[]byte, error) 
 	})
 
 	if err != nil {
-		return nil, nil, errors.Wrap(err, "unable to start session transaction")
+		return nil, "", errors.Wrap(err, "unable to start session transaction")
 	}
 
-	return &token, &signedToken, nil
+	return &token, string(signedToken), nil
 }
 
 func (s Service) encryptJWE(ctx context.Context, signedToken []byte, audience string) ([]byte, error) {
@@ -142,10 +143,16 @@ func (s Service) GrantRole(ctx context.Context, input GrantRoleInput) (*Role, er
 
 	role, err := persist.ParseRoleFromIdentifierString(input.RoleID)
 	if err != nil {
-		return nil, errors.Wrap(err, "could not parse role from param")
+		return nil, errors.Wrap(err, "could not parse role from identifier string")
 	}
 
-	params := s.buildGrantRoleParams(role, input.Proof, input.Inputs)
+	policy, err := persist.ParsePolicyFromIdentifierString(input.PolicyID)
+	if err != nil {
+		return nil, errors.Wrap(err, "could not parse policy from identifier string")
+	}
+
+	params := s.buildGrantRoleParams(role, policy, input.Proof, input.Inputs)
+	logrus.Infof("GrantRoleParams: %s", params)
 
 	_, err = s.rpcService.GrantRole(ctx, params)
 	if err != nil {
@@ -161,9 +168,9 @@ func (s Service) GrantRole(ctx context.Context, input GrantRoleInput) (*Role, er
 	return &stored, nil
 }
 
-func (s Service) buildGrantRoleParams(role *persist.Role, proof contracts.IPolicyVerifierProof, inputs [20]*big.Int) rpc.GrantRoleParams {
+func (s Service) buildGrantRoleParams(role *persist.Role, policy *persist.Policy, proof contracts.IPolicyVerifierProof, inputs [20]*big.Int) rpc.GrantRoleParams {
 	roleIdentifier := persist.NewRoleIdentifier(role.ContextID, role.RoleID)
-	policyIdentifier := persist.NewPolicyIdentifier(roleIdentifier.ContextID.String(), roleIdentifier.RoleID.String())
+	policyIdentifier := persist.NewPolicyIdentifier(policy.ContextID, policy.PolicyID)
 
 	return rpc.GrantRoleParams{
 		RoleIdentifier:   roleIdentifier,                   // input.RoleId
