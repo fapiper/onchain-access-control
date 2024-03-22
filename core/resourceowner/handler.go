@@ -18,7 +18,7 @@ const (
 	V1Prefix        = "/v1"
 )
 
-func handlersInit(ctx context.Context, config configpkg.SSIServiceConfig, instance *Service, engine *gin.Engine) (*gin.Engine, error) {
+func handlersInit(ctx context.Context, config configpkg.OACServiceConfig, instance *Service, engine *gin.Engine) (*gin.Engine, error) {
 	engine.GET(HealthPrefix, router.Health)
 	engine.GET(ReadinessPrefix, router.Readiness(instance.GetServices()))
 	engine.StaticFile("swagger.yaml", "./doc/swagger.yaml")
@@ -37,7 +37,7 @@ func handlersInit(ctx context.Context, config configpkg.SSIServiceConfig, instan
 	return apiInit(ctx, config, instance, engine)
 }
 
-func apiInit(ctx context.Context, config configpkg.SSIServiceConfig, instance *Service, engine *gin.Engine) (*gin.Engine, error) {
+func apiInit(ctx context.Context, config configpkg.OACServiceConfig, instance *Service, engine *gin.Engine) (*gin.Engine, error) {
 
 	// register all v1 routers
 	v1 := engine.Group(V1Prefix)

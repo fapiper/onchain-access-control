@@ -19,7 +19,7 @@ type readiness struct {
 }
 
 type GetReadinessResponse struct {
-	// Overall status of the ssi service.
+	// Overall status of the oac service.
 	Status svcframework.Status `json:"status"`
 
 	// A map from the name of the service to the status of that current service.

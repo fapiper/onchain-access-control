@@ -16,7 +16,7 @@ func (e EnvironmentVariable) String() string {
 	return string(e)
 }
 
-type SSIServiceConfig struct {
+type OACServiceConfig struct {
 	Server   ServerConfig   `toml:"server"`
 	Services ServicesConfig `toml:"services"`
 }
@@ -37,7 +37,7 @@ type ServerConfig struct {
 	EnableAllowAllCORS  bool          `toml:"enable_allow_all_cors" conf:"default:false"`
 }
 
-// ServicesConfig represents configurable properties for the components of the SSI Service
+// ServicesConfig represents configurable properties for the components of the OAC service
 type ServicesConfig struct {
 	// at present, it is assumed that a single storage provider works for all services
 	// in the future it may make sense to have per-service storage providers (e.g. mysql for one service,

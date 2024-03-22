@@ -39,7 +39,7 @@ type Service struct {
 // dependencies independent of transport.
 func ServicesInit(ctx context.Context, clients *Clients, config configpkg.ServicesConfig) (*Service, error) {
 	if err := validateServiceConfig(config); err != nil {
-		return nil, sdkutil.LoggingErrorMsg(err, "could not instantiate SSI Service, invalid config")
+		return nil, sdkutil.LoggingErrorMsg(err, "could not instantiate the oac service, invalid config")
 	}
 	return servicesInitUnsafe(clients, config)
 }

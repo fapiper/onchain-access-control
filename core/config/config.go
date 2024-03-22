@@ -24,7 +24,7 @@ const (
 	ServiceIssuer        ServiceID = "issuer"
 )
 
-func Init() *SSIServiceConfig {
+func Init() *OACServiceConfig {
 	_, err := LoadEnv()
 	if err != nil {
 		logrus.Fatalf("could not instantiate env: %s", err.Error())
@@ -52,7 +52,7 @@ func Init() *SSIServiceConfig {
 
 // LoadConfig attempts to load a TOML config file from the given path, and coerce it into our object model.
 // Before loading, defaults are applied on certain properties, which are overwritten if specified in the TOML file.
-func LoadConfig() (*SSIServiceConfig, error) {
+func LoadConfig() (*OACServiceConfig, error) {
 	configPath := env.GetString(ConfigPath.String())
 	dir, file := path.Split(configPath)
 	fsDir := os.DirFS(dir)
@@ -66,7 +66,7 @@ func LoadConfig() (*SSIServiceConfig, error) {
 	}
 
 	// create the config object
-	config := new(SSIServiceConfig)
+	config := new(OACServiceConfig)
 	if err = parseConfig(config); err != nil {
 		return nil, errors.Wrap(err, "parse and apply defaults")
 	}
@@ -87,7 +87,7 @@ func LoadConfig() (*SSIServiceConfig, error) {
 	return config, nil
 }
 
-func validateConfig(s *SSIServiceConfig) error {
+func validateConfig(s *OACServiceConfig) error {
 	if s.Server.Environment == EnvironmentProd {
 		if s.Services.KeyStoreConfig.DisableEncryption {
 			return errors.New("prod environment cannot disable key encryption")
@@ -111,7 +111,7 @@ func checkValidConfigPath(path string) (bool, error) {
 	return defaultConfig, nil
 }
 
-func parseConfig(cfg *SSIServiceConfig) error {
+func parseConfig(cfg *OACServiceConfig) error {
 	// parse and apply defaults
 	err := conf.Parse(os.Args[1:], ServiceName, cfg)
 	if err == nil {
@@ -138,7 +138,7 @@ func parseConfig(cfg *SSIServiceConfig) error {
 	return errors.Wrap(err, "parsing config")
 }
 
-func loadTOMLConfig(path string, config *SSIServiceConfig, fs fs.FS) error {
+func loadTOMLConfig(path string, config *OACServiceConfig, fs fs.FS) error {
 	// load from TOML file
 	file, err := fs.Open(path)
 	if err != nil {

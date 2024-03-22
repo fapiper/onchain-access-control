@@ -44,7 +44,7 @@ func LoadEnv() (string, error) {
 	return envFilePath, nil
 }
 
-func validateEnv(config *SSIServiceConfig) error {
+func validateEnv(config *OACServiceConfig) error {
 
 	dbPassword := env.GetString(DBPassword.String())
 	if dbPassword != "" {

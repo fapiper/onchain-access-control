@@ -67,7 +67,7 @@ func ClientInit(ctx context.Context) *Clients {
 
 // CoreInit initializes core server functionality. This is abstracted
 // so the test server can also utilize it
-func CoreInit(ctx context.Context, config configpkg.SSIServiceConfig, instance *Service) (*gin.Engine, error) {
+func CoreInit(ctx context.Context, config configpkg.OACServiceConfig, instance *Service) (*gin.Engine, error) {
 	engine := framework.SetupEngine(ctx, config.Server)
 
 	// set up engine and middleware
