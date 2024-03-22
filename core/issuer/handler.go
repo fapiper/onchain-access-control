@@ -35,26 +35,20 @@ func apiInit(ctx context.Context, config configpkg.SSIServiceConfig, instance *S
 	if err := KeyStoreAPI(v1, instance.KeyStore); err != nil {
 		return nil, sdkutil.LoggingErrorMsg(err, "unable to instantiate KeyStore API")
 	}
-	if err := DecentralizedIdentityAPI(v1, instance.DID, instance.BatchDID, instance.Webhook); err != nil {
+	if err := DecentralizedIdentityAPI(v1, instance.DID, instance.BatchDID); err != nil {
 		return nil, sdkutil.LoggingErrorMsg(err, "unable to instantiate DID API")
 	}
-	if err := CredentialAPI(v1, instance.Credential, instance.Webhook, config.Services.StatusEndpoint); err != nil {
+	if err := CredentialAPI(v1, instance.Credential, config.Services.StatusEndpoint); err != nil {
 		return nil, sdkutil.LoggingErrorMsg(err, "unable to instantiate Credential API")
 	}
 	if err := OperationAPI(v1, instance.Operation); err != nil {
 		return nil, sdkutil.LoggingErrorMsg(err, "unable to instantiate Operation API")
 	}
-	if err := PresentationAPI(v1, instance.Presentation, instance.Webhook); err != nil {
+	if err := PresentationAPI(v1, instance.Presentation); err != nil {
 		return nil, sdkutil.LoggingErrorMsg(err, "unable to instantiate Presentation API")
 	}
-	if err := ManifestAPI(v1, instance.Manifest, instance.Webhook); err != nil {
+	if err := ManifestAPI(v1, instance.Manifest); err != nil {
 		return nil, sdkutil.LoggingErrorMsg(err, "unable to instantiate Manifest API")
-	}
-	if err := WebhookAPI(v1, instance.Webhook); err != nil {
-		return nil, sdkutil.LoggingErrorMsg(err, "unable to instantiate Webhook API")
-	}
-	if err := DIDConfigurationAPI(v1, instance.DIDConfiguration); err != nil {
-		return nil, sdkutil.LoggingErrorMsg(err, "unable to instantiate DIDConfiguration API")
 	}
 
 	return engine, nil

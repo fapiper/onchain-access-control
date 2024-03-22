@@ -26,9 +26,7 @@ import (
 )
 
 type Service struct {
-	storage *Storage
-
-	// external dependencies
+	storage  *Storage
 	keyStore *keystore.Service
 	resolver resolution.Resolver
 }
@@ -83,7 +81,6 @@ func (s Service) CreateSchema(ctx context.Context, request CreateSchemaRequest) 
 		return nil, sdkutil.LoggingErrorMsgf(err, "validating schema request: %+v", request)
 	}
 
-	// validate the schema
 	jsonSchema := request.Schema
 	schemaBytes, err := json.Marshal(jsonSchema)
 	if err != nil {
@@ -99,7 +96,6 @@ func (s Service) CreateSchema(ctx context.Context, request CreateSchemaRequest) 
 		logrus.Infof("schema has id: %s, which is being overwritten", jsonSchema.ID())
 	}
 
-	// set name, and description on the schema
 	if jsonSchema[schema.JSONSchemaNameProperty] != "" && request.Name != "" {
 		logrus.Infof("schema has name: %s, which is being overwritten", jsonSchema[schema.JSONSchemaNameProperty])
 	}
@@ -111,12 +107,9 @@ func (s Service) CreateSchema(ctx context.Context, request CreateSchemaRequest) 
 		jsonSchema[schema.JSONSchemaDescriptionProperty] = request.Description
 	}
 
-	// if the schema is a credential schema, the credential's id is a fully qualified URI
-	// if the schema is a JSON schema, the schema's id is a fully qualified URI
 	schemaID := uuid.NewString()
 	schemaURI := strings.Join([]string{config.GetServicePath(framework.Schema), schemaID}, "/")
 
-	// create schema for storage
 	storedSchema := StoredSchema{ID: schemaID}
 	if request.IsCredentialSchemaRequest() {
 		jsonSchema[schema.JSONSchemaIDProperty] = schemaID
@@ -131,7 +124,7 @@ func (s Service) CreateSchema(ctx context.Context, request CreateSchemaRequest) 
 		storedSchema.Type = schema.JSONSchemaType
 		storedSchema.Schema = &jsonSchema
 	}
-	// store schema
+
 	if err = s.storage.StoreSchema(ctx, storedSchema); err != nil {
 		return nil, sdkutil.LoggingErrorMsg(err, "could not store schema")
 	}
@@ -154,7 +147,6 @@ func (s Service) createCredentialSchema(ctx context.Context, jsonSchema schema.J
 		return nil, sdkutil.LoggingErrorMsgf(err, "building credential when setting issuer: %s", issuer)
 	}
 
-	// set subject's jsonSchema value as the schema
 	subject := make(credential.CredentialSubject)
 	subject[credential.VerifiableCredentialJSONSchemaProperty] = jsonSchema
 	if err := builder.SetCredentialSubject(subject); err != nil {
@@ -217,7 +209,6 @@ func (s Service) ListSchemas(ctx context.Context, request ListSchemasRequest) (*
 func (s Service) GetSchema(ctx context.Context, request GetSchemaRequest) (*GetSchemaResponse, error) {
 	logrus.Debugf("getting schema: %s", request.ID)
 
-	// TODO(gabe) support external schema resolution https://github.com/TBD54566975/ssi-service/issues/125
 	gotSchema, err := s.storage.GetSchema(ctx, request.ID)
 	if err != nil {
 		return nil, sdkutil.LoggingErrorMsgf(err, "error getting schema: %s", request.ID)
@@ -243,7 +234,7 @@ func (s Service) DeleteSchema(ctx context.Context, request DeleteSchemaRequest) 
 	return nil
 }
 
-// Resolve wraps our get schema method for exposing schema access to other services
+// Resolve wraps the get schema method for exposing schema access to other services
 func (s Service) Resolve(ctx context.Context, id string) (*schema.JSONSchema, schema.VCJSONSchemaType, error) {
 	gotSchemaResponse, err := s.GetSchema(ctx, GetSchemaRequest{ID: id})
 	if err != nil {

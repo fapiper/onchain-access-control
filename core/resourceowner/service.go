@@ -16,7 +16,6 @@ import (
 	"github.com/fapiper/onchain-access-control/core/service/operation"
 	"github.com/fapiper/onchain-access-control/core/service/presentation"
 	"github.com/fapiper/onchain-access-control/core/service/schema"
-	"github.com/fapiper/onchain-access-control/core/service/webhook"
 	wellknown "github.com/fapiper/onchain-access-control/core/service/well-known"
 	"github.com/fapiper/onchain-access-control/core/storage"
 )
@@ -31,7 +30,6 @@ type Service struct {
 	Credential       *credential.Service
 	Presentation     *presentation.Service
 	Operation        *operation.Service
-	Webhook          *webhook.Service
 	storage          storage.ServiceStorage
 	BatchDID         *did.BatchService
 	DIDConfiguration *wellknown.DIDConfigurationService
@@ -56,9 +54,6 @@ func validateServiceConfig(config configpkg.ServicesConfig) error {
 	if config.DIDConfig.IsEmpty() {
 		return fmt.Errorf("%s no config provided", frameworksvc.DID)
 	}
-	if config.WebhookConfig.IsEmpty() {
-		return fmt.Errorf("%s no config provided", frameworksvc.Webhook)
-	}
 	return nil
 }
 
@@ -76,11 +71,6 @@ func servicesInitUnsafe(c *Clients, config configpkg.ServicesConfig) (*Service, 
 	storageProvider := unencryptedStorageProvider
 	if storageEncrypter != nil && storageDecrypter != nil {
 		storageProvider = storage.NewEncryptedWrapper(unencryptedStorageProvider, storageEncrypter, storageDecrypter)
-	}
-
-	webhookService, err := webhook.NewWebhookService(config.WebhookConfig, storageProvider)
-	if err != nil {
-		return nil, sdkutil.LoggingErrorMsg(err, "could not instantiate the webhook service")
 	}
 
 	keyEncrypter, keyDecrypter, err := keystore.NewServiceEncryption(unencryptedStorageProvider, config.KeyStoreConfig.EncryptionConfig, keystore.ServiceKeyEncryptionKey)
@@ -156,7 +146,6 @@ func servicesInitUnsafe(c *Clients, config configpkg.ServicesConfig) (*Service, 
 		Credential:       credentialService,
 		Presentation:     presentationService,
 		Operation:        operationService,
-		Webhook:          webhookService,
 		AccessControl:    accessControlService,
 		RPC:              rpcService,
 		DIDConfiguration: didConfigurationService,
@@ -174,7 +163,6 @@ func (s *Service) GetServices() []frameworksvc.Service {
 		s.Presentation,
 		s.Operation,
 		s.AccessControl,
-		s.Webhook,
 	}
 }
 

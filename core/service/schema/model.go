@@ -9,13 +9,11 @@ import (
 )
 
 type CreateSchemaRequest struct {
-	Name        string            `json:"name" validate:"required"`
-	Description string            `json:"description,omitempty"`
-	Schema      schema.JSONSchema `json:"schema" validate:"required"`
-
-	// If both are present the schema will be signed by the issuer's private key with the specified KID
-	Issuer                             string `json:"issuer,omitempty"`
-	FullyQualifiedVerificationMethodID string `json:"fullyQualifiedVerificationMethodId,omitempty"`
+	Name                               string            `json:"name" validate:"required"`
+	Description                        string            `json:"description,omitempty"`
+	Schema                             schema.JSONSchema `json:"schema" validate:"required"`
+	Issuer                             string            `json:"issuer,omitempty"`
+	FullyQualifiedVerificationMethodID string            `json:"fullyQualifiedVerificationMethodId,omitempty"`
 }
 
 // IsCredentialSchemaRequest returns true if the request is for a credential schema

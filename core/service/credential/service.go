@@ -31,8 +31,6 @@ type Service struct {
 	storage  *Storage
 	config   config.CredentialServiceConfig
 	verifier *verification.Verifier
-
-	// external dependencies
 	keyStore *keystore.Service
 	schema   *schema.Service
 }
@@ -155,29 +153,24 @@ func (s Service) createCredential(ctx context.Context, request CreateCredentialR
 		return nil, sdkutil.LoggingErrorMsgf(err, "could not build credential when setting issuer: %s", request.Issuer)
 	}
 
-	// check if there's a conflict with subject ID
 	if id, ok := request.Data[credential.VerifiableCredentialIDProperty]; ok && id != request.Subject {
 		return nil, sdkutil.LoggingNewErrorf("cannot set subject<%s>, data already contains a different ID value: %s", request.Subject, id)
 	}
 
-	// set subject value
 	subject := credential.CredentialSubject(request.Data)
 	subject[credential.VerifiableCredentialIDProperty] = request.Subject
 	if err := builder.SetCredentialSubject(subject); err != nil {
 		return nil, sdkutil.LoggingErrorMsgf(err, "could not set subject: %+v", subject)
 	}
 
-	// if a context value exists, set it
 	if request.Context != "" {
 		if err := builder.AddContext(request.Context); err != nil {
 			return nil, sdkutil.LoggingErrorMsgf(err, "could not add context to credential: %s", request.Context)
 		}
 	}
 
-	// if a schema value exists, verify we can access it, validate the data against it, then set it
 	var knownSchema *schemalib.JSONSchema
 	if request.SchemaID != "" {
-		// resolve schema and save it for validation later
 		gotSchema, schemaType, err := s.schema.Resolve(ctx, request.SchemaID)
 		if err != nil {
 			return nil, sdkutil.LoggingErrorMsgf(err, "failed to create credential; could not get schema: %s", request.SchemaID)
@@ -192,7 +185,6 @@ func (s Service) createCredential(ctx context.Context, request CreateCredentialR
 		}
 	}
 
-	// if an expiry value exists, set it
 	if request.Expiry != "" {
 		if err := builder.SetExpirationDate(request.Expiry); err != nil {
 			return nil, sdkutil.LoggingErrorMsgf(err, "could not set expiry for credential: %s", request.Expiry)
@@ -235,7 +227,6 @@ func (s Service) createCredential(ctx context.Context, request CreateCredentialR
 		}
 	}
 
-	// TODO(gabe) support Data Integrity creds too https://github.com/TBD54566975/ssi-service/issues/105
 	credCopy, err := credint.CopyCredential(*cred)
 	if err != nil {
 		return nil, sdkutil.LoggingErrorMsg(err, "could not copy credential")

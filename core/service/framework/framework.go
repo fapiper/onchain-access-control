@@ -20,7 +20,6 @@ const (
 	Manifest         Type = "manifest"
 	Presentation     Type = "presentation"
 	Operation        Type = "operation"
-	Webhook          Type = "webhook"
 	DIDConfiguration Type = "did_configuration"
 
 	StatusReady    StatusState = "ready"

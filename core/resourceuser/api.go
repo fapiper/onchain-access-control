@@ -6,11 +6,9 @@ import (
 	"github.com/gin-gonic/gin"
 
 	"github.com/fapiper/onchain-access-control/core/config"
-	"github.com/fapiper/onchain-access-control/core/server/middleware"
 	"github.com/fapiper/onchain-access-control/core/server/router"
 	didsvc "github.com/fapiper/onchain-access-control/core/service/did"
 	svcframework "github.com/fapiper/onchain-access-control/core/service/framework"
-	"github.com/fapiper/onchain-access-control/core/service/webhook"
 )
 
 const (
@@ -32,7 +30,6 @@ const (
 	ResponsesPrefix         = "/responses"
 	KeyStorePrefix          = "/keys"
 	VerificationPath        = "/verification"
-	WebhookPrefix           = "/webhooks"
 	DIDConfigurationsPrefix = "/did-configurations"
 
 	batchSuffix = "/batch"
@@ -69,7 +66,7 @@ func AuthAPI(rg *gin.RouterGroup, service svcframework.Service) (err error) {
 }
 
 // DecentralizedIdentityAPI registers all HTTP handlers for the DID Service
-func DecentralizedIdentityAPI(rg *gin.RouterGroup, service *didsvc.Service, did *didsvc.BatchService, webhookService *webhook.Service) (err error) {
+func DecentralizedIdentityAPI(rg *gin.RouterGroup, service *didsvc.Service, did *didsvc.BatchService) (err error) {
 	didRouter, err := router.NewDIDRouter(service)
 	if err != nil {
 		return sdkutil.LoggingErrorMsg(err, "creating DID router")
@@ -80,9 +77,9 @@ func DecentralizedIdentityAPI(rg *gin.RouterGroup, service *didsvc.Service, did 
 	config.SetServicePath(svcframework.DID, DIDsPrefix)
 	didAPI := rg.Group(DIDsPrefix)
 	didAPI.GET("", didRouter.ListDIDMethods)
-	didAPI.PUT("/:method", middleware.Webhook(webhookService, webhook.DID, webhook.Create), didRouter.CreateDIDByMethod)
+	didAPI.PUT("/:method", didRouter.CreateDIDByMethod)
 	didAPI.PUT("/:method/:id", didRouter.UpdateDIDByMethod)
-	didAPI.PUT("/:method/batch", middleware.Webhook(webhookService, webhook.DID, webhook.BatchCreate), batchDIDRouter.BatchCreateDIDs)
+	didAPI.PUT("/:method/batch", batchDIDRouter.BatchCreateDIDs)
 	didAPI.GET("/:method", didRouter.ListDIDsByMethod)
 	didAPI.GET("/:method/:id", didRouter.GetDIDByMethod)
 	didAPI.DELETE("/:method/:id", didRouter.SoftDeleteDIDByMethod)
@@ -91,7 +88,7 @@ func DecentralizedIdentityAPI(rg *gin.RouterGroup, service *didsvc.Service, did 
 }
 
 // SchemaAPI registers all HTTP handlers for the Schema Service
-func SchemaAPI(rg *gin.RouterGroup, service svcframework.Service, webhookService *webhook.Service) (err error) {
+func SchemaAPI(rg *gin.RouterGroup, service svcframework.Service) (err error) {
 	schemaRouter, err := router.NewSchemaRouter(service)
 	if err != nil {
 		return sdkutil.LoggingErrorMsg(err, "creating schema router")
@@ -100,15 +97,15 @@ func SchemaAPI(rg *gin.RouterGroup, service svcframework.Service, webhookService
 	// make sure the schema service is configured to use the correct path
 	config.SetServicePath(svcframework.Schema, SchemasPrefix)
 	schemaAPI := rg.Group(SchemasPrefix)
-	schemaAPI.PUT("", middleware.Webhook(webhookService, webhook.Schema, webhook.Create), schemaRouter.CreateSchema)
+	schemaAPI.PUT("", schemaRouter.CreateSchema)
 	schemaAPI.GET("/:id", schemaRouter.GetSchema)
 	schemaAPI.GET("", schemaRouter.ListSchemas)
-	schemaAPI.DELETE("/:id", middleware.Webhook(webhookService, webhook.Schema, webhook.Delete), schemaRouter.DeleteSchema)
+	schemaAPI.DELETE("/:id", schemaRouter.DeleteSchema)
 	return
 }
 
 // CredentialAPI registers all HTTP handlers for the Credentials Service
-func CredentialAPI(rg *gin.RouterGroup, service svcframework.Service, webhookService *webhook.Service, statusEndpoint string) (err error) {
+func CredentialAPI(rg *gin.RouterGroup, service svcframework.Service, statusEndpoint string) (err error) {
 	credRouter, err := router.NewCredentialRouter(service)
 	if err != nil {
 		return sdkutil.LoggingErrorMsg(err, "creating credential router")
@@ -126,12 +123,12 @@ func CredentialAPI(rg *gin.RouterGroup, service svcframework.Service, webhookSer
 
 	// Credentials
 	credentialAPI := rg.Group(CredentialsPrefix)
-	credentialAPI.PUT("", middleware.Webhook(webhookService, webhook.Credential, webhook.Create), credRouter.CreateCredential)
-	credentialAPI.PUT(batchSuffix, middleware.Webhook(webhookService, webhook.Credential, webhook.BatchCreate), credRouter.BatchCreateCredentials)
+	credentialAPI.PUT("", credRouter.CreateCredential)
+	credentialAPI.PUT(batchSuffix, credRouter.BatchCreateCredentials)
 	credentialAPI.GET("", credRouter.ListCredentials)
 	credentialAPI.GET("/:id", credRouter.GetCredential)
 	credentialAPI.PUT(VerificationPath, credRouter.VerifyCredential)
-	credentialAPI.DELETE("/:id", middleware.Webhook(webhookService, webhook.Credential, webhook.Delete), credRouter.DeleteCredential)
+	credentialAPI.DELETE("/:id", credRouter.DeleteCredential)
 
 	// Credential Status
 	credentialAPI.GET("/:id"+StatusPrefix, credRouter.GetCredentialStatus)
@@ -142,7 +139,7 @@ func CredentialAPI(rg *gin.RouterGroup, service svcframework.Service, webhookSer
 }
 
 // PresentationAPI registers all HTTP handlers for the Presentation Service
-func PresentationAPI(rg *gin.RouterGroup, service svcframework.Service, webhookService *webhook.Service) (err error) {
+func PresentationAPI(rg *gin.RouterGroup, service svcframework.Service) (err error) {
 	presRouter, err := router.NewPresentationRouter(service)
 	if err != nil {
 		return sdkutil.LoggingErrorMsg(err, "creating credential router")
@@ -167,7 +164,7 @@ func PresentationAPI(rg *gin.RouterGroup, service svcframework.Service, webhookS
 	presReqAPI.PUT("/:id", presRouter.DeleteRequest)
 
 	presSubAPI := rg.Group(PresentationsPrefix + SubmissionsPrefix)
-	presSubAPI.PUT("", middleware.Webhook(webhookService, webhook.Submission, webhook.Create), presRouter.CreateSubmission)
+	presSubAPI.PUT("", presRouter.CreateSubmission)
 	presSubAPI.GET("/:id", presRouter.GetSubmission)
 	presSubAPI.GET("", presRouter.ListSubmissions)
 	presSubAPI.PUT("/:id/review", presRouter.ReviewSubmission)
@@ -194,7 +191,7 @@ func OperationAPI(rg *gin.RouterGroup, service svcframework.Service) (err error)
 }
 
 // ManifestAPI registers all HTTP handlers for the Manifest Service
-func ManifestAPI(rg *gin.RouterGroup, service svcframework.Service, webhookService *webhook.Service) (err error) {
+func ManifestAPI(rg *gin.RouterGroup, service svcframework.Service) (err error) {
 	manifestRouter, err := router.NewManifestRouter(service)
 	if err != nil {
 		return sdkutil.LoggingErrorMsg(err, "creating manifest router")
@@ -204,16 +201,16 @@ func ManifestAPI(rg *gin.RouterGroup, service svcframework.Service, webhookServi
 	config.SetServicePath(svcframework.Manifest, ManifestsPrefix)
 
 	manifestAPI := rg.Group(ManifestsPrefix)
-	manifestAPI.PUT("", middleware.Webhook(webhookService, webhook.Manifest, webhook.Create), manifestRouter.CreateManifest)
+	manifestAPI.PUT("", manifestRouter.CreateManifest)
 	manifestAPI.GET("", manifestRouter.ListManifests)
 	manifestAPI.GET("/:id", manifestRouter.GetManifest)
-	manifestAPI.DELETE("/:id", middleware.Webhook(webhookService, webhook.Manifest, webhook.Delete), manifestRouter.DeleteManifest)
+	manifestAPI.DELETE("/:id", manifestRouter.DeleteManifest)
 
 	applicationAPI := manifestAPI.Group(ApplicationsPrefix)
-	applicationAPI.PUT("", middleware.Webhook(webhookService, webhook.Application, webhook.Create), manifestRouter.SubmitApplication)
+	applicationAPI.PUT("", manifestRouter.SubmitApplication)
 	applicationAPI.GET("", manifestRouter.ListApplications)
 	applicationAPI.GET("/:id", manifestRouter.GetApplication)
-	applicationAPI.DELETE("/:id", middleware.Webhook(webhookService, webhook.Application, webhook.Delete), manifestRouter.DeleteApplication)
+	applicationAPI.DELETE("/:id", manifestRouter.DeleteApplication)
 	applicationAPI.PUT("/:id/review", manifestRouter.ReviewApplication)
 
 	manifestReqAPI := manifestAPI.Group(RequestsPrefix)
@@ -244,43 +241,5 @@ func IssuanceAPI(rg *gin.RouterGroup, service svcframework.Service) error {
 	issuanceAPI.GET("", issuanceRouter.ListIssuanceTemplates)
 	issuanceAPI.GET("/:id", issuanceRouter.GetIssuanceTemplate)
 	issuanceAPI.DELETE("/:id", issuanceRouter.DeleteIssuanceTemplate)
-	return nil
-}
-
-// WebhookAPI registers all HTTP handlers for the Webhook Service
-func WebhookAPI(rg *gin.RouterGroup, service svcframework.Service) (err error) {
-	webhookRouter, err := router.NewWebhookRouter(service)
-	if err != nil {
-		return sdkutil.LoggingErrorMsg(err, "creating webhook router")
-	}
-
-	// make sure the webhook service is configured to use the correct path
-	config.SetServicePath(svcframework.Webhook, WebhookPrefix)
-
-	webhookAPI := rg.Group(WebhookPrefix)
-	webhookAPI.PUT("", webhookRouter.CreateWebhook)
-	webhookAPI.GET("", webhookRouter.ListWebhooks)
-	webhookAPI.GET("/:noun/:verb", webhookRouter.GetWebhook)
-	webhookAPI.DELETE("/:noun/:verb", webhookRouter.DeleteWebhook)
-
-	// TODO(gabe): consider refactoring this to a single get on /webhooks/info or similar
-	webhookAPI.GET("nouns", webhookRouter.GetSupportedNouns)
-	webhookAPI.GET("verbs", webhookRouter.GetSupportedVerbs)
-	return
-}
-
-func DIDConfigurationAPI(rg *gin.RouterGroup, service svcframework.Service) error {
-	didConfigurationsRouter, err := router.NewDIDConfigurationsRouter(service)
-	if err != nil {
-		return sdkutil.LoggingErrorMsg(err, "creating webhook router")
-	}
-
-	// make sure the did configuration service is configured to use the correct path
-	config.SetServicePath(svcframework.DIDConfiguration, DIDConfigurationsPrefix)
-
-	webhookAPI := rg.Group(DIDConfigurationsPrefix)
-	webhookAPI.PUT("", didConfigurationsRouter.CreateDIDConfiguration)
-	webhookAPI.PUT(VerificationPath, didConfigurationsRouter.VerifyDIDConfiguration)
-
 	return nil
 }

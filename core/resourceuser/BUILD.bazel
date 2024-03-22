@@ -27,7 +27,6 @@ go_library(
         "//core/service/rpc",
         "//core/service/rpc/ipfs",
         "//core/service/schema",
-        "//core/service/webhook",
         "//core/service/well-known",
         "//core/storage",
         "@com_github_ethereum_go_ethereum//ethclient",

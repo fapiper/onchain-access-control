@@ -92,9 +92,6 @@ func (s DIDConfigurationService) VerifyDIDConfiguration(ctx context.Context, req
 		DIDConfiguration: bodyCopy.String(),
 	}
 	for _, domainLinkageCredential := range didConfiguration.LinkedDIDs {
-		// For a Domain Linkage Credential to be deemed valid, it MUST be successfully processed in accordance with the following steps:
-		//
-		// 1. The credentialSubject.id MUST be a DID, and the value MUST be equal to both the Subject and Issuer of the Domain Linkage Credential.
 		credentialSubjectID := domainLinkageCredential.Credential.CredentialSubject["id"].(string)
 		if !strings.HasPrefix(credentialSubjectID, "did:") {
 			response.Reason = fmt.Sprintf("The credentialSubject.id MUST be a DID, but got <%s>", credentialSubjectID)
@@ -106,13 +103,11 @@ func (s DIDConfigurationService) VerifyDIDConfiguration(ctx context.Context, req
 			return &response, nil
 		}
 
-		// 2. The Domain Linkage Credential must be in either a Linked Data Proof Format or JSON Web Token Proof Format
 		if !domainLinkageCredential.HasSignedCredential() {
 			response.Reason = fmt.Sprintf("The Domain Linkage Credential must be in either a Linked Data Proof Format or JSON Web Token Proof Format")
 			return &response, nil
 		}
 
-		// 3. The credentialSubject.origin property MUST be present, and its value MUST match the origin the resource was requested from.
 		credentialSubjectOrigin := domainLinkageCredential.Credential.CredentialSubject["origin"].(string)
 		requestedURL := httpReq.URL.String()
 		if !originMatches(requestedURL, credentialSubjectOrigin) {
@@ -120,14 +115,11 @@ func (s DIDConfigurationService) VerifyDIDConfiguration(ctx context.Context, req
 			return &response, nil
 		}
 
-		// 4. The implementer MUST perform DID resolution on the DID specified in the Issuer of the Domain Linkage Credential to obtain the associated DID document.
-		// 5. Using the retrieved DID document, the implementer MUST validate the signature of the Domain Linkage Credential against key material referenced in the assertionMethod section of the DID document.
 		if err := s.validator.VerifyCredential(ctx, domainLinkageCredential); err != nil {
 			response.Reason = err.Error()
 			return &response, nil
 		}
 
-		// 6. If Domain Linkage Credential verification is successfull, a Verifier SHOULD consider the entity controlling the origin and the Controller of the DID to be the same entity.
 	}
 
 	response.Verified = true

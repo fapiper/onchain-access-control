@@ -57,7 +57,6 @@ type ServicesConfig struct {
 	FileStoreConfig  FileStoreServiceConfig  `toml:"filestore,omitempty"`
 	DIDConfig        DIDServiceConfig        `toml:"did,omitempty"`
 	CredentialConfig CredentialServiceConfig `toml:"credential,omitempty"`
-	WebhookConfig    WebhookServiceConfig    `toml:"webhook,omitempty"`
 }
 
 type AuthServiceConfig struct {
@@ -151,15 +150,4 @@ func (c *CredentialServiceConfig) IsEmpty() bool {
 		return true
 	}
 	return reflect.DeepEqual(c, &CredentialServiceConfig{})
-}
-
-type WebhookServiceConfig struct {
-	WebhookTimeout string `toml:"webhook_timeout" conf:"default:10s"`
-}
-
-func (p *WebhookServiceConfig) IsEmpty() bool {
-	if p == nil {
-		return true
-	}
-	return reflect.DeepEqual(p, &WebhookServiceConfig{})
 }
