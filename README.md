@@ -4,13 +4,59 @@ A proof-of-concept for SSI-oriented, on-chain access control.
 Smart contract managed roles, based on anonymous credentials that combine verifiable credentials and zero-knowledge proof systems.
 
 [![Commitizen friendly](https://img.shields.io/badge/commitizen-friendly-brightgreen.svg)](http://commitizen.github.io/cz-cli/)
+
 ## Getting Started
 
-```sh
-corepack enable
-pnpm i
-pnpm dev
-```
+### Prerequisites
+
+1. [Install Bazel](https://bazel.build/install)
+2. [Install Docker](https://docs.docker.com/get-docker/)
+3. [Install Go](https://golang.org/doc/install)
+4. [Install Node.js](https://nodejs.org/en/download)
+5. Install [jq](https://jqlang.github.io/jq/)
+
+    **Ubuntu**
+    ```bash
+    sudo apt-get install jq
+    ```
+    **Brew (Mac)**
+    ```bash
+    brew install jq
+    ```
+    **Choco (Windows)**
+    ```bash
+    choco install jq -y
+    ```
+6. [Install ZoKrates](https://zokrates.github.io/gettingstarted.html#installation)
+
+### Installation
+
+- Build the Bazel targets.
+  ```bash
+  make build
+  ```
+  
+- Install the Node.js dependencies.
+  ```bash
+  pnpm install
+  ```
+  
+- Create your .env file for each service in [./usecase/](./usecase/):
+  ```bash
+  cp .env.example .env
+  ```
+  
+- Spin up the required instances for [./usecase/](./usecase/):
+  ```bash
+  cd ./usecase && docker compose up -d
+  ```
+  
+- Run the usecase services.
+  ```bash
+  make run-accreditation_body
+  make run-verification_body
+  make run-project_operator
+  ```
 
 ## Zokrates
 
@@ -19,15 +65,15 @@ A sample policy [supplier_agreement.zok](./usecase/component_supplier/code/suppl
 
 From root dir, start a docker container for zokrates cli
 ```
-bash dev/zokrates/run_docker.sh
+./dev/zokrates/run_docker.sh
 ```
 Generate required sample zk artifacts
 ```
-bash /app/setup.sh <path_to_code_file> <path_to_out_dir> <witness_args>
+./app/setup.sh <path_to_code_file> <path_to_out_dir> <witness_args>
 ```
 For example for the provided component supplier
 ```
-bash /app/setup.sh /app/usecase/component_supplier/code/supplier_agreement.zok /app/usecase/component_supplier/gen 2 4
+./app/setup.sh /app/usecase/component_supplier/code/supplier_agreement.zok /app/usecase/component_supplier/gen 2 4
 ```
 
 ## Commit Guidelines
