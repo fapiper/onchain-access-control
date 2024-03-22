@@ -1,88 +1,19 @@
 version: "3.98"
 
 services:
-#  original_equipment_manufacturer:
-#    container_name: original_equipment_manufacturer
-#    image: ghcr.io/fapiper/original_equipment_manufacturer:main
-#    build:
-#      context: ./original_equipment_manufacturer/
-#    ports:
-#      - "8080:3000"
-#    environment:
-#      - CONFIG_PATH=/app/config/test.toml
-#      - JAEGER_HTTP_URL=http://jaeger:14268/api/traces
-#    depends_on:
-#      - jaeger
-#      - redis
-#    volumes:
-#      - ../config:/app/config
-#    networks:
-#      - oac_network
-#      - universal-resolver
-#    links:
-#      - uni-resolver
-#  module_supplier:
-#    container_name: module_supplier
-#    image: ghcr.io/fapiper/module_supplier:main
-#    build:
-#      context: ./module_supplier/
-#    ports:
-#      - "8080:3000"
-#    environment:
-#      - CONFIG_PATH=/app/config/test.toml
-#      - JAEGER_HTTP_URL=http://jaeger:14268/api/traces
-#    depends_on:
-#      - jaeger
-#      - redis
-#    volumes:
-#      - ../config:/app/config
-#    networks:
-#      - oac_network
-#      - universal-resolver
-#    links:
-#      - uni-resolver
-  component_supplier:
-    container_name: component_supplier
-    image: fapiper/onchain-access-control
-    ports:
-      - "8080:3000"
-    environment:
-      - CONFIG_PATH=/app/config/test.toml
-    depends_on:
-      - redis
-    volumes:
-      - ../config:/app/config
-    networks:
-      - oac_network
-      - universal-resolver
-    links:
-      - uni-resolver
   ipfs:
     image: ipfs/kubo:latest
     container_name: ipfs
     ports:
-      # API port, which includes admin operations, so you probably don't want this remotely accessible.
       - "127.0.0.1:5001:5001"
-
-      # HTTP Gateway
       - "127.0.0.1:8081:8080"
     restart: unless-stopped
     networks:
       - oac_network
-#  jaeger:
-#    image: jaegertracing/all-in-one:latest
-#    platform: "linux/amd64"
-#    ports:
-#      - "6831:6831/udp"
-#      - "16686:16686"
-#      - "14268:14268"
-#    networks:
-#      - oac_network
   redis:
     image: redis:alpine
     environment:
       - ALLOW_EMPTY_PASSWORD=yes
-    # This allows for data to not be persisted on new runs
     command: [sh, -c, "rm -f /data/dump.rdb && redis-server --save ''"]
     ports:
       - "6379:6379"
@@ -106,13 +37,6 @@ services:
     platform: "linux/amd64"
     networks:
       - universal-resolver
-#  driver-did-ion:
-#    image: identityfoundation/driver-did-ion:v0.8.1
-#    ports:
-#      - "8089:8080"
-#    platform: "linux/amd64"
-#    networks:
-#      - universal-resolver
 
 networks:
   oac_network:

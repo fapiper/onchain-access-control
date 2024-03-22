@@ -21,6 +21,7 @@ import (
 	"github.com/google/tink/go/subtle/random"
 	shell "github.com/ipfs/go-ipfs-api"
 	"github.com/lestrrat-go/jwx/v2/jwe"
+	"github.com/lestrrat-go/jwx/v2/jwt"
 	"github.com/pkg/errors"
 )
 
@@ -252,6 +253,14 @@ func (s Service) VerifySession(ctx context.Context, request VerifySessionInput) 
 		return &VerifySessionOutput{Verified: false, Reason: err.Error()}, nil
 	}
 
+	granted, err := s.checkRoleForSession(ctx, persist.NewRoleIdentifier(s.rpcService.Wallet.GetDID(), request.RoleID), session)
+	if err != nil {
+		return &VerifySessionOutput{Verified: false, Reason: err.Error()}, nil
+	}
+	if !granted {
+		return &VerifySessionOutput{Verified: false, Reason: "invalid authorization"}, nil
+	}
+
 	_, err = s.storageClient.GetSession(ctx, session.JwtID())
 
 	if err != nil {
@@ -277,6 +286,22 @@ func (s Service) VerifySession(ctx context.Context, request VerifySessionInput) 
 	}
 
 	return &VerifySessionOutput{Verified: true}, nil
+}
+
+func (s Service) checkRoleForSession(ctx context.Context, role persist.RoleIdentifier, session jwt.Token) (bool, error) {
+
+	address, err := s.rpcService.GetAccessContextAddress(role.ContextID)
+	if err != nil {
+		return false, errors.Wrap(err, "getting access context address")
+	}
+
+	did := crypto.Keccak256Hash([]byte(session.Subject()))
+
+	return s.rpcService.HasRole(ctx, rpc.HasRoleParams{
+		Address: address,
+		RoleID:  role.RoleID,
+		DID:     did,
+	})
 }
 
 func (s Service) createSession(ctx context.Context, token keyaccess.JWT) (*StoredSession, error) {

@@ -77,6 +77,7 @@ func (in CreateSessionInput) IsValid() bool {
 }
 
 type VerifySessionInput struct {
+	RoleID       string        `json:"role"`
 	SessionToken keyaccess.JWT `json:"jwt,omitempty" validate:"required"`
 }
 

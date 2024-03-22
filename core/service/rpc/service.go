@@ -190,7 +190,7 @@ type CheckSessionParams struct {
 	DID     common.Hash
 }
 
-// CheckSession starts a session
+// CheckSession verifies a session
 func (s Service) CheckSession(ctx context.Context, params CheckSessionParams) (bool, error) {
 	instance, err := contracts.NewSessionRegistryCaller(s.ContextHandler.Address(), s.Wallet.Client)
 	if err != nil {
@@ -202,6 +202,28 @@ func (s Service) CheckSession(ctx context.Context, params CheckSessionParams) (b
 	return instance.IsSession(
 		txOpts,
 		params.TokenID,
+		params.DID,
+	)
+}
+
+type HasRoleParams struct {
+	Address persist.Address
+	RoleID  common.Hash
+	DID     common.Hash
+}
+
+// HasRole verifies a role
+func (s Service) HasRole(ctx context.Context, params HasRoleParams) (bool, error) {
+	instance, err := contracts.NewAccessContextCaller(params.Address.Address(), s.Wallet.Client)
+	if err != nil {
+		return false, err
+	}
+
+	txOpts := s.Wallet.ToCallOpts()
+
+	return instance.HasRole(
+		txOpts,
+		params.RoleID,
 		params.DID,
 	)
 }
