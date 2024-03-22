@@ -90,14 +90,11 @@ func NewAuthServiceFactory(s storage.ServiceStorage, r resolution.Resolver, k *k
 }
 
 // StartSession starts a session by registering the session token on-chain.
-func (s Service) StartSession(ctx context.Context, request StartSessionInput) (*jwt.Token, *[]byte, error) {
-	if !request.IsValid() {
-		return nil, nil, errors.Errorf("invalid create session request: %+v", request)
-	}
+func (s Service) StartSession(ctx context.Context) (*jwt.Token, *[]byte, error) {
 	tid := uuid.NewString()
 
 	builder := jwt.NewBuilder().
-		Audience(request.Audience).
+		Audience([]string{s.rpcService.Wallet.GetDID()}).
 		Subject(s.rpcService.Wallet.GetDID()).
 		Issuer(s.rpcService.Wallet.GetDID()).
 		JwtID(tid)
@@ -118,12 +115,6 @@ func (s Service) StartSession(ctx context.Context, request StartSessionInput) (*
 	if err != nil {
 		return nil, nil, errors.Wrap(err, "unable to start session transaction")
 	}
-
-	//stored := Role{Id: role.RoleID, Context: role.ContextID, Identifier: params.RoleIdentifier.String()}
-	//
-	//if err = s.storageClient.InsertRole(ctx, stored); err != nil {
-	//	return nil, errors.Wrap(err, "could not store role for user")
-	//}
 
 	return &token, &signedToken, nil
 }
@@ -172,7 +163,7 @@ func (s Service) GrantRole(ctx context.Context, input GrantRoleInput) (*Role, er
 
 func (s Service) buildGrantRoleParams(role *persist.Role, proof contracts.IPolicyVerifierProof, inputs [20]*big.Int) rpc.GrantRoleParams {
 	roleIdentifier := persist.NewRoleIdentifier(role.ContextID, role.RoleID)
-	policyIdentifier := persist.NewPolicyIdentifier(roleIdentifier.ContextID, roleIdentifier.RoleID)
+	policyIdentifier := persist.NewPolicyIdentifier(roleIdentifier.ContextID.String(), roleIdentifier.RoleID.String())
 
 	return rpc.GrantRoleParams{
 		RoleIdentifier:   roleIdentifier,                   // input.RoleId

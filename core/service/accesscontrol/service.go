@@ -13,10 +13,12 @@ import (
 	"github.com/fapiper/onchain-access-control/core/internal/util"
 	"github.com/fapiper/onchain-access-control/core/service/framework"
 	"github.com/fapiper/onchain-access-control/core/service/keystore"
+	"github.com/fapiper/onchain-access-control/core/service/persist"
 	"github.com/fapiper/onchain-access-control/core/service/presentation"
 	"github.com/fapiper/onchain-access-control/core/service/presentation/model"
 	"github.com/fapiper/onchain-access-control/core/service/rpc"
 	"github.com/fapiper/onchain-access-control/core/storage"
+	"github.com/google/tink/go/subtle/random"
 	shell "github.com/ipfs/go-ipfs-api"
 	"github.com/lestrrat-go/jwx/v2/jwe"
 	"github.com/pkg/errors"
@@ -145,6 +147,86 @@ func (s Service) CreateSession(ctx context.Context, request CreateSessionInput) 
 	}
 
 	return s.createSession(ctx, token)
+}
+
+// RegisterResource registers a resource on-chain
+func (s Service) RegisterResource(ctx context.Context, request RegisterResourceInput) (*RegisterResourceOutput, error) {
+	if !request.IsValid() {
+		return nil, errors.Errorf("invalid register resource request: %+v", request)
+	}
+	did := s.rpcService.Wallet.GetDID()
+
+	address, err := s.rpcService.GetAccessContextAddress(s.rpcService.Wallet.GetDIDHash())
+	if err != nil {
+		return nil, errors.Wrap(err, "could not get access context address")
+	}
+
+	out := RegisterResourceOutput{
+		Role:       request.Role,
+		Policy:     request.Policy,
+		Permission: random.GetRandomBytes(32),
+		Resource:   fmt.Sprintf("%s;%s", did, request.Resource),
+		Operations: []uint8{0, 1},
+		DID:        did,
+	}
+
+	_, err = s.rpcService.RegisterResource(ctx, out.toParams(address))
+	if err != nil {
+		return nil, errors.Wrap(err, "could not register resource")
+	}
+
+	return &out, nil
+}
+
+// CreateAccessContext creates an access context
+func (s Service) CreateAccessContext(ctx context.Context) (*StoredAccessContext, error) {
+	did := s.rpcService.Wallet.GetDIDHash()
+	id := did
+
+	exists, err := s.storageClient.CheckAccessContextExists(ctx, id.String())
+	if err != nil {
+		return nil, errors.Wrap(err, "could not check access context exists")
+	}
+
+	if exists {
+		return s.storageClient.GetAccessContext(ctx, id.String())
+	}
+
+	address, err := s.rpcService.GetAccessContextAddress(id)
+	if err != nil {
+		return nil, errors.Wrap(err, "could not get access context address")
+	}
+	if address != persist.ZeroAddress {
+		return &StoredAccessContext{
+			ID:      id,
+			Address: address,
+		}, nil
+	}
+
+	salt := [20]byte(random.GetRandomBytes(20))
+
+	_, err = s.rpcService.CreateAccessContext(ctx, rpc.CreateAccessContextParams{
+		ID:   id,
+		Salt: salt,
+		DID:  did,
+	})
+	if err != nil {
+		return nil, errors.Wrap(err, "could not create access context")
+	}
+	address, err = s.rpcService.GetAccessContextAddress(id)
+	if err != nil {
+		return nil, errors.Wrap(err, "could not get access context address")
+	}
+	stored := StoredAccessContext{
+		ID:      did,
+		Address: address,
+	}
+	err = s.storageClient.InsertAccessContext(ctx, stored)
+	if err != nil {
+		return nil, errors.Wrap(err, "could not get access context address")
+	}
+
+	return &stored, nil
 }
 
 func (s Service) decryptJWE(ctx context.Context, jweBytes []byte, kid string) (keyaccess.JWT, error) {

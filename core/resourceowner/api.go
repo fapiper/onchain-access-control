@@ -202,6 +202,7 @@ func AccessControlAPI(rg *gin.RouterGroup, service svcframework.Service) (err er
 	// make sure the access service is configured to use the correct path
 	config.SetServicePath(svcframework.Access, AccessPrefix)
 	accessAPI := rg.Group(AccessPrefix)
-	accessAPI.PUT("/policy", accessRouter.CreatePolicy)
+	accessAPI.PUT("/context", accessRouter.CreateAccessContext)
+	accessAPI.PUT("/resource", accessRouter.RegisterResource)
 	return
 }

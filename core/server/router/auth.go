@@ -32,10 +32,6 @@ func NewAuthRouter(s svcframework.Service) (*AuthRouter, error) {
 	return &AuthRouter{service: service}, nil
 }
 
-type StartSessionRequest struct {
-	Audience []string `json:"audience,omitempty"`
-}
-
 type StartSessionResponse struct {
 	// The created session
 	Session jwt.Token `json:"session"`
@@ -47,28 +43,14 @@ type StartSessionResponse struct {
 //
 //	@Summary		Starts a Session
 //	@Tags			Auth
-//	@Accept			json
 //	@Produce		json
-//	@Param			request	body		StartSessionRequest	true	"request body"
 //	@Success		200		{object}	StartSessionResponse
 //	@Failure		400		{string}	string	"Bad request"
 //	@Failure		500		{string}	string	"Internal server error"
 //	@Router			/auth/session [put]
 func (r AuthRouter) StartSession(c *gin.Context) {
-	var request StartSessionRequest
-	if err := framework.Decode(c.Request, &request); err != nil {
-		framework.LoggingRespondErrWithMsg(c, err, "invalid start session request", http.StatusBadRequest)
-		return
-	}
 
-	if err := util.IsValidStruct(request); err != nil {
-		framework.LoggingRespondError(c, err, http.StatusBadRequest)
-		return
-	}
-
-	token, signedToken, err := r.service.StartSession(c, auth.StartSessionInput{
-		Audience: request.Audience,
-	})
+	token, signedToken, err := r.service.StartSession(c)
 	if err != nil {
 		framework.LoggingRespondErrWithMsg(c, err, "could not start session", http.StatusInternalServerError)
 		return

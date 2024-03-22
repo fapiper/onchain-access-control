@@ -66,7 +66,7 @@ func AuthMiddleware(accessControlService *accesscontrol.Service) gin.HandlerFunc
 
 		// TODO Retrieve `fileDidUrl` from token:
 		// fileDidUrl := "did:pkh:0x1234?ref=static/test.csv"
-		fileRefFromToken := "static/test.txt"
+		fileRefFromToken := "static/data/emission_report.csv"
 		fileRefFromPath := fmt.Sprintf("%s%s", config.GetFileStoreBase(), c.Param(fileRefParamKey))
 
 		// 1. check if `fileRefFromToken` matches requested file

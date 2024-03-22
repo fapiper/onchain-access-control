@@ -58,6 +58,75 @@ func NewRPCService() (*Service, error) {
 	return &service, nil
 }
 
+type CreateAccessContextParams struct {
+	ID   common.Hash
+	Salt [20]byte
+	DID  common.Hash
+}
+
+// CreateAccessContext creates a new access context
+func (s Service) CreateAccessContext(ctx context.Context, params CreateAccessContextParams) (*types.Receipt, error) {
+	instance, err := contracts.NewAccessContextHandler(s.ContextHandler.Address(), s.Wallet.Client)
+	if err != nil {
+		return nil, err
+	}
+
+	txOpts, err := s.Wallet.ToTransactOpts()
+	if err != nil {
+		return nil, err
+	}
+
+	return s.waitMined(instance.CreateContextInstance(
+		txOpts,
+		params.ID,
+		params.Salt,
+		params.DID,
+	))
+}
+
+// GetAccessContextAddress creates a new access context
+func (s Service) GetAccessContextAddress(id common.Hash) (persist.Address, error) {
+	instance, err := contracts.NewAccessContextHandlerCaller(s.ContextHandler.Address(), s.Wallet.Client)
+	if err != nil {
+		return "", err
+	}
+
+	txOpts := s.Wallet.ToCallOpts()
+	address, err := instance.GetContextInstance(txOpts, id)
+	if err != nil {
+		return "", err
+	}
+
+	return persist.Address(address.String()), nil
+}
+
+type RegisterResourceParams struct {
+	AccessContext persist.Address
+	Role          common.Hash
+	Policy        common.Hash
+	Permission    common.Hash
+	Resource      common.Hash
+	Operations    []uint8
+	Verifier      common.Address
+	DID           common.Hash
+}
+
+// RegisterResource creates a new access context
+func (s Service) RegisterResource(ctx context.Context, params RegisterResourceParams) (*types.Receipt, error) {
+	instance, err := contracts.NewAccessContext(params.AccessContext.Address(), s.Wallet.Client)
+	if err != nil {
+		return nil, err
+	}
+
+	txOpts, err := s.Wallet.ToTransactOpts()
+	if err != nil {
+		return nil, err
+	}
+
+	v := persist.Address("0x04756f72242049Eb05A0BAADa41E0F46828122cD")
+	return s.waitMined(instance.SetupRole(txOpts, params.Role, params.Policy, params.Permission, params.Resource, params.Operations, v.Address(), params.DID))
+}
+
 type GrantRoleParams struct {
 	RoleIdentifier   persist.RoleIdentifier
 	DID              common.Hash
