@@ -2,16 +2,10 @@ package config
 
 import (
 	"expvar"
-	"fmt"
-	"github.com/BurntSushi/toml"
 	"github.com/ardanlabs/conf"
-	"github.com/fapiper/onchain-access-control/core/env"
 	"github.com/pkg/errors"
 	"github.com/sirupsen/logrus"
-	"io/fs"
 	"os"
-	"path"
-	"path/filepath"
 )
 
 const (
@@ -53,35 +47,17 @@ func Init() *OACServiceConfig {
 // LoadConfig attempts to load a TOML config file from the given path, and coerce it into our object model.
 // Before loading, defaults are applied on certain properties, which are overwritten if specified in the TOML file.
 func LoadConfig() (*OACServiceConfig, error) {
-	configPath := env.GetString(ConfigPath.String())
-	dir, file := path.Split(configPath)
-	fsDir := os.DirFS(dir)
-
-	if fsDir == nil {
-		fsDir = os.DirFS(".")
-	}
-	useDefaultConfig, err := checkValidConfigPath(file)
-	if err != nil {
-		return nil, errors.Wrap(err, "validate config path")
-	}
-
 	// create the config object
 	config := new(OACServiceConfig)
-	if err = parseConfig(config); err != nil {
+	if err := parseConfig(config); err != nil {
 		return nil, errors.Wrap(err, "parse and apply defaults")
 	}
 
-	if !useDefaultConfig {
-		if err = loadTOMLConfig(file, config, fsDir); err != nil {
-			return nil, errors.Wrap(err, "load toml config")
-		}
-	}
-
-	if err = validateEnv(config); err != nil {
+	if err := validateEnv(config); err != nil {
 		return nil, errors.Wrap(err, "apply env variables")
 	}
 
-	if err = validateConfig(config); err != nil {
+	if err := validateConfig(config); err != nil {
 		return nil, errors.Wrap(err, "validating config values")
 	}
 	return config, nil
@@ -97,18 +73,6 @@ func validateConfig(s *OACServiceConfig) error {
 		}
 	}
 	return nil
-}
-
-func checkValidConfigPath(path string) (bool, error) {
-	// no path, load default config
-	defaultConfig := false
-	if path == "" {
-		logrus.Info("no config path provided, loading default config...")
-		defaultConfig = true
-	} else if filepath.Ext(path) != Extension {
-		return false, fmt.Errorf("file extension for path %q must be %q", path, Extension)
-	}
-	return defaultConfig, nil
 }
 
 func parseConfig(cfg *OACServiceConfig) error {
@@ -136,16 +100,4 @@ func parseConfig(cfg *OACServiceConfig) error {
 		return nil
 	}
 	return errors.Wrap(err, "parsing config")
-}
-
-func loadTOMLConfig(path string, config *OACServiceConfig, fs fs.FS) error {
-	// load from TOML file
-	file, err := fs.Open(path)
-	if err != nil {
-		return errors.Wrapf(err, "opening path %s", path)
-	}
-	if _, err = toml.NewDecoder(file).Decode(&config); err != nil {
-		return errors.Wrapf(err, "could not load config: %s", path)
-	}
-	return nil
 }

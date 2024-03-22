@@ -30,9 +30,15 @@ update-repos:
 gazelle:
 	@bazel run //:gazelle
 
-# Attestation
+# Run
+run project_operator:
+	ENV_PATH=${PWD}/usecase/project_operator/.env FILESTORE_PATH=${PWD}/usecase/project_operator/static bazel run //usecase/project_operator:project_operator
 
+run accreditation_body:
+	ENV_PATH=${PWD}/usecase/accreditation_body/.env bazel run //usecase/accreditation_body:accreditation_body
 
+run verification_body:
+	ENV_PATH=${PWD}/usecase/verification_body/.env bazel run //usecase/verification_body:verification_body
 
 # Benchmark
 

@@ -1,7 +1,0 @@
-# http service configuration
-[server]
-env = "dev" # either 'dev' or 'prod'
-api_host = "0.0.0.0:4000"
-
-[services]
-service_endpoint = "http://localhost:8080"

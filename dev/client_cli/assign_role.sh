@@ -1,4 +1,4 @@
-curl --location --silent --request PUT 'http://127.0.0.1:4000/v1/auth/role/did:pkh:eip155:11155111:0xd231120Eea6201B142b4048cf6C86BaC2A0655D2+ROLE_VERIFICATION_BODY_10' \
+curl --location --silent --request PUT 'http://127.0.0.1:3000/v1/auth/role/did:pkh:eip155:11155111:0xd231120Eea6201B142b4048cf6C86BaC2A0655D2+ROLE_VERIFICATION_BODY_10' \
 --header 'Content-Type: application/json' \
 --data '{
     "policy": "'"$1"'",
