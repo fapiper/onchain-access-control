@@ -13,7 +13,8 @@ Smart contract managed roles, based on anonymous credentials that combine verifi
 2. [Install Docker](https://docs.docker.com/get-docker/)
 3. [Install Go](https://golang.org/doc/install)
 4. [Install Node.js](https://nodejs.org/en/download)
-5. Install [jq](https://jqlang.github.io/jq/)
+5. [Install pnpm](https://pnpm.io/installation)
+6. Install [jq](https://jqlang.github.io/jq/)
 
     **Ubuntu**
     ```bash
@@ -27,7 +28,7 @@ Smart contract managed roles, based on anonymous credentials that combine verifi
     ```bash
     choco install jq -y
     ```
-6. [Install ZoKrates](https://zokrates.github.io/gettingstarted.html#installation)
+7. [Install ZoKrates](https://zokrates.github.io/gettingstarted.html#installation)
 
 ### Installation
 
