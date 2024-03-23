@@ -54,7 +54,7 @@ type CredentialSchemaRequest struct {
 	Issuer string `json:"issuer,omitempty" validate:"required"`
 
 	// The id of the verificationMethod (see https://www.w3.org/TR/did-core/#verification-methods) who's privateKey is
-	// stored in ssi-service. The verificationMethod must be part of the did document associated with `issuer`.
+	// stored in oac-service. The verificationMethod must be part of the did document associated with `issuer`.
 	// The private key associated with the verificationMethod's publicKey will be used to sign the schema as a
 	// credential using JsonSchemaCredential.
 	// Required if intending to sign the schema as a credential using JsonSchemaCredential.

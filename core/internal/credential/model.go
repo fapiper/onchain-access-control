@@ -15,7 +15,7 @@ import (
 // Container acts as an abstraction over both possible credential representations
 // JWT representations are parsed upon container creation, while the original JWT is maintained
 type Container struct {
-	// UUID assigned by the ssi-service. For example, 48958871-6a6d-4a25-889f-88c9c6835780. The `credential.id`
+	// UUID assigned by the oac-service. For example, 48958871-6a6d-4a25-889f-88c9c6835780. The `credential.id`
 	// value will be a URL that can be dereferenced, which includes this ID.
 	ID string `json:"id,omitempty"`
 

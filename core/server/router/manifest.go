@@ -59,7 +59,7 @@ type CreateManifestRequest struct {
 	IssuerDID string `json:"issuerDid" validate:"required"`
 
 	// The id of the verificationMethod (see https://www.w3.org/TR/did-core/#verification-methods) who's privateKey is
-	// stored in ssi-service. The verificationMethod must be part of the did document associated with `issuer`.
+	// stored in oac-service. The verificationMethod must be part of the did document associated with `issuer`.
 	// The private key associated with the verificationMethod's publicKey will be used to sign the issued credentials.
 	// Required.
 	VerificationMethodID string `json:"verificationMethodId" validate:"required" example:"did:key:z6MkkZDjunoN4gyPMx5TSy7Mfzw22D2RZQZUcx46bii53Ex3#z6MkkZDjunoN4gyPMx5TSy7Mfzw22D2RZQZUcx46bii53Ex3"`
@@ -70,7 +70,6 @@ type CreateManifestRequest struct {
 
 	// Formats that the issuer can support when issuing the credential. At least one needs to be set. We currently only
 	// support `jwt_vc` for issuance. See https://identity.foundation/claim-format-registry/#registry for the definition.
-	// TODO: support different claim formats https://github.com/TBD54566975/ssi-service/issues/96
 	ClaimFormat *exchange.ClaimFormat `json:"format" validate:"required,dive"`
 
 	// Array of objects as defined in https://identity.foundation/credential-manifest/#output-descriptor.

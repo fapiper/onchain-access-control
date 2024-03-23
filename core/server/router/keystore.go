@@ -31,7 +31,7 @@ func NewKeyStoreRouter(s svcframework.Service) (*KeyStoreRouter, error) {
 }
 
 type StoreKeyRequest struct {
-	// The `id` field is the unique identifier for this object. If set to a resolvable DID, the ssi-service will use
+	// The `id` field is the unique identifier for this object. If set to a resolvable DID, the oac-service will use
 	// the private key encoded in the `PrivateKeyBase58` field of this object to sign objects issued or authored by this
 	// DID; otherwise, it will only be used to identify this object.
 	ID string `json:"id" validate:"required"`

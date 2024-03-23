@@ -22,7 +22,7 @@ import (
 )
 
 const (
-	testServerURL = "https://ssi-service.com"
+	testServerURL = "https://example.com"
 )
 
 func TestMain(t *testing.M) {

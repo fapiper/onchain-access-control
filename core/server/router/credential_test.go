@@ -556,7 +556,7 @@ func TestCredentialRouter(t *testing.T) {
 				assert.NoError(tt, err)
 
 				assert.Contains(tt, statusEntry.ID, fmt.Sprintf("%s/status", createdCred.Credential.ID))
-				assert.Contains(tt, statusEntry.StatusListCredential, "https://ssi-service.com/v1/credentials/status")
+				assert.Contains(tt, statusEntry.StatusListCredential, "https://oac-service.com/v1/credentials/status")
 				assert.NotEmpty(tt, statusEntry.StatusListIndex)
 
 				credStatus, err := credService.GetCredentialStatus(context.Background(), credential.GetCredentialStatusRequest{ID: createdCred.ID})
@@ -676,7 +676,7 @@ func TestCredentialRouter(t *testing.T) {
 				assert.NoError(tt, err)
 
 				assert.Contains(tt, statusEntry.ID, fmt.Sprintf("%s/status", createdCred.Credential.ID))
-				assert.Contains(tt, statusEntry.StatusListCredential, "https://ssi-service.com/v1/credentials/status")
+				assert.Contains(tt, statusEntry.StatusListCredential, "https://oac-service.com/v1/credentials/status")
 				assert.NotEmpty(tt, statusEntry.StatusListIndex)
 
 				credStatus, err := credService.GetCredentialStatus(context.Background(), credential.GetCredentialStatusRequest{ID: createdCred.ID})
@@ -841,7 +841,7 @@ func TestCredentialRouter(t *testing.T) {
 				assert.NoError(tt, err)
 
 				assert.Contains(tt, statusEntry.ID, fmt.Sprintf("%s/status", createdCred.Credential.ID))
-				assert.Contains(tt, statusEntry.StatusListCredential, "https://ssi-service.com/v1/credentials/status")
+				assert.Contains(tt, statusEntry.StatusListCredential, "https://oac-service.com/v1/credentials/status")
 				assert.NotEmpty(tt, statusEntry.StatusListIndex)
 
 				credStatus, err := credService.GetCredentialStatus(context.Background(), credential.GetCredentialStatusRequest{ID: createdCred.ID})
@@ -897,7 +897,7 @@ func TestCredentialRouter(t *testing.T) {
 				assert.NoError(tt, err)
 
 				assert.Contains(tt, statusEntry.ID, fmt.Sprintf("%s/status", createdCred.Credential.ID))
-				assert.Contains(tt, statusEntry.StatusListCredential, "https://ssi-service.com/v1/credentials/status")
+				assert.Contains(tt, statusEntry.StatusListCredential, "https://oac-service.com/v1/credentials/status")
 				assert.NotEmpty(tt, statusEntry.StatusListIndex)
 
 				credStatus, err := credService.GetCredentialStatus(context.Background(), credential.GetCredentialStatusRequest{ID: createdCred.ID})
@@ -975,7 +975,7 @@ func TestCredentialRouter(t *testing.T) {
 				assert.NoError(tt, err)
 
 				assert.Contains(tt, statusEntry.ID, fmt.Sprintf("%s/status", createdCred.Credential.ID))
-				assert.Contains(tt, statusEntry.StatusListCredential, "https://ssi-service.com/v1/credentials/status")
+				assert.Contains(tt, statusEntry.StatusListCredential, "https://oac-service.com/v1/credentials/status")
 				assert.NotEmpty(tt, statusEntry.StatusListIndex)
 
 				credStatus, err := credService.GetCredentialStatus(context.Background(), credential.GetCredentialStatusRequest{ID: createdCred.ID})

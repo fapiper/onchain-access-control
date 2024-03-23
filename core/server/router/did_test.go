@@ -13,7 +13,6 @@ import (
 	"github.com/fapiper/onchain-access-control/core/service/framework"
 	"github.com/fapiper/onchain-access-control/core/testutil"
 	"github.com/stretchr/testify/assert"
-	gock "gopkg.in/h2non/gock.v1"
 )
 
 func TestDIDRouter(t *testing.T) {
@@ -33,7 +32,6 @@ func TestDIDRouter(t *testing.T) {
 
 	for _, test := range testutil.TestDatabases {
 		t.Run(test.Name, func(t *testing.T) {
-			// TODO: Fix pagesize issue on redis - https://github.com/TBD54566975/ssi-service/issues/538
 			if !strings.Contains(test.Name, "Redis") {
 				t.Run("List DIDs supports paging", func(tt *testing.T) {
 					db := test.ServiceStorage(tt)
@@ -189,21 +187,12 @@ func TestDIDRouter(t *testing.T) {
 
 				assert.ElementsMatch(tt, supported.Methods, []didsdk.Method{didsdk.KeyMethod, didsdk.WebMethod})
 
-				gock.Off()
-				gock.New("https://example.com").
-					Get("/.well-known/did.json").
-					Reply(200).
-					BodyString("")
 				// bad key type
 				createOpts := did.CreateWebDIDOptions{DIDWebID: "did:web:example.com"}
 				_, err = didService.CreateDIDByMethod(context.Background(), did.CreateDIDRequest{Method: didsdk.WebMethod, KeyType: "bad", Options: createOpts})
 				assert.Error(tt, err)
 				assert.Contains(tt, err.Error(), "key type <bad> not supported")
 
-				gock.Off()
-				gock.New("https://example.com").
-					Get("/.well-known/did.json").
-					Reply(404)
 				// good key type
 				createDIDResponse, err := didService.CreateDIDByMethod(context.Background(), did.CreateDIDRequest{Method: didsdk.WebMethod, KeyType: crypto.Ed25519, Options: createOpts})
 				assert.NoError(tt, err)
@@ -220,10 +209,6 @@ func TestDIDRouter(t *testing.T) {
 				// make sure it's the same value
 				assert.Equal(tt, createDIDResponse.DID.ID, getDIDResponse.DID.ID)
 
-				gock.Off()
-				gock.New("https://tbd.website").
-					Get("/.well-known/did.json").
-					Reply(404)
 				// create a second DID
 				createOpts = did.CreateWebDIDOptions{DIDWebID: "did:web:tbd.website"}
 				createDIDResponse2, err := didService.CreateDIDByMethod(context.Background(), did.CreateDIDRequest{Method: didsdk.WebMethod, KeyType: crypto.Ed25519, Options: createOpts})

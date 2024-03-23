@@ -63,7 +63,7 @@ type Template struct {
 	Issuer string `json:"issuer" validate:"required"`
 
 	// The id of the verificationMethod (see https://www.w3.org/TR/did-core/#verification-methods) who's privateKey is
-	// stored in ssi-service. The verificationMethod must be part of the did document associated with `issuer`.
+	// stored in oac-service. The verificationMethod must be part of the did document associated with `issuer`.
 	// The private key associated with the verificationMethod's publicKey will be used to sign the credentials.
 	VerificationMethodID string `json:"verificationMethodId" validate:"required" example:"did:key:z6MkkZDjunoN4gyPMx5TSy7Mfzw22D2RZQZUcx46bii53Ex3#z6MkkZDjunoN4gyPMx5TSy7Mfzw22D2RZQZUcx46bii53Ex3"`
 

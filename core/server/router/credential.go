@@ -103,7 +103,7 @@ type CreateCredentialRequest struct {
 	Issuer string `json:"issuer" validate:"required" example:"did:key:z6MkkZDjunoN4gyPMx5TSy7Mfzw22D2RZQZUcx46bii53Ex3"`
 
 	// The id of the verificationMethod (see https://www.w3.org/TR/did-core/#verification-methods) who's privateKey is
-	// stored in ssi-service. The verificationMethod must be part of the did document associated with `issuer`.
+	// stored in oac-service. The verificationMethod must be part of the did document associated with `issuer`.
 	// The private key associated with the verificationMethod's publicKey will be used to sign the credential.
 	VerificationMethodID string `json:"verificationMethodId" validate:"required" example:"did:key:z6MkkZDjunoN4gyPMx5TSy7Mfzw22D2RZQZUcx46bii53Ex3#z6MkkZDjunoN4gyPMx5TSy7Mfzw22D2RZQZUcx46bii53Ex3"`
 
@@ -193,7 +193,7 @@ func (cr CredentialRouter) CreateCredential(c *gin.Context) {
 }
 
 type GetCredentialResponse struct {
-	// The `id` of this credential within SSI-Service. Same as the `id` passed in the query parameter.
+	// The `id` of this credential within oac-service. Same as the `id` passed in the query parameter.
 	ID string `json:"id"`
 	credmodel.Container
 }
@@ -205,7 +205,7 @@ type GetCredentialResponse struct {
 //	@Tags			Credentials
 //	@Accept			json
 //	@Produce		json
-//	@Param			id	path		string	true	"ID of the credential within SSI-Service. Must be a UUID."
+//	@Param			id	path		string	true	"ID of the credential within oac-service. Must be a UUID."
 //	@Success		200	{object}	GetCredentialResponse
 //	@Failure		400	{string}	string	"Bad request"
 //	@Failure		500	{string}	string	"Internal server error"
